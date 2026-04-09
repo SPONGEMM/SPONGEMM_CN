@@ -1,0 +1,21 @@
+---
+import { hero } from "../../data/homepage";
+---
+
+<section class="hero section">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">{hero.eyebrow}</p>
+      <h1>{hero.title}</h1>
+      <p class="hero-intro">{hero.intro}</p>
+      <p class="hero-supporting">{hero.supporting}</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>
+        <a class="button button-secondary" href={hero.secondaryAction.href}>{hero.secondaryAction.label}</a>
+      </div>
+    </div>
+    <div class="hero-visual panel">
+      <img src={hero.image.src} alt={hero.image.alt} />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import SectionHeading from "../shared/SectionHeading.astro";
+import { overview } from "../../data/homepage";
+---
+
+<section class="section">
+  <div class="container overview-grid">
+    <div>
+      <SectionHeading eyebrow="基本介绍" title="面向复杂体系的高效分子模拟" />
+      <p class="overview-body">{overview.body}</p>
+    </div>
+    <div class="overview-cards">
+      {overview.highlights.map((item) => (
+        <article class="overview-card panel">
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

@@ -144,3 +144,132 @@ img {
   max-width: 640px;
   color: var(--muted);
 }
+
+.hero-grid,
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  align-items: center;
+}
+
+.hero {
+  padding-top: 112px;
+}
+
+.hero-copy,
+.hero-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1,
+.section-heading h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.hero h1 {
+  max-width: 10ch;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+}
+
+.hero-eyebrow {
+  margin: 0 0 16px;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-intro {
+  margin: 24px 0 0;
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.hero-supporting,
+.overview-body,
+.overview-card p,
+.component-card p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  color: #fff;
+}
+
+.button-secondary {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.hero-visual {
+  overflow: hidden;
+  border-radius: 32px;
+  padding: 24px;
+}
+
+.hero-visual img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.overview-cards,
+.component-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.component-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.overview-card,
+.component-card {
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.overview-card h3,
+.component-card h3 {
+  margin: 0 0 12px;
+}
+
+.component-kicker {
+  margin: 0 0 16px;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.component-card a {
+  display: inline-flex;
+  margin-top: 12px;
+  color: var(--primary);
+  font-weight: 600;
+}

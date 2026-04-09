@@ -1,15 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ComponentsSection from "../components/home/ComponentsSection.astro";
+import HeroSection from "../components/home/HeroSection.astro";
+import OverviewSection from "../components/home/OverviewSection.astro";
 import Header from "../components/site/Header.astro";
 import Footer from "../components/site/Footer.astro";
 ---
 
 <BaseLayout title="SPONGEMM | 分子模拟主页">
   <Header />
-  <main class="container section">
-    <div class="panel" style="padding: 2rem; border-radius: 24px;">
-      Homepage sections will render here.
-    </div>
+  <main>
+    <HeroSection />
+    <OverviewSection />
+    <ComponentsSection />
   </main>
   <Footer />
 </BaseLayout>
