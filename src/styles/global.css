@@ -341,3 +341,24 @@ img {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
 }
+
+@media (max-width: 960px) {
+  .hero-grid,
+  .overview-grid,
+  .component-grid,
+  .highlight-grid,
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-inner,
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 0;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+}
