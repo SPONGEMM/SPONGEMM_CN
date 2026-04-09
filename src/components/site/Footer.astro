@@ -1,0 +1,17 @@
+---
+import { siteNav } from "../../data/homepage";
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">SPONGEMM</p>
+      <p class="footer-copy">面向下一代分子模拟的软件与研究平台。</p>
+    </div>
+    <div class="footer-links">
+      {siteNav.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </div>
+  </div>
+</footer>

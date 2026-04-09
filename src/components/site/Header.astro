@@ -1,0 +1,17 @@
+---
+import { siteNav } from "../../data/homepage";
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark"></span>
+      <span>SPONGEMM</span>
+    </a>
+    <nav class="nav">
+      {siteNav.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>

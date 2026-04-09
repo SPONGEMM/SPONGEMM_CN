@@ -57,3 +57,90 @@ img {
 .section {
   padding: 88px 0;
 }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  background: rgba(245, 248, 248, 0.82);
+  border-bottom: 1px solid rgba(0, 75, 99, 0.08);
+}
+
+.header-inner,
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 700;
+}
+
+.brand-mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 0 0 8px rgba(38, 166, 154, 0.12);
+}
+
+.nav,
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.nav a,
+.footer-links a {
+  color: var(--muted);
+  transition: color 160ms ease;
+}
+
+.nav a:hover,
+.footer-links a:hover,
+.nav a:focus-visible,
+.footer-links a:focus-visible {
+  color: var(--primary);
+}
+
+.site-footer {
+  padding: 32px 0 48px;
+}
+
+.footer-title {
+  margin: 0 0 8px;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 700;
+}
+
+.footer-copy {
+  margin: 0;
+  color: var(--muted);
+}
+
+.section-heading {
+  margin-bottom: 32px;
+}
+
+.section-eyebrow {
+  margin: 0 0 12px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.section-description {
+  max-width: 640px;
+  color: var(--muted);
+}
