@@ -1,0 +1,22 @@
+---
+import { updates } from "../../data/homepage";
+import SectionHeading from "../shared/SectionHeading.astro";
+---
+
+<section class="section">
+  <div class="container">
+    <SectionHeading
+      eyebrow="网站更新"
+      title="近期更新记录"
+      description="首页只展示近期条目，保留站点持续维护的信号。"
+    />
+    <div class="updates-list">
+      {updates.map((item) => (
+        <article class="update-row">
+          <p class="update-date">{item.date}</p>
+          <h3>{item.title}</h3>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
