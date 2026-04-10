@@ -13,13 +13,14 @@ const { section, currentPath, title } = Astro.props as {
 
 const meta = legacySectionMeta[section];
 const groups = legacySectionGroups[section];
+const normalizedCurrentPath = currentPath.replace(/\.md$/, "").replace(/\/README$/, "").replace(/\/+$/, "");
 ---
 
 <section class="section legacy-docs-section">
   <div class="container legacy-docs-layout">
     <aside class="legacy-sidebar">
       <div class="legacy-sidebar-inner">
-        <a class:list={["legacy-sidebar-home", currentPath === meta.homeHref && "is-active"]} href={meta.homeHref}>
+        <a class:list={["legacy-sidebar-home", normalizedCurrentPath === meta.homeHref && "is-active"]} href={meta.homeHref}>
           {meta.overviewTitle}
         </a>
 
@@ -28,7 +29,7 @@ const groups = legacySectionGroups[section];
             <h2>{group.title}</h2>
             <nav>
               {group.items.map((item) => (
-                <a class:list={["legacy-sidebar-link", currentPath === item.href && "is-active"]} href={item.href}>
+                <a class:list={["legacy-sidebar-link", normalizedCurrentPath === item.href && "is-active"]} href={item.href}>
                   <span>{item.title}</span>
                   {item.note && <small>{item.note}</small>}
                 </a>
@@ -64,6 +65,70 @@ const groups = legacySectionGroups[section];
   const contentRoot = document.querySelector(".legacy-markdown-body");
 
   if (tocRoot instanceof HTMLElement && tocLinksRoot instanceof HTMLElement && contentRoot instanceof HTMLElement) {
+    const normalizeLegacyHref = (href) => {
+      if (!href || href.startsWith("#") || /^[a-z]+:/i.test(href)) {
+        return href;
+      }
+
+      try {
+        const resolved = new URL(href, window.location.href);
+        if (resolved.origin !== window.location.origin) {
+          return href;
+        }
+
+        let normalizedPathname = resolved.pathname
+          .replace(/\/README\.md$/i, "")
+          .replace(/\.md$/i, "");
+
+        if (!normalizedPathname.endsWith("/")) {
+          normalizedPathname += "/";
+        }
+
+        return `${normalizedPathname}${resolved.search}${resolved.hash}`;
+      } catch {
+        return href;
+      }
+    };
+
+    contentRoot.querySelectorAll("a[href]").forEach((link) => {
+      if (!(link instanceof HTMLAnchorElement)) {
+        return;
+      }
+
+      const href = link.getAttribute("href");
+      const normalizedHref = normalizeLegacyHref(href);
+
+      if (normalizedHref && normalizedHref !== href) {
+        link.setAttribute("href", normalizedHref);
+      }
+    });
+
+    contentRoot.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+          return;
+        }
+
+        const link = target.closest("a[href]");
+        if (!(link instanceof HTMLAnchorElement)) {
+          return;
+        }
+
+        const href = link.getAttribute("href");
+        const normalizedHref = normalizeLegacyHref(href);
+
+        if (!normalizedHref || normalizedHref === href) {
+          return;
+        }
+
+        event.preventDefault();
+        window.location.href = normalizedHref;
+      },
+      true
+    );
+
     const slugify = (value) =>
       value
         .toLowerCase()

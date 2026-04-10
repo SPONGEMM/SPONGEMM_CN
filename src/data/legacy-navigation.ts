@@ -13,31 +13,91 @@ export type LegacySectionKey = "docs" | "tutorials" | "download";
 
 export const docsGroups: LegacyGroup[] = [
   {
-    title: "CudaSPONGE 文档",
+    title: "SPONGE2.0 文档",
     items: [
       {
-        title: "输入命令",
-        href: "/文档/CudaSPONGE文档/输入命令"
+        title: "快速开始",
+        href: "/文档/SPONGE2.0/getting-started"
       },
       {
-        title: "模块功能",
-        href: "/文档/CudaSPONGE文档/模块功能"
+        title: "构建指南",
+        href: "/文档/SPONGE2.0/build-guide"
       },
       {
-        title: "文件格式",
-        href: "/文档/CudaSPONGE文档/文件格式"
+        title: "输入参考",
+        href: "/文档/SPONGE2.0/input-reference"
       },
       {
-        title: "CV 系统",
-        href: "/文档/CudaSPONGE文档/CV系统"
+        title: "贡献指南",
+        href: "/文档/SPONGE2.0/contributing"
       },
       {
-        title: "版本迭代",
-        href: "/文档/CudaSPONGE文档/版本迭代"
+        title: "SPONGE1.4 参考手册",
+        note: "归档保留",
+        href: "/文档/SPONGE1.4/reference_manual"
+      }
+    ]
+  },
+  {
+    title: "SPONGE2.0 输入参考",
+    items: [
+      {
+        title: "核心参数",
+        href: "/文档/SPONGE2.0/input-reference/core"
       },
       {
-        title: "参考手册",
-        href: "/文档/CudaSPONGE文档/reference_manual"
+        title: "输入输出",
+        href: "/文档/SPONGE2.0/input-reference/io"
+      },
+      {
+        title: "温控器",
+        href: "/文档/SPONGE2.0/input-reference/thermostat"
+      },
+      {
+        title: "压控器",
+        href: "/文档/SPONGE2.0/input-reference/barostat"
+      },
+      {
+        title: "原子位置约束",
+        href: "/文档/SPONGE2.0/input-reference/restrain"
+      },
+      {
+        title: "约束算法",
+        href: "/文档/SPONGE2.0/input-reference/constraint"
+      },
+      {
+        title: "邻居表",
+        href: "/文档/SPONGE2.0/input-reference/neighbor-list"
+      },
+      {
+        title: "PME 静电",
+        href: "/文档/SPONGE2.0/input-reference/pme"
+      },
+      {
+        title: "集体变量",
+        href: "/文档/SPONGE2.0/input-reference/collective-variables"
+      },
+      {
+        title: "增强采样",
+        href: "/文档/SPONGE2.0/input-reference/enhanced-sampling"
+      },
+      {
+        title: "SinkMeta",
+        href: "/文档/SPONGE2.0/input-reference/sinkmeta"
+      },
+      {
+        title: "高级参数",
+        href: "/文档/SPONGE2.0/input-reference/advanced"
+      }
+    ]
+  },
+  {
+    title: "SPONGE1.4 文档（归档）",
+    items: [
+      {
+        title: "进入 SPONGE1.4 文档归档",
+        note: "包含输入命令、模块功能、文件格式、CV 系统、版本迭代、参考手册",
+        href: "/文档/SPONGE1.4"
       }
     ]
   },
@@ -190,4 +250,28 @@ export function getLegacySection(route: string): LegacySectionKey {
   }
 
   return "docs";
+}
+
+export function getLegacyTitleByHref(href: string) {
+  const normalizedHref = href
+    .replace(/\.md$/, "")
+    .replace(/\/README$/, "")
+    .replace(/\/+$/, "");
+
+  const sections = [docsGroups, tutorialGroups, downloadGroups];
+  for (const groups of sections) {
+    for (const group of groups) {
+      for (const item of group.items) {
+        if (item.href === normalizedHref) {
+          return item.title;
+        }
+      }
+    }
+  }
+
+  if (normalizedHref === "/工作坊视频") {
+    return "工作坊视频";
+  }
+
+  return null;
 }
