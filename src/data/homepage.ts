@@ -3,11 +3,10 @@ export const siteNav = [
   { label: "文档", href: "/docs" },
   { label: "教程", href: "/tutorials" },
   { label: "下载", href: "/download" },
-  { label: "联系", href: "/contact" }
+  { label: "GitHub", href: "https://github.com/SPONGEMM/SPONGE", icon: "github" }
 ];
 
 export const hero = {
-  eyebrow: "SPONGE",
   title: "Simulation Package tOward Next Generation molecular modelling",
   intro:
     "SPONGE是由北京大学高毅勤课题组开发的分子动力学模拟程序。",

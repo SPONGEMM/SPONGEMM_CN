@@ -4,10 +4,19 @@ import { heroHighlights } from "../../data/homepage";
 ---
 
 <section class="hero section">
+  <div class="hero-background" aria-hidden="true">
+    <img src="/background.png" alt="" />
+  </div>
   <div class="container hero-grid">
     <div class="hero-copy">
-      <p class="hero-eyebrow">{hero.eyebrow}</p>
-      <h1>{hero.title}</h1>
+      <h1 aria-label="Simulation Package tOward Next GEneration molecular modelling">
+        <span><span class="hero-accent">S</span>imulation</span>{" "}
+        <span><span class="hero-accent">P</span>ackage</span>{" "}
+        <span>t<span class="hero-accent">O</span>ward</span>{" "}
+        <span><span class="hero-accent">N</span>ext</span>{" "}
+        <span><span class="hero-accent">GE</span>neration</span>{" "}
+        <span>molecular modelling</span>
+      </h1>
       <p class="hero-intro">{hero.intro}</p>
       <div class="hero-actions">
         <a class="button button-primary" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>

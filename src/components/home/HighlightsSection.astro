@@ -5,11 +5,7 @@ import SectionHeading from "../shared/SectionHeading.astro";
 
 <section class="section">
   <div class="container">
-    <SectionHeading
-      eyebrow="研究成果"
-      title="代表性应用与论文精选"
-      description="保留原首页中的成果脉络，并把重点条目重构为可视化卡片。"
-    />
+    <SectionHeading title="研究成果" />
     <div class="highlight-grid">
       {highlights.map((item) => (
         <article class="highlight-card panel">
@@ -17,10 +13,7 @@ import SectionHeading from "../shared/SectionHeading.astro";
             {item.image ? (
               <img src={item.image} alt={item.alt} loading="lazy" />
             ) : (
-              <div class="highlight-no-image">
-                <p class="highlight-year">{item.year}</p>
-                <h3>{item.title}</h3>
-              </div>
+              <div class="highlight-no-image" aria-hidden="true" />
             )}
           </div>
           <div class="highlight-body">
