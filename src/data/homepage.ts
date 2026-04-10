@@ -174,3 +174,26 @@ export const updates = [
   { date: "2023/11/25", title: "更新 SPONGE 1.4b0 版本，并更新文档" },
   { date: "2023/03/12", title: "更新 SPONGE 1.3 版本" }
 ];
+
+export const friendLinks = [
+  {
+    name: "GaliLeo",
+    description:
+      "GaliLeo 是北京星使智算科技有限公司（Sidereus AI）开发的科学智算平台，支持用自然语言描述科研问题并自动执行计算任务。",
+    href: "https://sidereus-ai.com",
+    image: "/assets/home/logo-banner.png",
+    badge: "GL"
+  },
+  {
+    name: "DSDP",
+    description: "Deep Site and Docking Pose (DSDP) 是高毅勤课题组开发的 GPU 加速盲对接策略。",
+    href: "https://github.com/PKUGaoGroup/DSDP",
+    badge: "DS"
+  },
+  {
+    name: "MindScience",
+    description: "MindScience 是昇思 MindSpore 的科学计算生态项目入口，包含 MindSPONGE 等子项目。",
+    href: "https://github.com/mindspore-ai/mindscience",
+    badge: "MS"
+  }
+];

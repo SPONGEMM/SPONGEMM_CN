@@ -13,26 +13,23 @@ import SectionHeading from "../shared/SectionHeading.astro";
     <div class="highlight-grid">
       {highlights.map((item) => (
         <article class="highlight-card panel">
-          {item.image ? (
-            <>
+          <div class="highlight-media">
+            {item.image ? (
               <img src={item.image} alt={item.alt} loading="lazy" />
-              <div class="highlight-body">
+            ) : (
+              <div class="highlight-no-image">
                 <p class="highlight-year">{item.year}</p>
                 <h3>{item.title}</h3>
-                <a href={item.doi} target="_blank" rel="noreferrer">
-                  {item.doi.replace("https://doi.org/", "DOI: ")}
-                </a>
               </div>
-            </>
-          ) : (
-            <div class="highlight-body highlight-no-image">
-              <p class="highlight-year">{item.year}</p>
-              <h3>{item.title}</h3>
-              <a href={item.doi} target="_blank" rel="noreferrer">
-                {item.doi.replace("https://doi.org/", "DOI: ")}
-              </a>
-            </div>
-          )}
+            )}
+          </div>
+          <div class="highlight-body">
+            <p class="highlight-year">{item.year}</p>
+            <h3>{item.title}</h3>
+            <a href={item.doi} target="_blank" rel="noreferrer">
+              {item.doi.replace("https://doi.org/", "DOI: ")}
+            </a>
+          </div>
         </article>
       ))}
     </div>
