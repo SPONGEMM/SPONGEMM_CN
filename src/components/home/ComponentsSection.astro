@@ -5,18 +5,18 @@ import { components } from "../../data/homepage";
 
 <section class="section">
   <div class="container">
-    <SectionHeading
-      eyebrow="组成部分"
-      title="由三个核心模块构成"
-      description="保留原主页结构，但用更清晰的卡片布局解释 SPONGE 的内部组成。"
-    />
+    <SectionHeading eyebrow="组成部分" title="由三个核心模块构成" />
     <div class="component-grid">
       {components.map((item) => (
         <article class="component-card panel">
-          <p class="component-kicker">Core Module</p>
           <h3>{item.name}</h3>
           <p>{item.description}</p>
-          <a href={item.href}>查看详情</a>
+          <a href={item.doi} target="_blank" rel="noreferrer">
+            {item.citation}
+          </a>
+          <a class="component-doi" href={item.doi} target="_blank" rel="noreferrer">
+            {item.doi.replace("https://doi.org/", "DOI: ")}
+          </a>
         </article>
       ))}
     </div>

@@ -145,10 +145,9 @@ img {
   color: var(--muted);
 }
 
-.hero-grid,
-.overview-grid {
+.hero-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: 32px;
   align-items: center;
 }
@@ -172,8 +171,8 @@ img {
 }
 
 .hero h1 {
-  max-width: 10ch;
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  max-width: 14ch;
+  font-size: clamp(2.9rem, 6vw, 4.9rem);
 }
 
 .hero-eyebrow {
@@ -191,9 +190,7 @@ img {
   line-height: 1.8;
 }
 
-.hero-supporting,
 .overview-body,
-.overview-card p,
 .component-card p {
   color: var(--muted);
   line-height: 1.8;
@@ -232,12 +229,119 @@ img {
   padding: 24px;
 }
 
-.hero-visual img {
-  width: 100%;
-  border-radius: 20px;
+.hero-carousel {
+  display: grid;
+  gap: 20px;
+  min-height: 720px;
 }
 
-.overview-cards,
+.hero-carousel-head p,
+.hero-carousel-head span {
+  margin: 0;
+}
+
+.hero-carousel-head p {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.hero-carousel-head span {
+  color: var(--muted);
+}
+
+.hero-carousel-track {
+  position: relative;
+  min-height: 580px;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(24px);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.hero-slide-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 360px;
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(0, 75, 99, 0.05), rgba(38, 166, 154, 0.03));
+}
+
+.hero-slide-media img {
+  width: 100%;
+  height: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+.hero-slide-body {
+  padding: 20px 22px 24px;
+}
+
+.hero-slide-year {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.hero-slide-body h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.45;
+}
+
+.hero-slide-body a {
+  display: inline-flex;
+  margin-top: 16px;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.hero-carousel-dots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.hero-carousel-dots button {
+  width: 10px;
+  height: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 75, 99, 0.2);
+  cursor: pointer;
+}
+
+.hero-carousel-dots button.is-active {
+  background: var(--primary);
+}
+
+.overview-single {
+  max-width: 980px;
+}
+
 .component-grid {
   display: grid;
   gap: 24px;
@@ -247,24 +351,13 @@ img {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.overview-card,
 .component-card {
   border-radius: var(--radius);
   padding: 24px;
 }
 
-.overview-card h3,
 .component-card h3 {
   margin: 0 0 12px;
-}
-
-.component-kicker {
-  margin: 0 0 16px;
-  color: var(--primary);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .component-card a {
@@ -272,6 +365,15 @@ img {
   margin-top: 12px;
   color: var(--primary);
   font-weight: 600;
+}
+
+.component-citation {
+  min-height: 5.6em;
+  margin-top: 10px;
+}
+
+.component-doi {
+  margin-top: 8px;
 }
 
 .highlight-grid {
@@ -297,6 +399,10 @@ img {
 .quick-card,
 .update-row {
   padding: 24px;
+}
+
+.highlight-no-image {
+  padding-top: 24px;
 }
 
 .highlight-year,
