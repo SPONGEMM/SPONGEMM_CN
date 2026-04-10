@@ -182,25 +182,30 @@ export const tutorialGroups: LegacyGroup[] = [
 
 export const downloadGroups: LegacyGroup[] = [
   {
-    title: "程序包",
+    title: "SPONGE 程序",
     items: [
       {
-        title: "CudaSPONGE 程序",
-        href: "/下载/CudaSPONGE程序"
+        title: "SPONGE2.0 安装",
+        href: "/下载/SPONGE2.0安装"
+      },
+      {
+        title: "历史版本归档",
+        note: "1.4 及更早版本",
+        href: "/下载/历史版本归档"
       }
     ]
   },
   {
-    title: "模块包",
+    title: "兼容资源",
     items: [
       {
-        title: "CudaSPONGE 模块",
+        title: "SPONGE1.4 模块归档",
         href: "/下载/CudaSPONGE模块"
       }
     ]
   },
   {
-    title: "工具包",
+    title: "工具与插件",
     items: [
       {
         title: "SPONGE 工具",
