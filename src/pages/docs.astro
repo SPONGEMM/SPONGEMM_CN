@@ -1,15 +1,27 @@
 ---
 import Footer from "../components/site/Footer.astro";
 import Header from "../components/site/Header.astro";
+import LegacyDocsLayout from "../components/legacy/LegacyDocsLayout.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadLegacyMarkdown } from "../lib/legacy-markdown";
+
+const page = await loadLegacyMarkdown("文档");
+
+if (!page) {
+  throw new Error("Missing legacy docs overview page");
+}
+
+const Content = page.module.default;
 ---
 
 <BaseLayout title="SPONGEMM | 文档">
   <Header />
-  <main class="container section">
-    <div class="panel" style="padding: 2rem; border-radius: 24px;">
-      页面建设中，后续将逐步从 wiki.js 内容迁移到 Astro。
-    </div>
+  <main>
+    <LegacyDocsLayout section="docs" currentPath="/docs" title={page.title}>
+      <div class="legacy-markdown-body">
+        <Content />
+      </div>
+    </LegacyDocsLayout>
   </main>
   <Footer />
 </BaseLayout>
