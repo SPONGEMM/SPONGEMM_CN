@@ -32,6 +32,20 @@ const entryLinks = [
 ---
 
 <BaseLayout title="SPONGEMM | SPONGE">
+  <script slot="head">
+    (() => {
+      const introKey = "spongemm-home-intro-seen";
+      try {
+        if (window.sessionStorage.getItem(introKey) === "1") {
+          window.location.replace("/home");
+          return;
+        }
+        window.sessionStorage.setItem(introKey, "1");
+      } catch {
+        // Fallback: keep showing the intro if storage is unavailable.
+      }
+    })();
+  </script>
   <main class="sponge-deck" data-deck>
     <section class="deck-slide is-active" data-slide="0" aria-label="SPONGE 全称与缩写动画">
       <img class="sponge-intro-mark" src="/background.png" alt="" aria-hidden="true" loading="lazy" decoding="async" />
