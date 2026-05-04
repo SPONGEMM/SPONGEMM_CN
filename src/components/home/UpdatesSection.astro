@@ -1,14 +1,20 @@
 ---
 import { updates } from "../../data/homepage";
 import SectionHeading from "../shared/SectionHeading.astro";
+
+const {
+  items = updates,
+  title = "发展脉络",
+  label = "SPONGE 发展脉络"
+} = Astro.props;
 ---
 
-<section class="section">
+<section class="section" id="timeline">
   <div class="container">
-    <SectionHeading title="网站更新" />
-    <div class="updates-list">
-      {updates.map((item) => (
-        <article class="update-row">
+    <SectionHeading title={title} />
+    <div class="timeline-track" aria-label={label}>
+      {items.map((item) => (
+        <article class="timeline-item">
           <p class="update-date">{item.date}</p>
           <h3>{item.title}</h3>
         </article>

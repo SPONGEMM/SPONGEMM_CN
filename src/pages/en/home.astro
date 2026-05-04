@@ -1,0 +1,144 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnnouncementSection from "../../components/home/AnnouncementSection.astro";
+import ComponentsSection from "../../components/home/ComponentsSection.astro";
+import HeroSection from "../../components/home/HeroSection.astro";
+import HighlightsSection from "../../components/home/HighlightsSection.astro";
+import FriendLinksSection from "../../components/home/FriendLinksSection.astro";
+import UpdatesSection from "../../components/home/UpdatesSection.astro";
+import Header from "../../components/site/Header.astro";
+import { citations, highlights } from "../../data/homepage";
+import {
+  announcementsEn,
+  componentsEn,
+  friendLinksEn,
+  heroEn,
+  highlightsEn,
+  siteNavEn,
+  updatesEn
+} from "../../data/homepage-en";
+
+const pageTitle = "SPONGEMM | SPONGE Molecular Simulation Software Homepage";
+const pageDescription =
+  "The official SPONGE project homepage, with software updates, citation information, representative research outputs, documentation, tutorials, downloads, and related scientific software ecosystem links.";
+const siteUrl = "https://spongemm.cn";
+const homeJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: `${siteUrl}/en/home`,
+    inLanguage: "en",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SPONGEMM",
+      url: siteUrl
+    },
+    about: {
+      "@type": "SoftwareApplication",
+      name: "SPONGE",
+      alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+      applicationCategory: "Scientific software",
+      operatingSystem: "Linux, Windows, macOS",
+      url: `${siteUrl}/en/home`,
+      codeRepository: "https://github.com/SPONGEMM/SPONGE"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SPONGE",
+    alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+    applicationCategory: "Scientific software",
+    operatingSystem: "Linux, Windows, macOS",
+    description:
+      "SPONGE is a molecular simulation software package developed by the Yi Qin Gao group at Peking University, supporting molecular dynamics, enhanced sampling, free energy calculation, multi-hardware acceleration, and AI-enhanced molecular simulation.",
+    url: `${siteUrl}/en/home`,
+    codeRepository: "https://github.com/SPONGEMM/SPONGE",
+    creator: {
+      "@type": "Organization",
+      name: "Yi Qin Gao group, Peking University"
+    },
+    citation: citations.map((item) => item.doi)
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SPONGE software and method citations",
+    itemListElement: citations.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "ScholarlyArticle",
+        name: item.citation,
+        headline: item.citation,
+        isPartOf: item.venue,
+        url: item.doi,
+        identifier: item.doi
+      }
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Representative SPONGE research outputs",
+    itemListElement: highlights.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "ScholarlyArticle",
+        name: item.title,
+        headline: item.title,
+        datePublished: item.year,
+        url: item.doi,
+        identifier: item.doi,
+        image: item.image ? new URL(item.image, siteUrl).toString() : undefined
+      }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  lang="en"
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/en/home"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/home" },
+    { hreflang: "en", path: "/en/home" },
+    { hreflang: "x-default", path: "/home" }
+  ]}
+  ogImage="/assets/home/sponge-logo-notext.png"
+  jsonLd={homeJsonLd}
+>
+  <div class="page-watermark" aria-hidden="true">
+    <img src="/background.png" alt="" />
+  </div>
+  <Header navItems={siteNavEn} brandHref="/en" />
+  <main>
+    <AnnouncementSection items={announcementsEn} label="Official announcements" />
+    <HeroSection
+      item={heroEn}
+      titleLines={["SPONGE", "Simulation Package tOwards Next GEneration molecular modeling"]}
+    />
+    <ComponentsSection
+      items={componentsEn}
+      title="How to Cite"
+      description="If SPONGE and related tools support your research, please cite the corresponding software or method papers."
+    />
+    <HighlightsSection
+      items={highlightsEn}
+      title="Representative Research Outputs"
+      controlsLabel="Research carousel controls"
+      carouselLabel="Representative research outputs carousel"
+      dotsLabel="Research carousel position"
+      prevLabel="Previous item"
+      nextLabel="Next item"
+      dotLabel={(index: number) => `Go to research output ${index + 1}`}
+    />
+    <UpdatesSection items={updatesEn} title="Development Timeline" label="SPONGE development timeline" />
+    <FriendLinksSection items={friendLinksEn} title="Related Links" />
+  </main>
+</BaseLayout>

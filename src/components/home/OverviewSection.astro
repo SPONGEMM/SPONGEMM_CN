@@ -5,9 +5,15 @@ import { overview } from "../../data/homepage";
 
 <section class="section">
   <div class="container overview-single">
-    <SectionHeading title="基本介绍" />
-    {overview.body.split("\n\n").map((paragraph) => (
-      <p class="overview-body">{paragraph}</p>
-    ))}
+    <SectionHeading title="为什么选择 SPONGE" />
+    <p class="overview-lead">{overview.intro}</p>
+    <div class="overview-points">
+      {overview.points.map((item) => (
+        <article class="overview-point">
+          <h3>{item.title}</h3>
+          <p>{item.body}</p>
+        </article>
+      ))}
+    </div>
   </div>
 </section>

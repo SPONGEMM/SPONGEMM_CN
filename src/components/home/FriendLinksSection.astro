@@ -1,19 +1,24 @@
 ---
 import { friendLinks } from "../../data/homepage";
 import SectionHeading from "../shared/SectionHeading.astro";
+
+const {
+  items = friendLinks,
+  title = "友情链接"
+} = Astro.props;
 ---
 
-<section class="section">
+<section class="section" id="friend-links">
   <div class="container">
-    <SectionHeading title="友情链接" />
+    <SectionHeading title={title} />
     <div class="friend-grid">
-      {friendLinks.map((item) => (
+      {items.map((item) => (
         <a class="friend-card panel" href={item.href} target="_blank" rel="noreferrer">
           {item.image ? (
             <img src={item.image} alt={item.name} />
           ) : (
             <div class="friend-badge" aria-hidden="true">
-              {item.badge}
+              {item.name}
             </div>
           )}
           <div class="friend-body">

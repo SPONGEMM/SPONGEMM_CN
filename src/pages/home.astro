@@ -1,26 +1,118 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import AnnouncementSection from "../components/home/AnnouncementSection.astro";
 import ComponentsSection from "../components/home/ComponentsSection.astro";
 import HeroSection from "../components/home/HeroSection.astro";
 import HighlightsSection from "../components/home/HighlightsSection.astro";
-import OverviewSection from "../components/home/OverviewSection.astro";
 import FriendLinksSection from "../components/home/FriendLinksSection.astro";
-import QuickLinksSection from "../components/home/QuickLinksSection.astro";
 import UpdatesSection from "../components/home/UpdatesSection.astro";
 import Header from "../components/site/Header.astro";
-import Footer from "../components/site/Footer.astro";
+import { citations, highlights } from "../data/homepage";
+
+const pageTitle = "SPONGEMM | SPONGE 分子模拟软件主页";
+const pageDescription =
+  "SPONGE 官方项目主页，提供 SPONGE 分子模拟软件的版本通知、论文引用、代表性研究成果、文档、教程、下载入口与相关科研软件生态。";
+const siteUrl = "https://spongemm.cn";
+const homeJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: `${siteUrl}/home`,
+    inLanguage: "zh-CN",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SPONGEMM",
+      url: siteUrl
+    },
+    about: {
+      "@type": "SoftwareApplication",
+      name: "SPONGE",
+      alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+      applicationCategory: "Scientific software",
+      operatingSystem: "Linux, Windows, macOS",
+      url: `${siteUrl}/home`,
+      codeRepository: "https://github.com/SPONGEMM/SPONGE"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SPONGE",
+    alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+    applicationCategory: "Scientific software",
+    operatingSystem: "Linux, Windows, macOS",
+    description:
+      "SPONGE 是由北京大学高毅勤课题组开发的分子模拟软件，支持分子动力学、增强采样、自由能计算、多硬件平台加速和 AI 增强分子模拟方法。",
+    url: `${siteUrl}/home`,
+    codeRepository: "https://github.com/SPONGEMM/SPONGE",
+    creator: {
+      "@type": "Organization",
+      name: "Yi Qin Gao group, Peking University"
+    },
+    citation: citations.map((item) => item.doi)
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SPONGE 软件与方法引用",
+    itemListElement: citations.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "ScholarlyArticle",
+        name: item.citation,
+        headline: item.citation,
+        isPartOf: item.venue,
+        url: item.doi,
+        identifier: item.doi
+      }
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SPONGE 代表性研究成果",
+    itemListElement: highlights.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "ScholarlyArticle",
+        name: item.title,
+        headline: item.title,
+        datePublished: item.year,
+        url: item.doi,
+        identifier: item.doi,
+        image: item.image ? new URL(item.image, siteUrl).toString() : undefined
+      }
+    }))
+  }
+];
 ---
 
-<BaseLayout title="SPONGEMM | 分子模拟主页">
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/home"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/home" },
+    { hreflang: "en", path: "/en/home" },
+    { hreflang: "x-default", path: "/home" }
+  ]}
+  ogImage="/assets/home/sponge-logo-notext.png"
+  jsonLd={homeJsonLd}
+>
+  <div class="page-watermark" aria-hidden="true">
+    <img src="/background.png" alt="" />
+  </div>
   <Header />
   <main>
+    <AnnouncementSection />
     <HeroSection />
-    <OverviewSection />
     <ComponentsSection />
     <HighlightsSection />
-    <QuickLinksSection />
     <UpdatesSection />
     <FriendLinksSection />
   </main>
-  <Footer />
 </BaseLayout>

@@ -1,19 +1,26 @@
 ---
 import SectionHeading from "../shared/SectionHeading.astro";
 import { components } from "../../data/homepage";
+
+const {
+  items = components,
+  title = "如何引用",
+  description = "如果 SPONGE 及相关工具支持了你的研究工作，请在论文中引用对应的软件或方法论文。"
+} = Astro.props;
 ---
 
-<section class="section">
+<section class="section" id="citation">
   <div class="container">
-    <SectionHeading title="组成部分" />
+    <SectionHeading
+      title={title}
+      description={description}
+    />
     <div class="component-grid">
-      {components.map((item) => (
+      {items.map((item) => (
         <article class="component-card panel">
           <h3>{item.name}</h3>
           <p>{item.description}</p>
-          <a href={item.doi} target="_blank" rel="noreferrer">
-            {item.citation}
-          </a>
+          <cite>{item.citation}</cite>
           <a class="component-doi" href={item.doi} target="_blank" rel="noreferrer">
             {item.doi.replace("https://doi.org/", "DOI: ")}
           </a>

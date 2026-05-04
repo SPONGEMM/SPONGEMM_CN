@@ -1,19 +1,46 @@
 ---
 import { highlights } from "../../data/homepage";
 import SectionHeading from "../shared/SectionHeading.astro";
+
+const {
+  items = highlights,
+  title = "代表性研究成果",
+  controlsLabel = "研究成果轮播控制",
+  carouselLabel = "代表性研究成果轮播",
+  dotsLabel = "研究成果轮播位置",
+  prevLabel = "上一项",
+  nextLabel = "下一项",
+  dotLabel = (index: number) => `跳转到第 ${index + 1} 项研究成果`
+} = Astro.props;
 ---
 
-<section class="section">
+<section class="section" id="research-results">
   <div class="container">
-    <SectionHeading title="研究成果" />
-    <div class="highlight-grid">
-      {highlights.map((item) => (
+    <div class="carousel-heading-row">
+      <SectionHeading title={title} />
+      <div class="carousel-controls" aria-label={controlsLabel}>
+        <button class="carousel-button" type="button" data-carousel-prev aria-label={prevLabel}>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          </svg>
+        </button>
+        <button class="carousel-button" type="button" data-carousel-next aria-label={nextLabel}>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="m7.5 4.5 5.5 5.5-5.5 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="highlight-carousel" data-highlight-carousel aria-label={carouselLabel}>
+      {items.map((item, index) => (
         <article class="highlight-card panel">
           <div class="highlight-media">
             {item.image ? (
               <img src={item.image} alt={item.alt} loading="lazy" />
             ) : (
-              <div class="highlight-no-image" aria-hidden="true" />
+              <div class="highlight-no-image" role="img" aria-label={item.alt}>
+                <span>{item.fallbackLabel ?? "Research highlight"}</span>
+              </div>
             )}
           </div>
           <div class="highlight-body">
@@ -26,5 +53,56 @@ import SectionHeading from "../shared/SectionHeading.astro";
         </article>
       ))}
     </div>
+    <div class="carousel-dots" aria-label={dotsLabel}>
+      {items.map((_, index) => (
+        <button
+          class={index === 0 ? "is-active" : ""}
+          type="button"
+          data-carousel-dot={index}
+          aria-label={dotLabel(index)}
+        />
+      ))}
+    </div>
   </div>
 </section>
+
+<script>
+  const carousel = document.querySelector<HTMLElement>("[data-highlight-carousel]");
+  const prevButton = document.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+  const nextButton = document.querySelector<HTMLButtonElement>("[data-carousel-next]");
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
+
+  if (carousel) {
+    const getStep = () => {
+      const card = carousel.querySelector<HTMLElement>(".highlight-card");
+      if (!card) return carousel.clientWidth;
+      const styles = window.getComputedStyle(carousel);
+      const gap = Number.parseFloat(styles.columnGap || styles.gap || "0");
+      return card.offsetWidth + gap;
+    };
+
+    const scrollToIndex = (index: number) => {
+      carousel.scrollTo({ left: getStep() * index, behavior: "smooth" });
+    };
+
+    const updateDots = () => {
+      const index = Math.round(carousel.scrollLeft / getStep());
+      dots.forEach((dot, dotIndex) => dot.classList.toggle("is-active", dotIndex === index));
+    };
+
+    prevButton?.addEventListener("click", () => {
+      const index = Math.max(0, Math.round(carousel.scrollLeft / getStep()) - 1);
+      scrollToIndex(index);
+    });
+
+    nextButton?.addEventListener("click", () => {
+      const index = Math.min(dots.length - 1, Math.round(carousel.scrollLeft / getStep()) + 1);
+      scrollToIndex(index);
+    });
+
+    dots.forEach((dot, index) => dot.addEventListener("click", () => scrollToIndex(index)));
+    carousel.addEventListener("scroll", updateDots, { passive: true });
+    window.addEventListener("resize", updateDots);
+    updateDots();
+  }
+</script>

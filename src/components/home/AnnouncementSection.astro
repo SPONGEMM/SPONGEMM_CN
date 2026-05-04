@@ -1,0 +1,39 @@
+---
+import { announcements } from "../../data/homepage";
+
+const {
+  items = announcements,
+  label = "官方通知"
+} = Astro.props;
+---
+
+{items.length > 0 && (
+  <aside class="announcement-band" aria-label={label}>
+    <div class="container announcement-list">
+      {items.map((item) => (
+        <article class="announcement-card">
+          <div class="announcement-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 9.7c0-3.2-2.2-5.7-6-5.7S6 6.5 6 9.7v2.7c0 1-.4 1.9-1.1 2.6L4 16h16l-.9-1c-.7-.7-1.1-1.6-1.1-2.6V9.7Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+              <path d="M9.7 19a2.5 2.5 0 0 0 4.6 0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
+            </svg>
+          </div>
+          <div class="announcement-meta">
+            <span>{item.type}</span>
+          </div>
+          <div class="announcement-content">
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </div>
+          <a class="announcement-link" href={item.href}>
+            <span>{item.action}</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M8 5H5.8C4.8 5 4 5.8 4 6.8v7.4c0 1 .8 1.8 1.8 1.8h7.4c1 0 1.8-.8 1.8-1.8V12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+              <path d="M11 4h5v5M9.5 10.5 16 4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+            </svg>
+          </a>
+        </article>
+      ))}
+    </div>
+  </aside>
+)}

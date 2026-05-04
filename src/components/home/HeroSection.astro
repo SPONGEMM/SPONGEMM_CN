@@ -1,86 +1,24 @@
 ---
 import { hero } from "../../data/homepage";
-import { heroHighlights } from "../../data/homepage";
+
+const {
+  item = hero,
+  titleLines = ["SPONGE", "面向下一代分子科学的分子模拟软件"],
+  image = "/assets/home/1ubq.jpg"
+} = Astro.props;
 ---
 
 <section class="hero section">
-  <div class="hero-background" aria-hidden="true">
-    <img src="/background.png" alt="" />
-  </div>
   <div class="container hero-grid">
     <div class="hero-copy">
-      <h1 aria-label="Simulation Package tOward Next GEneration molecular modelling">
-        <span><span class="hero-accent">S</span>imulation</span>{" "}
-        <span><span class="hero-accent">P</span>ackage</span>{" "}
-        <span>t<span class="hero-accent">O</span>ward</span>{" "}
-        <span><span class="hero-accent">N</span>ext</span>{" "}
-        <span><span class="hero-accent">GE</span>neration</span>{" "}
-        <span>molecular modelling</span>
+      <h1>
+        <span class="hero-accent">{titleLines[0]}</span>
+        <span>{titleLines[1]}</span>
       </h1>
-      <p class="hero-intro">{hero.intro}</p>
-      <div class="hero-actions">
-        <a class="button button-primary" href={hero.primaryAction.href}>{hero.primaryAction.label}</a>
-        <a class="button button-secondary" href={hero.secondaryAction.href}>{hero.secondaryAction.label}</a>
-      </div>
+      <p class="hero-intro">{item.intro}</p>
     </div>
-    <div class="hero-visual panel hero-carousel" data-hero-carousel>
-      <div class="hero-carousel-head">
-        <p>代表性应用与论文精选</p>
-        <span>Featured Research</span>
-      </div>
-      <div class="hero-carousel-track">
-        {heroHighlights.map((item, index) => (
-          <article class={`hero-slide ${index === 0 ? "is-active" : ""}`} data-hero-slide>
-            <div class="hero-slide-media">
-              <img src={item.image} alt={item.alt} loading="lazy" />
-            </div>
-            <div class="hero-slide-body">
-              <p class="hero-slide-year">{item.year}</p>
-              <h2>{item.title}</h2>
-              <a href={item.doi} target="_blank" rel="noreferrer">
-                {item.doi.replace("https://doi.org/", "DOI: ")}
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
-      <div class="hero-carousel-dots">
-        {heroHighlights.map((_, index) => (
-          <button
-            class={index === 0 ? "is-active" : undefined}
-            type="button"
-            aria-label={`切换到第 ${index + 1} 个精选条目`}
-            data-hero-dot
-          />
-        ))}
-      </div>
+    <div class="hero-visual" aria-hidden="true">
+      <img class="hero-visual-image" src={image} alt="" loading="eager" />
     </div>
   </div>
 </section>
-
-<script>
-  const root = document.querySelector("[data-hero-carousel]");
-  if (root) {
-    const slides = Array.from(root.querySelectorAll("[data-hero-slide]"));
-    const dots = Array.from(root.querySelectorAll("[data-hero-dot]"));
-    let activeIndex = 0;
-
-    const activate = (index) => {
-      activeIndex = index;
-      slides.forEach((slide, slideIndex) => {
-        slide.classList.toggle("is-active", slideIndex === index);
-      });
-      dots.forEach((dot, dotIndex) => {
-        dot.classList.toggle("is-active", dotIndex === index);
-      });
-    };
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => activate(index));
-    });
-
-    setInterval(() => {
-      activate((activeIndex + 1) % slides.length);
-    }, 3600);
-  }
-</script>
