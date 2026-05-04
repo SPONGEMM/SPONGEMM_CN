@@ -50,7 +50,7 @@ jobs:
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" | sed 's/\r$//' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
@@ -61,5 +61,5 @@ jobs:
           else
             DEST="${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.PREVIEW_DEPLOY_PATH }}"
           fi
-          rsync -avz --delete dist/ "$DEST"
-          ssh -i ~/.ssh/deploy_key "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" "sudo systemctl reload nginx"
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" dist/ "$DEST"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" "sudo systemctl reload nginx"
