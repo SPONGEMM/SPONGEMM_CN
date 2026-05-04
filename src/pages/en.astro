@@ -1,0 +1,182 @@
+---
+import IntroDeck from "../components/intro/IntroDeck.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "SPONGE | Simulation Package tOwards Next GEneration molecular modeling";
+const pageDescription =
+  "SPONGE is a molecular simulation software package for next-generation molecular science, developed by the Yi Qin Gao group at Peking University.";
+const introJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SPONGEMM",
+    url: "https://spongemm.cn/en",
+    sameAs: ["https://github.com/SPONGEMM/SPONGE"],
+    parentOrganization: {
+      "@type": "CollegeOrUniversity",
+      name: "Peking University"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SPONGE",
+    alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+    applicationCategory: "Scientific software",
+    operatingSystem: "Linux, Windows",
+    description: pageDescription,
+    url: "https://spongemm.cn/en",
+    codeRepository: "https://github.com/SPONGEMM/SPONGE",
+    creator: {
+      "@type": "Organization",
+      name: "Yi Qin Gao group, Peking University"
+    }
+  }
+];
+
+const entryLinks = [
+  {
+    label: "Enter Site",
+    href: "/en/home",
+    variant: "primary",
+    icon: "M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-8.5Z"
+  },
+  {
+    label: "Documentation",
+    href: "/en/Documents",
+    variant: "outline",
+    icon: "M6 4h9l3 3v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm8 0v4h4M8 12h8M8 16h5"
+  },
+  {
+    label: "Download",
+    href: "/en/Download",
+    variant: "outline",
+    icon: "M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"
+  },
+  {
+    label: "Perspectives & Insights",
+    href: "/en/insights",
+    variant: "outline",
+    icon: "M12 5v14M5 12h14M7.5 7.5l9 9M16.5 7.5l-9 9"
+  }
+] as const;
+
+const contextItems = [
+  {
+    title: "Scientific Context",
+    body: "Molecular structure, dynamics, and interactions shape many biological, chemical, and materials processes across atomic scales and multiple timescales."
+  },
+  {
+    title: "Role of Simulation",
+    body: "Molecular simulation acts as a computational microscope, connecting microscopic mechanisms with thermodynamic properties and observable phenomena."
+  },
+  {
+    title: "Current Challenges",
+    body: "As molecular systems grow larger, simulation timescales become longer, and sampling problems become more complex, simulation software must adapt to heterogeneous hardware, enhanced sampling methods, and AI-driven computational paradigms."
+  }
+] as const;
+
+const featureSlides = [
+  {
+    label: "Molecular dynamics acceleration across diverse hardware",
+    eyebrow: "Core Capability",
+    title: "Molecular Dynamics Acceleration Across Diverse Hardware",
+    body: "SPONGE is designed to accelerate molecular dynamics simulations across CPUs, GPUs, NPUs, and Chinese hardware platforms, combining portability on Windows, Linux, and macOS with performance in heterogeneous computing environments.",
+    points: [
+      "CPU support: Intel, AMD, Apple, and Chinese CPU platforms, among others.",
+      "Accelerator support: NVIDIA and AMD GPUs, Chinese GPUs, Chinese NPUs, and other accelerator platforms.",
+      "Chinese hardware ecosystem: Huawei, Hygon, Moore Threads, and related platforms for trusted heterogeneous computing in Chinese IT environments.",
+      "Cross-system deployment: Windows, Linux, macOS, and related environments across local workstations, servers, and high-performance computing platforms."
+    ]
+  },
+  {
+    label: "Enhanced sampling and free energy calculation",
+    eyebrow: "Core Capability",
+    title: "Enhanced Sampling and Free Energy Calculation",
+    body: "For conformational changes, rare events, and free energy landscapes, SPONGE integrates enhanced sampling methods to help researchers explore complex molecular systems more effectively.",
+    points: [
+      "Why enhanced sampling matters: conventional molecular dynamics often cannot cross high energy barriers or fully visit important conformations within limited simulation time, while enhanced sampling improves the exploration of rare events, conformational transitions, and free energy landscapes.",
+      "Method support: covers enhanced sampling algorithms such as umbrella sampling, metadynamics, and selective temperature integration, as well as free energy calculation methods such as MM/GBSA and free energy perturbation."
+    ]
+  },
+  {
+    label: "AI-driven molecular simulation methods",
+    eyebrow: "Core Capability",
+    title: "AI-Driven Molecular Simulation Methods",
+    body: "SPONGE follows the development of AI-enhanced molecular simulation, exploring how machine learning can support modeling, sampling, potentials, analysis, and simulation decision-making. It connects machine learning, molecular modeling, and traditional molecular dynamics simulation, supports AI-driven ideas for sampling, analysis, and model-assisted simulation, and keeps clear software interfaces for future algorithm development and cross-tool collaboration.",
+    points: []
+  },
+  {
+    label: "Agentic MD for autonomous molecular simulation workflows",
+    eyebrow: "Frontier Direction",
+    title: "Agentic MD for Autonomous Molecular Simulation Workflows",
+    body: "Agentic MD points toward autonomous molecular simulation workflows where AI agents help plan, execute, inspect, and iterate simulation tasks. It is an emerging direction for moving from manual scripts to explainable intelligent collaboration, exploring autonomous molecular simulation together with workflow automation, letting agents assist system preparation, parameter checks, task orchestration, and result analysis, and emphasizing traceable, reviewable, and iterative simulation decisions for complex research workflows.",
+    points: []
+  },
+  {
+    label: "Biomolecular simulation applications",
+    eyebrow: "Typical Applications",
+    title: "Biomolecular Simulation for Life Science",
+    body: "For proteins, nucleic acids, membranes, ligand recognition, and other biomolecular systems, SPONGE supports studies of conformational dynamics, molecular interactions, binding free energy, and mechanistic interpretation, helping researchers understand complex biological processes at atomic resolution.",
+    points: [
+      "Protein and nucleic acid systems: conformational change, folding stability, mutation effects, and molecular recognition mechanisms.",
+      "Drug discovery and ligand binding: binding mode analysis, binding free energy estimation, and candidate molecule screening.",
+      "Membrane proteins and complex biological systems: long-timescale dynamics in membrane environments, solvent effects, and multicomponent systems."
+    ]
+  },
+  {
+    label: "Materials molecular simulation applications",
+    eyebrow: "Typical Applications",
+    title: "Molecular Simulation for Materials Science",
+    body: "For polymers, electrolytes, interfaces, crystals, soft matter, and related materials systems, SPONGE can support studies of microscopic structure, diffusion and transport, interfacial interactions, and thermodynamic properties, providing computational support for materials design and performance understanding.",
+    points: [
+      "Energy and electrolyte materials: ion solvation, diffusion and transport, interface structure, and electrochemistry-related microscopic mechanisms.",
+      "Polymers and soft matter: chain motion, aggregation behavior, interaction networks, and structure-property relationships.",
+      "Crystals, interfaces, and composite materials: connecting atomic-scale structure, interfacial interactions, and observable materials properties."
+    ]
+  },
+  {
+    label: "Ecosystem, community, and partners",
+    eyebrow: "Ecosystem",
+    title: "Supporting Research Education and Industrial R&D",
+    body: "SPONGE aims to build an open, reusable, and extensible molecular simulation software ecosystem for research and education across universities and institutes, as well as R&D and engineering applications in industry. It supports teaching and research in computational chemistry, molecular simulation, molecular modeling, and high-performance computing, while also serving enterprise scenarios in drug discovery, materials, energy, and intelligent computing. SPONGE has been used in teaching contexts such as the Peking University undergraduate course Introduction to Computational Chemistry, and is exploring connections among scientific software, intelligent computing, and industrial applications with organizations including Beijing Sidereus Intelligent Computing Technology Co., Ltd.",
+    points: []
+  }
+] as const;
+
+---
+
+<BaseLayout
+  lang="en"
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/en"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/" },
+    { hreflang: "en", path: "/en" },
+    { hreflang: "x-default", path: "/" }
+  ]}
+  ogImage="/assets/home/sponge-logo-notext.png"
+  jsonLd={introJsonLd}
+>
+  <IntroDeck
+    entryLinks={entryLinks}
+    switchHref="/"
+    switchLabel="切换到中文"
+    slideOneLabel="SPONGE acronym animation"
+    slideTwoLabel="SPONGE overview"
+    fullNameLabel="Simulation Package tOwards Next GEneration molecular modeling"
+    molecularModelingText="molecular modeling"
+    navLabel="Primary navigation"
+    scrollDownLabel="Scroll down"
+    scrollUpLabel="Back"
+    overviewEyebrow="What is SPONGE?"
+    overviewTitle="Simulation Package tOwards<br />Next GEneration molecular modeling"
+    overviewBody="Developed by the Yi Qin Gao group at Peking University, SPONGE accelerates molecular dynamics across many hardware platforms, including many-core CPUs, GPUs, and NPUs, while integrating enhanced sampling methods and AI-driven algorithms."
+    contextSlideLabel="Why molecular simulation"
+    contextEyebrow="Why molecular simulation?"
+    contextTitle="From Scientific Questions to Computational Tools"
+    contextItems={contextItems}
+    featureSlides={featureSlides}
+  />
+</BaseLayout>

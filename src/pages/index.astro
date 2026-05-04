@@ -1,12 +1,37 @@
 ---
+import IntroDeck from "../components/intro/IntroDeck.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const acronymWords = [
-  { lead: "S", rest: "imulation" },
-  { lead: "P", rest: "ackage" },
-  { lead: "O", prefix: "t", rest: "ward" },
-  { lead: "N", rest: "ext" },
-  { lead: "GE", rest: "neration" }
+const pageTitle = "SPONGE | 面向下一代分子科学的分子模拟软件";
+const pageDescription =
+  "SPONGE 是由北京大学高毅勤课题组开发的分子模拟软件，面向众核 CPU、GPU、NPU 等多种硬件平台提供加速的分子动力学模拟能力。";
+const introJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SPONGEMM",
+    url: "https://spongemm.cn/",
+    sameAs: ["https://github.com/SPONGEMM/SPONGE"],
+    parentOrganization: {
+      "@type": "CollegeOrUniversity",
+      name: "Peking University"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SPONGE",
+    alternateName: "Simulation Package tOwards Next GEneration molecular modeling",
+    applicationCategory: "Scientific software",
+    operatingSystem: "Linux, Windows",
+    description: pageDescription,
+    url: "https://spongemm.cn/",
+    codeRepository: "https://github.com/SPONGEMM/SPONGE",
+    creator: {
+      "@type": "Organization",
+      name: "Yi Qin Gao group, Peking University"
+    }
+  }
 ];
 
 const entryLinks = [
@@ -25,519 +50,133 @@ const entryLinks = [
   {
     label: "获取程序",
     href: "/download",
-    variant: "ghost",
+    variant: "outline",
     icon: "M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"
+  },
+  {
+    label: "观点洞见",
+    href: "/insights",
+    variant: "outline",
+    icon: "M12 5v14M5 12h14M7.5 7.5l9 9M16.5 7.5l-9 9"
   }
-];
+] as const;
+
+const contextItems = [
+  {
+    title: "科学问题背景",
+    body: "分子结构、动力学和相互作用决定了许多生命、化学和材料过程，但这些过程往往发生在原子尺度和多时间尺度上。"
+  },
+  {
+    title: "分子模拟的角色",
+    body: "分子模拟为研究者提供一台计算显微镜，用来连接微观机制、热力学性质和可观测实验现象。"
+  },
+  {
+    title: "现有挑战",
+    body: "随着研究体系变大、模拟时间尺度延长和采样问题复杂化，分子模拟软件需要同时适应异构硬件、增强采样方法和 AI 驱动的新计算范式。"
+  }
+] as const;
+
+const featureSlides = [
+  {
+    label: "多硬件加速的分子动力学模拟",
+    eyebrow: "核心能力",
+    title: "多硬件加速的分子动力学模拟",
+    body: "SPONGE 面向 CPU、GPU、NPU 和国产硬件平台开展分子动力学模拟加速，兼顾 Windows、Linux 与 macOS 等操作系统上的可移植性和异构计算性能。",
+    points: [
+      "处理器支持：覆盖 Intel、AMD、Apple 等主流 CPU 以及国产 CPU 平台。",
+      "加速器支持：覆盖 NVIDIA、AMD 等 GPU，以及国产 GPU、国产 NPU 等加速器平台。",
+      "国产硬件生态：适配华为、海光、摩尔线程等平台，面向自主可控的信创异构计算。",
+      "跨系统部署：支持 Windows、Linux、macOS 等操作系统，覆盖本地工作站、服务器和高性能计算平台。"
+    ]
+  },
+  {
+    label: "增强采样与自由能计算",
+    eyebrow: "核心能力",
+    title: "增强采样与自由能计算",
+    body: "针对构象变化、稀有事件和自由能景观等分子模拟难题，SPONGE 集成增强采样方法，帮助研究者更有效地探索复杂分子体系。",
+    points: [
+      "为什么需要增强采样：常规分子动力学很难在有限时间内跨越高能垒并充分访问重要构象，增强采样可以提高稀有事件、构象转变和自由能景观的探索效率。",
+      "方法支持：覆盖伞形采样、metadynamics、选择性温度积分等增强采样算法，以及 MM/GBSA、自由能微扰等自由能计算方法。"
+    ]
+  },
+  {
+    label: "AI 增强分子模拟方法",
+    eyebrow: "核心能力",
+    title: "AI 增强分子模拟方法",
+    body: "SPONGE 关注 AI 增强分子模拟的方法发展，面向建模、采样、势能、分析和模拟决策等环节探索机器学习与分子模拟的结合，连接机器学习、分子建模与传统分子动力学模拟，支持 AI 驱动的采样、分析和模型辅助模拟思路，并为后续算法扩展和跨工具协作保留清晰的软件接口。",
+    points: []
+  },
+  {
+    label: "Agentic MD 自主分子模拟工作流",
+    eyebrow: "前沿方向",
+    title: "Agentic MD：面向自主分子模拟工作流",
+    body: "Agentic MD 面向由 AI 智能体辅助规划、执行、检查和迭代的自主分子模拟工作流。它更像一个正在发展的方向，用来探索模拟任务如何从人工脚本走向可解释的智能协作，探索自主分子模拟与工作流自动化的结合，让智能体参与体系准备、参数检查、任务编排和结果分析，并面向复杂研究流程强调可追踪、可复核、可迭代的模拟决策。",
+    points: []
+  },
+  {
+    label: "生物分子模拟应用场景",
+    eyebrow: "典型应用场景",
+    title: "面向生命科学的生物分子模拟",
+    body: "在蛋白质、核酸、膜体系和配体识别等生物分子研究中，SPONGE 可用于构象动力学、分子相互作用、结合自由能和机制解释等问题，帮助研究者从原子尺度理解复杂生命过程。",
+    points: [
+      "蛋白质与核酸体系：研究构象变化、折叠稳定性、突变影响和分子识别机制。",
+      "药物发现与配体结合：支持结合模式分析、结合自由能估计和候选分子筛选。",
+      "膜蛋白与复杂生物体系：面向膜环境、溶剂效应和多组分体系中的长时间尺度动力学。"
+    ]
+  },
+  {
+    label: "材料分子模拟应用场景",
+    eyebrow: "典型应用场景",
+    title: "面向材料科学的分子模拟",
+    body: "在聚合物、电解液、界面、晶体和软物质等材料体系中，SPONGE 可服务于微观结构、扩散输运、界面作用和热力学性质研究，为材料设计与性能理解提供计算支撑。",
+    points: [
+      "能源与电解液材料：研究离子溶剂化、扩散输运、界面结构和电化学相关微观机制。",
+      "聚合物与软物质体系：分析链段运动、聚集行为、相互作用网络和结构-性能关系。",
+      "晶体、界面与复合材料：连接原子尺度结构、界面作用和可观测材料性质。"
+    ]
+  },
+  {
+    label: "生态社区与合作伙伴",
+    eyebrow: "生态社区",
+    title: "连接科研教育与产业研发",
+    body: "SPONGE 希望持续建设开放、可复用、可扩展的分子模拟软件生态，为各科研院所的科研与教育、企业的研发和工程化应用提供助力，支持计算化学、分子模拟、分子建模和高性能计算相关教学与研究，也服务药物、材料、能源和智能计算等方向的产业研发场景。目前，SPONGE 已在北京大学本科生课程《计算化学导论》等教学场景中使用，并与北京星使智算科技有限公司等单位探索科研软件、智能计算与产业应用之间的连接。",
+    points: []
+  }
+] as const;
+
 ---
 
-<BaseLayout title="SPONGEMM | SPONGE">
-  <script slot="head">
-    (() => {
-      const introKey = "spongemm-home-intro-seen";
-      try {
-        if (window.sessionStorage.getItem(introKey) === "1") {
-          window.location.replace("/home");
-          return;
-        }
-        window.sessionStorage.setItem(introKey, "1");
-      } catch {
-        // Fallback: keep showing the intro if storage is unavailable.
-      }
-    })();
-  </script>
-  <main class="sponge-deck" data-deck>
-    <section class="deck-slide is-active" data-slide="0" aria-label="SPONGE 全称与缩写动画">
-      <img class="sponge-intro-mark" src="/background.png" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-      <div class="deck-slide-body">
-        <div class="sponge-intro-stage">
-          <div class="sponge-full-name" aria-label="Simulation Package tOward Next GEneration molecular modelling">
-            {acronymWords.map((word, index) => (
-              <span class="sponge-word" style={`--word-index: ${index}`}>
-                {word.prefix && <span class="sponge-prefix">{word.prefix}</span>}
-                <span class="sponge-lead">{word.lead}</span>
-                <span class="sponge-rest">{word.rest}</span>
-              </span>
-            ))}
-            <span class="sponge-word sponge-tail" style="--word-index: 5">molecular modelling</span>
-          </div>
-
-          <h1 class="sponge-acronym">SPONGE</h1>
-        </div>
-
-        <nav class="sponge-entry" aria-label="主要入口">
-          {entryLinks.map((link, index) => (
-            <a
-              class={`sponge-entry-link is-${link.variant}`}
-              href={link.href}
-              style={`--entry-index: ${index}`}
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <path d={link.icon} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              <span>{link.label}</span>
-            </a>
-          ))}
-        </nav>
-      </div>
-
-      <button type="button" class="sponge-scroll-hint" data-deck-next aria-label="继续向下浏览">
-        <span>向下滚动</span>
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-    </section>
-
-    <section class="deck-slide is-future" data-slide="1" aria-label="SPONGE 概览">
-      <div class="deck-slide-body deck-overview">
-        <p class="deck-eyebrow">What is SPONGE</p>
-        <h2 class="deck-title">
-          面向下一代分子模拟的<br />高性能、模块化软件包
-        </h2>
-        <p class="deck-body">
-          SPONGE 由北京大学高毅勤课题组开发，提供 GPU 加速的分子动力学模拟、丰富的增强采样方法，以及深度学习势函数与算法的原生集成。
-        </p>
-        <div class="deck-actions">
-          <a class="sponge-entry-link is-primary" href="/home">了解更多</a>
-          <a class="sponge-entry-link is-outline" href="/docs">阅读文档</a>
-        </div>
-      </div>
-
-      <button type="button" class="sponge-scroll-hint up" data-deck-prev aria-label="返回顶部">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span>返回</span>
-      </button>
-    </section>
-  </main>
+<BaseLayout
+  lang="zh-CN"
+  title={pageTitle}
+  description={pageDescription}
+  canonicalPath="/"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/" },
+    { hreflang: "en", path: "/en" },
+    { hreflang: "x-default", path: "/" }
+  ]}
+  ogImage="/assets/home/sponge-logo-notext.png"
+  jsonLd={introJsonLd}
+>
+  <IntroDeck
+    entryLinks={entryLinks}
+    switchHref="/en"
+    switchLabel="Switch to English"
+    slideOneLabel="SPONGE 全称与缩写动画"
+    slideTwoLabel="SPONGE 概览"
+    fullNameLabel="Simulation Package tOwards Next GEneration molecular modeling"
+    molecularModelingText="molecular modeling"
+    navLabel="主要入口"
+    scrollDownLabel="向下滚动"
+    scrollUpLabel="返回"
+    overviewEyebrow="SPONGE是什么？"
+    overviewTitle="面向下一代分子科学的<br />分子模拟软件"
+    overviewBody="SPONGE 由北京大学高毅勤课题组开发，面向众核 CPU、GPU、NPU 等多种硬件平台提供加速的分子动力学模拟能力，并集成丰富的增强采样方法与 AI 驱动算法。"
+    contextSlideLabel="为什么需要分子模拟"
+    contextEyebrow="为什么需要分子模拟？"
+    contextTitle="从科学问题到计算工具"
+    contextItems={contextItems}
+    featureSlides={featureSlides}
+  />
 </BaseLayout>
-
-<script>
-  const deck = document.querySelector<HTMLElement>("[data-deck]");
-  if (deck) {
-    const slides = Array.from(deck.querySelectorAll<HTMLElement>(".deck-slide"));
-    const INTRO_LOCK_MS = 3800;
-    const COOLDOWN_MS = 750;
-    let current = 0;
-    let ready = false;
-    let lastTrigger = 0;
-    let touchStartY: number | null = null;
-
-    const unlockReady = () => {
-      ready = true;
-      deck.classList.add("is-ready");
-    };
-    window.setTimeout(unlockReady, INTRO_LOCK_MS);
-
-    const goto = (index: number) => {
-      if (index < 0 || index >= slides.length || index === current) return;
-      const now = performance.now();
-      if (now - lastTrigger < COOLDOWN_MS) return;
-      lastTrigger = now;
-      const direction = index > current ? "down" : "up";
-      slides[current].classList.remove("is-active");
-      slides[current].classList.add(direction === "down" ? "is-past" : "is-future");
-      slides[index].classList.remove("is-past", "is-future");
-      slides[index].classList.add("is-active");
-      current = index;
-    };
-
-    const next = () => goto(current + 1);
-    const prev = () => goto(current - 1);
-
-    deck.addEventListener(
-      "wheel",
-      (event) => {
-        if (!ready) {
-          event.preventDefault();
-          return;
-        }
-        if (Math.abs(event.deltaY) < 12) return;
-        event.preventDefault();
-        if (event.deltaY > 0) next();
-        else prev();
-      },
-      { passive: false }
-    );
-
-    deck.addEventListener("touchstart", (event) => {
-      touchStartY = event.touches[0]?.clientY ?? null;
-    }, { passive: true });
-
-    deck.addEventListener("touchend", (event) => {
-      if (!ready || touchStartY == null) return;
-      const endY = event.changedTouches[0]?.clientY;
-      if (endY == null) return;
-      const dy = touchStartY - endY;
-      if (Math.abs(dy) < 50) return;
-      if (dy > 0) next();
-      else prev();
-      touchStartY = null;
-    }, { passive: true });
-
-    window.addEventListener("keydown", (event) => {
-      if (!ready) return;
-      if (["ArrowDown", "PageDown", " "].includes(event.key)) {
-        event.preventDefault();
-        next();
-      } else if (["ArrowUp", "PageUp"].includes(event.key)) {
-        event.preventDefault();
-        prev();
-      }
-    });
-
-    deck.querySelectorAll<HTMLElement>("[data-deck-next]").forEach((el) => {
-      el.addEventListener("click", () => next());
-    });
-    deck.querySelectorAll<HTMLElement>("[data-deck-prev]").forEach((el) => {
-      el.addEventListener("click", () => prev());
-    });
-  }
-</script>
-
-<style>
-  .sponge-deck {
-    position: relative;
-    height: 100svh;
-    width: 100%;
-    overflow: hidden;
-    background:
-      radial-gradient(circle at 12% 18%, rgba(78, 161, 255, 0.14), transparent 32%),
-      radial-gradient(circle at 85% 10%, rgba(29, 105, 181, 0.12), transparent 30%),
-      var(--bg);
-    color: var(--text);
-  }
-
-  .deck-slide {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    justify-items: center;
-    align-items: center;
-    padding: clamp(24px, 6vw, 72px);
-    row-gap: clamp(20px, 3vh, 40px);
-    transition:
-      opacity 620ms cubic-bezier(0.65, 0, 0.35, 1),
-      transform 620ms cubic-bezier(0.65, 0, 0.35, 1);
-    opacity: 0;
-    transform: translateY(48px);
-    pointer-events: none;
-  }
-
-  .deck-slide.is-active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-    z-index: 2;
-  }
-
-  .deck-slide.is-past {
-    opacity: 0;
-    transform: translateY(-48px);
-    z-index: 1;
-  }
-
-  .deck-slide.is-future {
-    opacity: 0;
-    transform: translateY(48px);
-    z-index: 1;
-  }
-
-  .deck-slide-body {
-    width: min(1180px, 100%);
-    display: grid;
-    justify-items: center;
-    align-content: center;
-    row-gap: clamp(36px, 6vh, 72px);
-  }
-
-  .sponge-intro-mark {
-    position: absolute;
-    inset: 50% auto auto 50%;
-    width: min(720px, 70vw);
-    opacity: 0.08;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .sponge-intro-stage {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-  }
-
-  .sponge-full-name {
-    grid-area: 1 / 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(10px, 2vw, 24px);
-    align-items: baseline;
-    justify-content: center;
-    animation: sponge-fullname-out 420ms ease forwards;
-    animation-delay: 2.3s;
-  }
-
-  .sponge-word {
-    display: inline-flex;
-    align-items: baseline;
-    color: var(--text);
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: clamp(2rem, 5vw, 4.8rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: 0;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateY(18px);
-    animation: sponge-word-in 520ms ease forwards;
-    animation-delay: calc(var(--word-index) * 240ms);
-  }
-
-  .sponge-lead {
-    color: var(--primary);
-  }
-
-  .sponge-tail {
-    color: var(--muted);
-  }
-
-  .sponge-acronym {
-    grid-area: 1 / 1;
-    margin: 0;
-    color: var(--primary);
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: clamp(5.5rem, 17vw, 15rem);
-    font-weight: 700;
-    line-height: 0.9;
-    letter-spacing: 0.06em;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(12px);
-    animation: sponge-acronym-in 600ms ease forwards;
-    animation-delay: 2.72s;
-  }
-
-  .sponge-entry {
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(12px, 2vw, 20px);
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(16px);
-    animation: sponge-fade-up 600ms ease forwards;
-    animation-delay: 3.35s;
-  }
-
-  .sponge-entry-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: clamp(12px, 1.4vw, 16px) clamp(22px, 2.4vw, 30px);
-    border-radius: 999px;
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: clamp(1rem, 1.2vw, 1.1rem);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    text-decoration: none;
-    transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-  }
-
-  .sponge-entry-link svg {
-    flex-shrink: 0;
-  }
-
-  .sponge-entry-link.is-primary {
-    background: var(--primary);
-    color: #fff;
-    border: 1px solid var(--primary);
-    box-shadow: 0 12px 30px rgba(29, 105, 181, 0.28);
-  }
-
-  .sponge-entry-link.is-primary:hover {
-    background: var(--primary-strong);
-    border-color: var(--primary-strong);
-    transform: translateY(-2px);
-    box-shadow: 0 18px 40px rgba(17, 74, 133, 0.32);
-  }
-
-  .sponge-entry-link.is-outline {
-    background: var(--surface);
-    color: var(--primary);
-    border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent);
-    backdrop-filter: blur(12px);
-  }
-
-  .sponge-entry-link.is-outline:hover {
-    background: var(--surface-strong);
-    border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-  }
-
-  .sponge-entry-link.is-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px dashed color-mix(in srgb, var(--muted) 40%, transparent);
-  }
-
-  .sponge-entry-link.is-ghost:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    border-style: solid;
-    transform: translateY(-2px);
-  }
-
-  .sponge-scroll-hint {
-    --bounce-y: 6px;
-    position: absolute;
-    bottom: clamp(20px, 3.5vh, 40px);
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.82rem;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 500ms ease, color 180ms ease;
-  }
-
-  .sponge-scroll-hint.up {
-    --bounce-y: -6px;
-    top: clamp(20px, 3.5vh, 40px);
-    bottom: auto;
-  }
-
-  .sponge-deck.is-ready .sponge-scroll-hint {
-    opacity: 1;
-    visibility: visible;
-    animation: sponge-bounce 1.8s ease-in-out 400ms infinite;
-  }
-
-  .sponge-scroll-hint:hover {
-    color: var(--primary);
-  }
-
-  .sponge-scroll-hint svg {
-    display: block;
-  }
-
-  .deck-overview {
-    text-align: center;
-    max-width: 860px;
-  }
-
-  .deck-eyebrow {
-    margin: 0;
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: 0.92rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--primary);
-  }
-
-  .deck-title {
-    margin: 0;
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    line-height: 1.2;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .deck-body {
-    margin: 0;
-    max-width: 640px;
-    font-size: clamp(1rem, 1.2vw, 1.1rem);
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  .deck-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-  }
-
-  @keyframes sponge-word-in {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes sponge-acronym-in {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes sponge-fullname-out {
-    to {
-      opacity: 0;
-      transform: translateY(-12px);
-      visibility: hidden;
-    }
-  }
-
-  @keyframes sponge-fade-up {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes sponge-bounce {
-    0%, 100% {
-      transform: translateX(-50%) translateY(0);
-    }
-    50% {
-      transform: translateX(-50%) translateY(var(--bounce-y, 6px));
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .deck-slide {
-      transition: none;
-    }
-
-    .sponge-intro-stage {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      justify-content: center;
-    }
-
-    .sponge-full-name,
-    .sponge-word,
-    .sponge-tail,
-    .sponge-acronym,
-    .sponge-entry,
-    .sponge-scroll-hint {
-      animation: none;
-      opacity: 1;
-      transform: none;
-      visibility: visible;
-    }
-
-    .sponge-full-name,
-    .sponge-acronym {
-      grid-area: auto;
-    }
-  }
-</style>

@@ -1,0 +1,23 @@
+---
+import Footer from "../components/site/Footer.astro";
+import Header from "../components/site/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="SPONGEMM | 观点洞见"
+  description="SPONGE 分子模拟观点洞见，关注 molecular modeling 的方法、经验与思考。"
+>
+  <Header />
+  <main class="container section">
+    <section class="panel" style="padding: 2rem; border-radius: 24px;">
+      <p class="section-kicker">Perspectives & Insights</p>
+      <h1 style="margin-top: 0;">观点洞见</h1>
+      <p style="max-width: 720px; color: var(--muted); line-height: 1.8;">
+        这里将用于发布与分子模拟、分子建模和计算方法相关的观点、观察与经验总结。
+      </p>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+

@@ -4,21 +4,60 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  lang?: string;
+  canonicalPath?: string;
+  alternateLocales?: Array<{
+    hreflang: string;
+    path: string;
+  }>;
+  ogImage?: string;
+  ogType?: "website" | "article";
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title,
-  description = "SPONGE 分子动力学模拟软件"
+  description = "SPONGE 分子动力学模拟软件",
+  lang = "zh-CN",
+  canonicalPath,
+  alternateLocales = [],
+  ogImage = "/assets/home/sponge-logo-notext.png",
+  ogType = "website",
+  jsonLd
 } = Astro.props;
+
+const site = Astro.site ?? new URL("https://spongemm.cn");
+const canonicalUrl = canonicalPath ? new URL(canonicalPath, site).toString() : undefined;
+const currentUrl = canonicalUrl ?? new URL(Astro.url.pathname, site).toString();
+const absoluteOgImage = new URL(ogImage, site).toString();
+const alternateLinks = alternateLocales.map((locale) => ({
+  hreflang: locale.hreflang,
+  href: new URL(locale.path, site).toString()
+}));
+const jsonLdText = jsonLd ? JSON.stringify(jsonLd) : null;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1d69b5" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {alternateLinks.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="SPONGEMM" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -26,6 +65,7 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
     />
+    {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
     <slot name="head" />
     <title>{title}</title>
   </head>
