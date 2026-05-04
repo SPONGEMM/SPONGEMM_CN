@@ -62,4 +62,3 @@ jobs:
             DEST="${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.PREVIEW_DEPLOY_PATH }}"
           fi
           rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" dist/ "$DEST"
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" "sudo systemctl reload nginx"
