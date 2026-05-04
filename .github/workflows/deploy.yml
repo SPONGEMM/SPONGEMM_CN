@@ -1,0 +1,63 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Deploy target'
+        required: true
+        type: choice
+        options:
+          - preview
+          - production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Determine deploy target
+        id: target
+        run: |
+          echo "target=${{ github.event.inputs.target }}" >> $GITHUB_OUTPUT
+
+      - name: Set SITE_URL
+        id: site_url
+        run: |
+          if [ "${{ steps.target.outputs.target }}" = "production" ]; then
+            echo "url=https://spongemm.cn" >> $GITHUB_OUTPUT
+          else
+            echo "url=https://preview.spongemm.cn" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          SITE_URL: ${{ steps.site_url.outputs.url }}
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          if [ "${{ steps.target.outputs.target }}" = "production" ]; then
+            DEST="${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.PROD_DEPLOY_PATH }}"
+          else
+            DEST="${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.PREVIEW_DEPLOY_PATH }}"
+          fi
+          rsync -avz --delete dist/ "$DEST"
+          ssh -i ~/.ssh/deploy_key "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" "sudo systemctl reload nginx"

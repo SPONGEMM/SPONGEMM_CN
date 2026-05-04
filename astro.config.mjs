@@ -2,6 +2,6 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://spongemm.cn",
+  site: process.env.SITE_URL || "https://preview.spongemm.cn",
   integrations: [sitemap()]
 });
