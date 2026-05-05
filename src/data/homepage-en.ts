@@ -5,6 +5,7 @@ export const siteNavEn = [
   { label: "Docs", href: "/en/Documents" },
   { label: "Download", href: "/en/Download" },
   { label: "Insights", href: "/en/insights" },
+  { label: "Contact", href: "/en/contact" },
   { label: "GitHub", href: "https://github.com/SPONGEMM/SPONGE", icon: "github" }
 ];
 

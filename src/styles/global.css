@@ -536,7 +536,7 @@ img {
 
 .hero-visual-image {
   width: 100%;
-  max-width: 520px;
+  max-width: 400px;
   height: auto;
   object-fit: contain;
   mix-blend-mode: multiply;
@@ -1127,6 +1127,28 @@ img {
     padding: 16px 0;
   }
 
+  .header-inner .nav {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 22px;
+    padding-right: 24px;
+    margin-right: -24px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 32px), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - 32px), transparent);
+  }
+  .header-inner .nav::-webkit-scrollbar {
+    display: none;
+  }
+  .header-inner .nav > a,
+  .header-inner .nav > .nav-icon-link {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
   .hero h1 {
     font-size: clamp(2.15rem, 9vw, 2.65rem);
     line-height: 1.08;
@@ -1147,11 +1169,7 @@ img {
   }
 
   .hero-visual {
-    min-height: 320px;
-  }
-
-  .hero-visual-image {
-    max-width: 360px;
+    display: none;
   }
 
   .legacy-docs-layout {

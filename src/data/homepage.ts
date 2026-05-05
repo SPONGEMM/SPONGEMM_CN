@@ -3,6 +3,7 @@ export const siteNav = [
   { label: "文档", href: "/docs" },
   { label: "教程", href: "/tutorials" },
   { label: "下载", href: "/download" },
+  { label: "联络", href: "/contact" },
   { label: "GitHub", href: "https://github.com/SPONGEMM/SPONGE", icon: "github" }
 ];
 

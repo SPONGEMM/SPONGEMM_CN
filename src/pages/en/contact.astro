@@ -1,15 +1,16 @@
 ---
-import Header from "../components/site/Header.astro";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteNavEn } from "../../data/homepage-en";
+import Header from "../../components/site/Header.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const cards = [
   {
     kind: "institution",
     num: "01",
-    tag: "北京",
-    title: "北京大学",
-    subtitle: "化学与分子工程学院",
-    addressLines: ["北京市海淀区成府路 202 号", "邮编 100871"],
+    tag: "Beijing",
+    title: "Peking University",
+    subtitle: "College of Chemistry and Molecular Engineering",
+    addressLines: ["No. 202 Chengfu Road, Haidian District, Beijing", "Postal code 100871"],
     action: {
       label: "yijiexia@pku.edu.cn",
       href: "mailto:yijiexia@pku.edu.cn",
@@ -19,10 +20,10 @@ const cards = [
   {
     kind: "institution",
     num: "02",
-    tag: "杭州",
-    title: "西湖大学",
-    subtitle: "理学院",
-    addressLines: ["浙江省杭州市西湖区墩余路 600 号 · 云谷校区", "邮编 310030"],
+    tag: "Hangzhou",
+    title: "Westlake University",
+    subtitle: "School of Science",
+    addressLines: ["No. 600 Dunyu Road, Xihu District, Hangzhou · Yungu Campus", "Postal code 310030"],
     action: {
       label: "xiayijie@westlake.edu.cn",
       href: "mailto:xiayijie@westlake.edu.cn",
@@ -32,28 +33,28 @@ const cards = [
   {
     kind: "qq",
     num: "03",
-    tag: "QQ 群",
-    title: "SPONGE 用户群",
-    subtitle: "扫码加入",
+    tag: "QQ Group",
+    title: "SPONGE user group",
+    subtitle: "Scan to join",
     image: "/assets/contact/qq.jpg",
-    imageAlt: "SPONGE 用户 QQ 群二维码"
+    imageAlt: "SPONGE user QQ group QR code"
   },
   {
     kind: "github",
     num: "04",
-    tag: "源代码",
+    tag: "Source code",
     title: "GitHub",
-    subtitle: "源码与官网仓库",
+    subtitle: "Source code & website source",
     repos: [
-      { label: "spongemm/SPONGE", href: "https://github.com/spongemm/SPONGE", note: "源码主页" },
-      { label: "spongemm/spongemm_cn", href: "https://github.com/spongemm/spongemm_cn", note: "官网源码" }
+      { label: "spongemm/SPONGE", href: "https://github.com/spongemm/SPONGE", note: "Project source" },
+      { label: "spongemm/spongemm_cn", href: "https://github.com/spongemm/spongemm_cn", note: "Website source" }
     ]
   }
 ];
 
-const pageTitle = "SPONGEMM | 联系我们";
+const pageTitle = "SPONGEMM | Contact";
 const pageDescription =
-  "SPONGE 分子模拟软件团队联系方式：北京大学化学与分子工程学院、西湖大学理学院办公地点，开发者邮箱、QQ 用户群与 GitHub 源码与官网仓库。";
+  "Contact information for the SPONGE molecular simulation project: offices at Peking University (College of Chemistry and Molecular Engineering) and Westlake University (School of Science), developer email, QQ user group and GitHub repositories.";
 const siteUrl = "https://spongemm.cn";
 
 const contactJsonLd = [
@@ -62,8 +63,8 @@ const contactJsonLd = [
     "@type": "ContactPage",
     name: pageTitle,
     description: pageDescription,
-    url: `${siteUrl}/contact`,
-    inLanguage: "zh-CN",
+    url: `${siteUrl}/en/contact`,
+    inLanguage: "en",
     isPartOf: {
       "@type": "WebSite",
       name: "SPONGEMM",
@@ -77,8 +78,8 @@ const contactJsonLd = [
     url: siteUrl,
     parentOrganization: {
       "@type": "CollegeOrUniversity",
-      name: "北京大学",
-      url: "https://www.pku.edu.cn/"
+      name: "Peking University",
+      url: "https://english.pku.edu.cn/"
     },
     contactPoint: [
       {
@@ -86,38 +87,38 @@ const contactJsonLd = [
         contactType: "Academic inquiry (Peking University)",
         email: "yijiexia@pku.edu.cn",
         areaServed: "CN",
-        availableLanguage: ["zh-CN", "en"]
+        availableLanguage: ["en", "zh-CN"]
       },
       {
         "@type": "ContactPoint",
         contactType: "Academic inquiry (Westlake University)",
         email: "xiayijie@westlake.edu.cn",
         areaServed: "CN",
-        availableLanguage: ["zh-CN", "en"]
+        availableLanguage: ["en", "zh-CN"]
       }
     ],
     location: [
       {
         "@type": "Place",
-        name: "北京大学化学与分子工程学院",
+        name: "Peking University, College of Chemistry and Molecular Engineering",
         address: {
           "@type": "PostalAddress",
-          streetAddress: "成府路 202 号",
+          streetAddress: "No. 202 Chengfu Road",
           postalCode: "100871",
-          addressLocality: "海淀区",
-          addressRegion: "北京市",
+          addressLocality: "Haidian District",
+          addressRegion: "Beijing",
           addressCountry: "CN"
         }
       },
       {
         "@type": "Place",
-        name: "西湖大学理学院",
+        name: "Westlake University, School of Science",
         address: {
           "@type": "PostalAddress",
-          streetAddress: "墩余路 600 号 · 云谷校区",
+          streetAddress: "No. 600 Dunyu Road, Yungu Campus",
           postalCode: "310030",
-          addressLocality: "西湖区",
-          addressRegion: "杭州市",
+          addressLocality: "Xihu District",
+          addressRegion: "Hangzhou",
           addressCountry: "CN"
         }
       }
@@ -134,7 +135,8 @@ const contactJsonLd = [
 <BaseLayout
   title={pageTitle}
   description={pageDescription}
-  canonicalPath="/contact"
+  lang="en"
+  canonicalPath="/en/contact"
   alternateLocales={[
     { hreflang: "zh-CN", path: "/contact" },
     { hreflang: "en", path: "/en/contact" },
@@ -143,17 +145,18 @@ const contactJsonLd = [
   ogImage="/assets/home/sponge-logo-notext.png"
   jsonLd={contactJsonLd}
 >
-  <Header />
+  <Header navItems={siteNavEn} brandHref="/en" />
   <main class="contact-page">
     <div class="contact-bg" aria-hidden="true"></div>
 
     <section class="contact-hero container">
-      <p class="contact-eyebrow">联络</p>
+      <p class="contact-eyebrow">Contact</p>
       <h1 class="contact-title">
-        <span class="contact-title-zh">想聊聊吗<span class="contact-title-period">？</span></span>
+        <span class="contact-title-en-main">Drop us</span>
+        <span class="contact-title-en">a line<span class="contact-title-period">.</span></span>
       </h1>
       <p class="contact-lede">
-        SPONGE 由北京大学高毅勤课题组与合作团队共同开发与维护。
+        SPONGE is developed and maintained by the Yi Qin Gao group at Peking University together with collaborating teams.
       </p>
     </section>
 
@@ -263,7 +266,6 @@ const contactJsonLd = [
     font-weight: 600;
   }
 
-  /* ─────────── Hero ─────────── */
   .contact-hero {
     padding-bottom: 64px;
   }
@@ -277,7 +279,7 @@ const contactJsonLd = [
     line-height: 0.96;
     letter-spacing: -0.035em;
   }
-  .contact-title-zh {
+  .contact-title-en-main {
     color: var(--text);
   }
   .contact-title-en {
@@ -292,13 +294,12 @@ const contactJsonLd = [
   }
   .contact-lede {
     margin: 28px 0 0;
-    max-width: 580px;
+    max-width: 640px;
     font-size: 1.08rem;
     line-height: 1.75;
     color: var(--muted);
   }
 
-  /* ─────────── Card grid (unified style) ─────────── */
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -353,8 +354,10 @@ const contactJsonLd = [
     font-weight: 600;
   }
   .c-tag {
+    font-family: Georgia, "Source Serif Pro", serif;
+    font-style: italic;
     color: var(--muted);
-    font-size: 0.92rem;
+    font-size: 0.95rem;
   }
   .c-tag::before {
     content: "";
@@ -374,14 +377,15 @@ const contactJsonLd = [
     margin: 0;
     font-family: "Space Grotesk", "Inter", sans-serif;
     font-weight: 600;
-    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-size: clamp(1.5rem, 2.4vw, 1.95rem);
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.15;
   }
   .c-sub {
     margin: 0;
     color: var(--text);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
+    line-height: 1.4;
   }
   .c-sub-en {
     margin: 0;
@@ -391,7 +395,6 @@ const contactJsonLd = [
     font-size: 0.92rem;
   }
 
-  /* slot 3 variants — institution / qq / github all live in same row of grid */
   .c-address {
     align-self: end;
     color: var(--muted);
@@ -486,7 +489,6 @@ const contactJsonLd = [
     transform: translate(2px, -2px);
   }
 
-  /* unified action pill */
   .c-pill {
     display: inline-flex;
     align-items: center;
