@@ -59,6 +59,16 @@ img {
   padding: 64px 0;
 }
 
+.eyebrow {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .site-header {
   position: sticky;
   top: 0;

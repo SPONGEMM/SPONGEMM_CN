@@ -1,8 +1,29 @@
 ---
 import Header from "../components/site/Header.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import GitHubIcon from "../components/icons/GitHubIcon.astro";
+import MailIcon from "../components/icons/MailIcon.astro";
+import ArrowOutIcon from "../components/icons/ArrowOutIcon.astro";
+import { getSiteUrl } from "../lib/site";
 
-const cards = [
+type CardBase = { num: string; tag: string; title: string; subtitle: string };
+type InstitutionCard = CardBase & {
+  kind: "institution";
+  addressLines: string[];
+  action: { label: string; href: string };
+};
+type QqCard = CardBase & {
+  kind: "qq";
+  image: string;
+  imageAlt: string;
+};
+type GithubCard = CardBase & {
+  kind: "github";
+  repos: { label: string; href: string; note: string }[];
+};
+type ContactCard = InstitutionCard | QqCard | GithubCard;
+
+const cards: ContactCard[] = [
   {
     kind: "institution",
     num: "01",
@@ -10,10 +31,7 @@ const cards = [
     title: "北京大学",
     subtitle: "化学与分子工程学院",
     addressLines: ["北京市海淀区成府路 202 号", "邮编 100871"],
-    action: {
-      label: "yijiexia@pku.edu.cn",
-      href: "mailto:yijiexia@pku.edu.cn"
-    }
+    action: { label: "yijiexia@pku.edu.cn", href: "mailto:yijiexia@pku.edu.cn" }
   },
   {
     kind: "institution",
@@ -22,10 +40,7 @@ const cards = [
     title: "西湖大学",
     subtitle: "理学院",
     addressLines: ["浙江省杭州市西湖区墩余路 600 号 · 云谷校区", "邮编 310030"],
-    action: {
-      label: "xiayijie@westlake.edu.cn",
-      href: "mailto:xiayijie@westlake.edu.cn"
-    }
+    action: { label: "xiayijie@westlake.edu.cn", href: "mailto:xiayijie@westlake.edu.cn" }
   },
   {
     kind: "qq",
@@ -53,7 +68,7 @@ const cards = [
 const pageTitle = "SPONGEMM | 联系我们";
 const pageDescription =
   "SPONGE 分子模拟软件团队联系方式：北京大学化学与分子工程学院、西湖大学理学院办公地点，开发者邮箱、QQ 用户群与 GitHub 源码与官网仓库。";
-const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
+const siteUrl = getSiteUrl(Astro.site);
 
 const contactJsonLd = [
   {
@@ -63,11 +78,7 @@ const contactJsonLd = [
     description: pageDescription,
     url: `${siteUrl}/contact`,
     inLanguage: "zh-CN",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "SPONGEMM",
-      url: siteUrl
-    }
+    isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
   },
   {
     "@context": "https://schema.org",
@@ -147,7 +158,7 @@ const contactJsonLd = [
     <div class="contact-bg" aria-hidden="true"></div>
 
     <section class="contact-hero container">
-      <p class="contact-eyebrow">联络</p>
+      <p class="eyebrow">联络</p>
       <h1 class="contact-title">
         <span class="contact-title-zh">想聊聊吗<span class="contact-title-period">？</span></span>
       </h1>
@@ -170,9 +181,15 @@ const contactJsonLd = [
           </div>
 
           {c.kind === "institution" && (
-            <div class="c-address">
-              {c.addressLines.map((line) => <p>{line}</p>)}
-            </div>
+            <>
+              <div class="c-address">
+                {c.addressLines.map((line) => <p>{line}</p>)}
+              </div>
+              <a class="c-pill" href={c.action.href}>
+                <MailIcon />
+                <span>{c.action.label}</span>
+              </a>
+            </>
           )}
 
           {c.kind === "qq" && (
@@ -188,31 +205,16 @@ const contactJsonLd = [
               {c.repos.map((r) => (
                 <a class="c-repo-row" href={r.href} target="_blank" rel="noreferrer">
                   <span class="c-repo-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.48v-1.68c-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1.01.07 1.54 1.07 1.54 1.07.9 1.58 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 2.5-.35c.85 0 1.71.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.56 1.41.21 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.35 4.8-4.59 5.05.36.32.68.94.68 1.9v2.82c0 .26.18.57.69.48A10.34 10.34 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/>
-                    </svg>
+                    <GitHubIcon size={20} />
                   </span>
                   <span class="c-repo-text">
                     <span class="c-repo-name">{r.label}</span>
                     <span class="c-repo-note">{r.note}</span>
                   </span>
-                  <svg class="c-repo-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M5 19 19 5"/>
-                    <path d="M9 5h10v10"/>
-                  </svg>
+                  <ArrowOutIcon size={16} />
                 </a>
               ))}
             </div>
-          )}
-
-          {c.action && (
-            <a class="c-pill" href={c.action.href}>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <path d="m4 7 8 6 8-6"/>
-              </svg>
-              <span>{c.action.label}</span>
-            </a>
           )}
         </article>
       ))}
@@ -240,17 +242,6 @@ const contactJsonLd = [
     z-index: 1;
   }
 
-  .contact-eyebrow {
-    margin: 0;
-    font-family: "Space Grotesk", "Inter", sans-serif;
-    font-size: 0.76rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--primary);
-    font-weight: 600;
-  }
-
-  /* ─────────── Hero ─────────── */
   .contact-hero {
     padding-bottom: 64px;
   }
@@ -267,13 +258,6 @@ const contactJsonLd = [
   .contact-title-zh {
     color: var(--text);
   }
-  .contact-title-en {
-    font-family: Georgia, "Source Serif Pro", "Iowan Old Style", serif;
-    font-style: italic;
-    font-weight: 400;
-    color: var(--primary);
-    letter-spacing: -0.02em;
-  }
   .contact-title-period {
     color: var(--accent);
   }
@@ -285,7 +269,6 @@ const contactJsonLd = [
     color: var(--muted);
   }
 
-  /* ─────────── Card grid (unified style) ─────────── */
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -302,8 +285,7 @@ const contactJsonLd = [
     grid-template-rows: auto auto 1fr auto;
     gap: 22px;
     overflow: hidden;
-    transition: border-color 220ms ease,
-                transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transition: border-color 220ms ease, transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
                 box-shadow 280ms ease;
   }
   .c-card::before {
@@ -370,6 +352,7 @@ const contactJsonLd = [
     color: var(--text);
     font-size: 1.05rem;
   }
+
   .c-address {
     align-self: end;
     color: var(--muted);
@@ -406,7 +389,31 @@ const contactJsonLd = [
     border-radius: 8px;
   }
 
-  /* GitHub repos list */
+  .c-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 999px;
+    background: rgba(29, 105, 181, 0.08);
+    color: var(--primary-strong);
+    font-family: "Space Grotesk", "Inter", monospace;
+    font-size: 0.96rem;
+    width: fit-content;
+    justify-self: start;
+    transition: background 220ms ease, transform 220ms ease;
+  }
+  .c-pill svg {
+    flex-shrink: 0;
+    transition: transform 220ms ease;
+  }
+  .c-pill:hover {
+    background: rgba(29, 105, 181, 0.16);
+  }
+  .c-pill:hover svg {
+    transform: translate(2px, -2px);
+  }
+
   .c-repos {
     grid-row: 3 / 5;
     align-self: stretch;
@@ -455,38 +462,12 @@ const contactJsonLd = [
     font-size: 0.82rem;
     color: var(--muted);
   }
-  .c-repo-arrow {
+  .c-repo-row > svg {
     color: var(--muted);
     transition: transform 220ms ease, color 220ms ease;
   }
-  .c-repo-row:hover .c-repo-arrow {
+  .c-repo-row:hover > svg {
     color: var(--primary);
-    transform: translate(2px, -2px);
-  }
-
-  /* unified action pill */
-  .c-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    border-radius: 999px;
-    background: rgba(29, 105, 181, 0.08);
-    color: var(--primary-strong);
-    font-family: "Space Grotesk", "Inter", monospace;
-    font-size: 0.96rem;
-    width: fit-content;
-    justify-self: start;
-    transition: background 220ms ease, transform 220ms ease;
-  }
-  .c-pill svg {
-    flex-shrink: 0;
-    transition: transform 220ms ease;
-  }
-  .c-pill:hover {
-    background: rgba(29, 105, 181, 0.16);
-  }
-  .c-pill:hover svg {
     transform: translate(2px, -2px);
   }
 
