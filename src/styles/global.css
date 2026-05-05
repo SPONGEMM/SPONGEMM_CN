@@ -78,8 +78,7 @@ img {
   border-bottom: 1px solid rgba(29, 105, 181, 0.08);
 }
 
-.header-inner,
-.footer-inner {
+.header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -101,16 +100,14 @@ img {
   object-fit: contain;
 }
 
-.nav,
-.footer-links {
+.nav {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.nav a,
-.footer-links a {
+.nav a {
   color: var(--muted);
   transition: color 160ms ease;
 }
@@ -135,25 +132,8 @@ img {
 }
 
 .nav a:hover,
-.footer-links a:hover,
-.nav a:focus-visible,
-.footer-links a:focus-visible {
+.nav a:focus-visible {
   color: var(--primary);
-}
-
-.site-footer {
-  padding: 32px 0 48px;
-}
-
-.footer-title {
-  margin: 0 0 8px;
-  font-family: "Space Grotesk", "Inter", sans-serif;
-  font-weight: 700;
-}
-
-.footer-copy {
-  margin: 0;
-  color: var(--muted);
 }
 
 .section-heading {
@@ -274,7 +254,6 @@ img {
   line-height: 1.8;
 }
 
-.overview-body,
 .component-card p {
   color: var(--muted);
   line-height: 1.8;
@@ -294,10 +273,6 @@ img {
   height: auto;
   object-fit: contain;
   mix-blend-mode: multiply;
-}
-
-.overview-single {
-  max-width: 1120px;
 }
 
 .announcement-band {
@@ -454,15 +429,6 @@ img {
   line-height: 1.55;
 }
 
-.overview-lead {
-  max-width: 880px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 1.08rem;
-  line-height: 1.85;
-}
-
-.overview-points,
 .capability-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -470,7 +436,6 @@ img {
   margin-top: 28px;
 }
 
-.overview-point,
 .capability-card {
   padding: 22px;
   border: 1px solid rgba(29, 105, 181, 0.14);
@@ -478,13 +443,11 @@ img {
   background: rgba(255, 255, 255, 0.62);
 }
 
-.overview-point h3,
 .capability-card h3 {
   margin: 0 0 10px;
   font-family: "Space Grotesk", "Inter", sans-serif;
 }
 
-.overview-point p,
 .capability-card p {
   margin: 0;
   color: var(--muted);
@@ -815,9 +778,7 @@ img {
 
 @media (max-width: 960px) {
   .hero-grid,
-  .overview-grid,
   .citation-grid,
-  .overview-points,
   .capability-grid,
   .component-grid,
   .highlight-grid,
@@ -874,8 +835,7 @@ img {
     font-size: 1.2rem;
   }
 
-  .header-inner,
-  .footer-inner {
+  .header-inner {
     flex-direction: column;
     align-items: flex-start;
     padding: 16px 0;

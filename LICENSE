@@ -1,0 +1,42 @@
+# License
+
+This project is distributed under two separate licenses for different types of content:
+
+---
+
+## Code (Apache License 2.0)
+
+All source code, including but not limited to Astro components, stylesheets, scripts, configuration files, utilities, and layouts, is licensed under the **Apache License, Version 2.0**.
+
+You may obtain a copy of the Apache License 2.0 at:
+https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the Apache License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the Apache License for the specific language governing permissions and limitations under the Apache License.
+
+---
+
+## Content (Creative Commons Attribution-NonCommercial 4.0 International)
+
+All written content, including but not limited to documentation, tutorials, insights, blog posts, and any other textual or editorial material (located in directories such as `src/content/insights/`, `src/content/insights-en/`, `docs/`, or similar content directories), is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
+
+You may obtain a copy of the CC BY-NC 4.0 License at:
+https://creativecommons.org/licenses/by-nc/4.0/
+
+Under this license, you are free to:
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
+
+Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **NonCommercial** — You may not use the material for commercial purposes.
+
+No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+---
+
+## Summary
+
+| Content Type | License |
+|--------------|---------|
+| Source code (components, scripts, configs, etc.) | Apache License 2.0 |
+| Written content (documentation, tutorials, insights, etc.) | CC BY-NC 4.0 |

@@ -19,6 +19,7 @@ const labels = lang === "en"
       dateLocale: "en-US",
       back: "← Back to Insights",
       backHref: "/en/insights",
+      disclaimer: "The views expressed in this article are those of the author and do not necessarily represent the views of the SPONGE development team.",
       updated: "Updated",
       footnotesLabel: "References",
       rssTitle: "SPONGEMM Insights RSS",
@@ -31,6 +32,7 @@ const labels = lang === "en"
       dateLocale: "zh-CN",
       back: "← 返回观点洞见列表",
       backHref: "/insights",
+      disclaimer: "本文观点仅代表作者个人观点，不代表 SPONGE 开发团队立场。",
       updated: "更新于",
       footnotesLabel: "参考文献",
       rssTitle: "SPONGEMM 观点洞见 RSS",
@@ -118,10 +120,58 @@ const articleJsonLd = {
       </div>
 
       <footer class="article-foot">
+        <p class="article-disclaimer">{labels.disclaimer}</p>
         <a class="article-back" href={labels.backHref}>{labels.back}</a>
       </footer>
     </article>
   </main>
+
+  <script>
+    const renderMermaid = async () => {
+      const blocks = document.querySelectorAll<HTMLPreElement>(
+        "pre[data-language='mermaid'], pre:has(> code.language-mermaid)"
+      );
+      if (blocks.length === 0) return;
+
+      const { default: mermaid } = await import("mermaid");
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: "base",
+        themeVariables: {
+          fontFamily: '"Inter", "Noto Sans SC", sans-serif',
+          primaryColor: "#f7fbff",
+          primaryTextColor: "#172033",
+          primaryBorderColor: "#b9d4ee",
+          lineColor: "#5f7896",
+          secondaryColor: "#eef7f1",
+          tertiaryColor: "#fff7e8"
+        }
+      });
+
+      let index = 0;
+
+      for (const block of blocks) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "mermaid-diagram";
+        wrapper.textContent = block.textContent ?? "";
+        block.replaceWith(wrapper);
+        try {
+          const id = `mermaid-${index++}`;
+          const { svg } = await mermaid.render(id, wrapper.textContent);
+          wrapper.innerHTML = svg;
+        } catch (error) {
+          wrapper.classList.add("mermaid-diagram--error");
+          console.error("Failed to render Mermaid diagram", error);
+        }
+      }
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", renderMermaid, { once: true });
+    } else {
+      renderMermaid();
+    }
+  </script>
 </BaseLayout>
 
 <style>
@@ -319,6 +369,21 @@ const articleJsonLd = {
     border: 1px solid var(--line);
   }
 
+  .prose :global(.mermaid-diagram) {
+    margin: 32px 0;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fbfdff;
+    overflow-x: auto;
+  }
+  .prose :global(.mermaid-diagram svg) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
   .prose :global([data-footnotes] > h2) {
     font-size: 0;
     margin: 56px 0 16px;
@@ -360,6 +425,12 @@ const articleJsonLd = {
     margin-top: 80px;
     padding-top: 24px;
     border-top: 1px solid var(--line);
+  }
+  .article-disclaimer {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
   .article-back {
     color: var(--muted);
