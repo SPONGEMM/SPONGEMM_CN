@@ -1,0 +1,78 @@
+---
+title: 关于观点洞见
+description: 观点洞见是记录分子模拟相关的方法、经验和思考，欢迎各位通过 GitHub 分享。
+date: 2026-05-05
+author: 夏义杰
+avatar: /assets/avatar/yijiexia.png
+---
+
+## 这个栏目是干什么的
+
+观点洞见用来记录与分子模拟、分子建模、计算化学方法相关的**观点、观察与经验**。文章源文件存在 `src/content/insights/`，欢迎通过 GitHub Pull Request 投稿。
+
+每篇文章是一个 `.mdx` 文件，顶部 YAML frontmatter 写元信息（标题、作者、日期、头像），正文用 Markdown 即可，需要的时候可以嵌入 Astro 组件。
+
+## 表格
+
+| 体系 | 原子数 | A100 (ns/day) | H100 (ns/day) |
+|------|------:|--------------:|--------------:|
+| 1UBQ | 18,000 | 320 | 540 |
+| 2OOB | 95,000 | 110 | 175 |
+| 4XCN | 220,000 | 48 | 78 |
+
+## 公式
+
+行内公式：势能由键合项 $U_{\text{bond}}$ 与非键合项 $U_{\text{nb}}$ 组成，即 $U = U_{\text{bond}} + U_{\text{nb}}$。
+
+块级公式：
+
+$$
+U_{\text{LJ}}(r) = 4\varepsilon\left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^{6}\right]
+$$
+
+$$
+F_i = -\nabla_i U(\mathbf{r}_1, \dots, \mathbf{r}_N)
+$$
+
+## 代码
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, SPONGE!" << std::endl;
+    return 0;
+}
+```
+
+## 图片
+
+下面是一张 SPONGE 中常用的 1UBQ[^1ubq] 蛋白结构示意图，作为例子：
+
+![1UBQ 结构示意](/assets/home/1ubq.jpg)
+
+## 可交互分子结构
+
+下面的 1UBQ[^1ubq] 结构由 [Mol*](https://molstar.org/)[^molstar][^molstar-web] 渲染，可以拖动旋转、滚轮缩放、点击残基查看更多信息：
+
+<iframe
+  src="https://molstar.org/viewer/?pdb=1UBQ&hide-controls=1&collapse-left-panel=1"
+  width="100%"
+  height="520"
+  style={{ border: '1px solid var(--line)', borderRadius: '14px' }}
+  title="1UBQ structure rendered in Mol* viewer"
+  loading="lazy"
+></iframe>
+
+## 投稿方式
+
+1. Fork [`spongemm/spongemm_cn`](https://github.com/spongemm/spongemm_cn)
+2. 在 `src/content/insights/` 下新建一个 `.mdx` 文件
+3. 写好 frontmatter 与正文，本地 `npm run dev` 预览效果
+4. 提交 Pull Request，合并后下次部署即上线
+
+[^1ubq]: Vijay-Kumar S, Bugg CE, Cook WJ. *Structure of ubiquitin refined at 1.8 Å resolution.* J Mol Biol. 1987;194(3):531–544. doi:[10.1016/0022-2836(87)90679-6](https://doi.org/10.1016/0022-2836(87)90679-6)
+
+[^molstar]: Sehnal D, Bittrich S, Deshpande M, et al. *Mol\* Viewer: modern web app for 3D visualization and analysis of large biomolecular structures.* Nucleic Acids Research. 2021;49(W1):W431–W437. doi:[10.1093/nar/gkab314](https://doi.org/10.1093/nar/gkab314)
+
+[^molstar-web]: Mol\* Viewer 项目主页. [https://molstar.org/](https://molstar.org/)

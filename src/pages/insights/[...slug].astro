@@ -1,0 +1,378 @@
+---
+import "katex/dist/katex.min.css";
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/site/Header.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("insights");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"insights">;
+}
+
+const { entry } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await entry.render();
+
+const dateFmt = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+
+const isoDate = entry.data.date.toISOString();
+const isoUpdated = entry.data.updated?.toISOString();
+const siteUrl = "https://spongemm.cn";
+const articleUrl = `${siteUrl}/insights/${entry.slug}`;
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: entry.data.title,
+  description: entry.data.description,
+  datePublished: isoDate,
+  dateModified: isoUpdated ?? isoDate,
+  author: { "@type": "Person", name: entry.data.author },
+  inLanguage: "zh-CN",
+  url: articleUrl,
+  mainEntityOfPage: articleUrl,
+  isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
+};
+---
+
+<BaseLayout
+  title={`${entry.data.title} | SPONGEMM`}
+  description={entry.data.description}
+  canonicalPath={`/insights/${entry.slug}`}
+  ogType="article"
+  jsonLd={articleJsonLd}
+>
+  <link
+    slot="head"
+    rel="alternate"
+    type="application/rss+xml"
+    title="SPONGEMM 观点洞见 RSS"
+    href="/rss.xml"
+  />
+  <Header />
+  <main class="article-page">
+    <article class="article container">
+      <header class="article-head">
+        <h1 class="article-title">{entry.data.title}</h1>
+        <p class="article-lede">{entry.data.description}</p>
+
+        <div class="article-byline">
+          <div class="article-author">
+            {entry.data.avatar ? (
+              <img class="article-avatar" src={entry.data.avatar} alt={entry.data.author} width="36" height="36" />
+            ) : (
+              <span class="article-avatar article-avatar--fallback" aria-hidden="true">
+                {entry.data.author.slice(0, 1)}
+              </span>
+            )}
+            <span>{entry.data.author}</span>
+          </div>
+          <time datetime={isoDate}>{dateFmt.format(entry.data.date)}</time>
+          {entry.data.updated && (
+            <span class="article-updated">更新于 {dateFmt.format(entry.data.updated)}</span>
+          )}
+        </div>
+      </header>
+
+      <div class="article-body prose">
+        <Content />
+      </div>
+
+      <footer class="article-foot">
+        <a class="article-back" href="/insights">← 返回观点洞见列表</a>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .article-page {
+    padding: 64px 0 160px;
+  }
+  .article {
+    max-width: 760px;
+  }
+
+  .article-head {
+    margin-bottom: 56px;
+  }
+  .article-eyebrow {
+    margin: 0;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .article-eyebrow a {
+    color: var(--primary);
+  }
+  .article-title {
+    margin: 0;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 4.4vw, 3.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .article-lede {
+    margin: 22px 0 0;
+    color: var(--muted);
+    font-size: 1.15rem;
+    line-height: 1.7;
+  }
+  .article-byline {
+    margin: 32px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .article-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .article-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line);
+  }
+  .article-avatar--fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(29, 105, 181, 0.12);
+    color: var(--primary-strong);
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 600;
+  }
+  .article-byline time,
+  .article-updated {
+    font-family: "Space Grotesk", "Inter", monospace;
+  }
+
+  /* ─────────── Prose (markdown body) ─────────── */
+  .prose {
+    color: var(--text);
+    font-size: 1.04rem;
+    line-height: 1.78;
+  }
+  .prose > * {
+    max-width: 100%;
+  }
+  .prose :global(h2) {
+    margin: 56px 0 16px;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .prose :global(h3) {
+    margin: 36px 0 12px;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.18rem;
+    letter-spacing: -0.005em;
+  }
+  .prose :global(p) {
+    margin: 0 0 1.1em;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.1em;
+    padding-left: 1.6em;
+  }
+  .prose :global(li) {
+    margin: 0.3em 0;
+  }
+  .prose :global(li > p) {
+    margin: 0;
+  }
+  .prose :global(a) {
+    color: var(--primary-strong);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 160ms ease;
+  }
+  .prose :global(a:hover) {
+    color: var(--primary);
+  }
+  .prose :global(strong) {
+    font-weight: 600;
+  }
+  .prose :global(blockquote) {
+    margin: 24px 0;
+    padding: 14px 22px;
+    border-left: 3px solid var(--primary);
+    color: var(--muted);
+    background: rgba(29, 105, 181, 0.04);
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+  }
+  .prose :global(blockquote p) {
+    margin: 0;
+  }
+  .prose :global(hr) {
+    margin: 48px 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Inline code */
+  .prose :global(:not(pre) > code) {
+    font-family: "JetBrains Mono", "Space Grotesk", "Menlo", monospace;
+    background: rgba(29, 105, 181, 0.08);
+    color: var(--primary-strong);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.9em;
+  }
+  /* Code blocks (Shiki output) */
+  .prose :global(pre) {
+    margin: 24px 0;
+    padding: 22px 24px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: #f7fbff !important;
+    overflow-x: auto;
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+  .prose :global(pre code) {
+    font-family: "JetBrains Mono", "Space Grotesk", "Menlo", monospace;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1em;
+  }
+
+  /* Tables */
+  .prose :global(table) {
+    width: 100%;
+    margin: 28px 0;
+    border-collapse: collapse;
+    font-size: 0.96rem;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  .prose :global(thead) {
+    background: rgba(29, 105, 181, 0.06);
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+  .prose :global(th) {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .prose :global(tbody tr:last-child td) {
+    border-bottom: 0;
+  }
+  .prose :global(tr:hover) {
+    background: rgba(29, 105, 181, 0.03);
+  }
+
+  /* Images */
+  .prose :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 32px auto;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+  }
+
+  /* Footnotes heading: localize default "Footnotes" → 参考文献 */
+  .prose :global([data-footnotes] > h2) {
+    font-size: 0;
+    margin: 56px 0 16px;
+  }
+  .prose :global([data-footnotes] > h2)::before {
+    content: "参考文献";
+    display: block;
+    font-family: "Space Grotesk", "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .prose :global([data-footnotes] ol) {
+    padding-left: 1.4em;
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+  .prose :global([data-footnote-backref]) {
+    display: none;
+  }
+  /* separator between adjacent inline footnote refs: 2,3 instead of 23 */
+  .prose :global(sup:has(a[data-footnote-ref]) + sup:has(a[data-footnote-ref]))::before {
+    content: ",";
+    color: var(--muted);
+  }
+
+  /* KaTeX block math centering & overflow */
+  .prose :global(.katex-display) {
+    margin: 24px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0;
+  }
+  .prose :global(.katex) {
+    font-size: 1.06em;
+  }
+
+  .article-foot {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .article-back {
+    color: var(--muted);
+    font-size: 0.94rem;
+    transition: color 160ms ease;
+  }
+  .article-back:hover {
+    color: var(--primary);
+  }
+
+  @media (max-width: 720px) {
+    .article-page {
+      padding: 40px 0 80px;
+    }
+    .article-head {
+      margin-bottom: 36px;
+    }
+    .prose {
+      font-size: 1rem;
+    }
+    .prose :global(pre) {
+      padding: 18px 18px;
+      border-radius: 12px;
+    }
+  }
+</style>
