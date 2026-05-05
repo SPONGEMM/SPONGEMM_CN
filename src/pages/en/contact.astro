@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import GitHubIcon from "../../components/icons/GitHubIcon.astro";
 import MailIcon from "../../components/icons/MailIcon.astro";
 import ArrowOutIcon from "../../components/icons/ArrowOutIcon.astro";
+import QrDialog from "../../components/contact/QrDialog.astro";
 import { getSiteUrl } from "../../lib/site";
 
 type CardBase = { num: string; tag: string; title: string; subtitle: string };
@@ -196,11 +197,7 @@ const contactJsonLd = [
           )}
 
           {c.kind === "qq" && (
-            <div class="c-qr">
-              <div class="c-qr-frame">
-                <img src={c.image} alt={c.imageAlt} loading="lazy" />
-              </div>
-            </div>
+            <QrDialog src={c.image} alt={c.imageAlt} closeLabel="Close" />
           )}
 
           {c.kind === "github" && (
@@ -375,29 +372,6 @@ const contactJsonLd = [
   }
   .c-address p + p {
     margin-top: 4px;
-  }
-
-  .c-qr {
-    align-self: end;
-    display: flex;
-  }
-  .c-qr-frame {
-    width: 168px;
-    height: 168px;
-    border-radius: 18px;
-    background: #fff;
-    border: 1px solid var(--line);
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .c-qr-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 8px;
   }
 
   .c-pill {

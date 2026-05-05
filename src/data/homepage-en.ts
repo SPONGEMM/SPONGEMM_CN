@@ -2,8 +2,8 @@ import { highlights } from "./homepage";
 
 export const siteNavEn = [
   { label: "Home", href: "/en/home" },
-  { label: "Docs", href: "/en/Documents" },
-  { label: "Download", href: "/en/Download" },
+  { label: "Docs", href: "/en/docs" },
+  { label: "Download", href: "/en/download" },
   { label: "Insights", href: "/en/insights" },
   { label: "Contact", href: "/en/contact" },
   { label: "GitHub", href: "https://github.com/SPONGEMM/SPONGE", icon: "github" }
@@ -19,8 +19,8 @@ export const announcementsEn = [
     type: "Beta Testing",
     title: "SPONGE 2.0 is currently in beta testing",
     description:
-      "SPONGE 2.0 is improving documentation, input parameters, and tutorial examples for next-generation molecular simulation workflows. Follow the documentation and tutorials for currently available features.",
-    href: "/en/Documents",
+      "SPONGE 2.0 is improving core functionality and documentation for next-generation molecular simulation workflows. Stay tuned for progress updates.",
+    href: "/en/docs",
     action: "View Docs"
   }
 ];

@@ -19,9 +19,9 @@ export const announcements = [
     date: "2026/05",
     title: "SPONGE 2.0 正在进行 beta 测试",
     description:
-      "SPONGE 2.0 面向新一代分子模拟工作流持续完善文档、输入参数与教程示例。欢迎关注测试进展，并通过文档与教程页面了解当前可用功能。",
+      "SPONGE 2.0 面向新一代分子模拟工作流持续完善核心功能与文档。欢迎关注测试进展。",
     href: "/docs",
-    action: "查看当前文档"
+    action: "查看文档"
   }
 ];
 
@@ -84,25 +84,6 @@ export const overview = {
   ]
 };
 
-export const capabilities = [
-  {
-    title: "高性能分子动力学",
-    body: "面向 CPU、GPU、NPU 和国产硬件平台开展分子模拟加速，覆盖工作站、服务器与高性能计算平台。"
-  },
-  {
-    title: "增强采样与自由能计算",
-    body: "支持伞形采样、metadynamics、选择性温度积分等增强采样算法，以及 MM/GBSA、自由能微扰等自由能计算方法。"
-  },
-  {
-    title: "AI 增强分子模拟",
-    body: "关注机器学习在建模、采样、势能、分析和模拟决策中的作用，支持 AI 与传统分子动力学的结合。"
-  },
-  {
-    title: "可扩展软件生态",
-    body: "通过 CudaSPONGE、MindSPONGE、Xponge 等组件连接模拟引擎、AI 方法和前后处理工具。"
-  }
-];
-
 export const components = [
   {
     name: "SPONGE",
@@ -143,7 +124,7 @@ export const highlights = [
   {
     year: "2024",
     title: "Integrating Epigenetics, Proteomics, and Metabolomics to Reveal the Involvement of Wnt/β-Catenin Signaling Pathway in Oridonin-Induced Reproductive Toxicity",
-    image: "/assets/home/2024-2.png",
+    image: "/assets/home/2024-2.jpg",
     alt: "Multi-omics and Wnt beta-catenin signaling research visualization",
     doi: "https://doi.org/10.3390/toxics12050339"
   },
@@ -198,13 +179,6 @@ export const highlights = [
   }
 ];
 
-
-export const quickLinks = [
-  { title: "下载", description: "获取程序包、模块包与工具包入口。", href: "/download" },
-  { title: "文档", description: "查看 CudaSPONGE、Xponge 等文档资料。", href: "/docs" },
-  { title: "教程", description: "阅读安装指南与建模、增强采样示例。", href: "/tutorials" },
-  { title: "联系", description: "获取项目联系信息与交流入口。", href: "/contact" }
-];
 
 export const updates = [
   { date: "2026", title: "SPONGE 2.0 进入 beta 测试，面向新一代分子模拟工作流持续完善" },

@@ -1,4 +1,20 @@
 node_modules
 dist
 .astro
+
+# OS
 .DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local env / logs
+.env
+.env.*
+*.log
+npm-debug.log*
