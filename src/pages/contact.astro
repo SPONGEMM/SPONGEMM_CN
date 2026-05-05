@@ -12,8 +12,7 @@ const cards = [
     addressLines: ["北京市海淀区成府路 202 号", "邮编 100871"],
     action: {
       label: "yijiexia@pku.edu.cn",
-      href: "mailto:yijiexia@pku.edu.cn",
-      icon: "mail"
+      href: "mailto:yijiexia@pku.edu.cn"
     }
   },
   {
@@ -25,8 +24,7 @@ const cards = [
     addressLines: ["浙江省杭州市西湖区墩余路 600 号 · 云谷校区", "邮编 310030"],
     action: {
       label: "xiayijie@westlake.edu.cn",
-      href: "mailto:xiayijie@westlake.edu.cn",
-      icon: "mail"
+      href: "mailto:xiayijie@westlake.edu.cn"
     }
   },
   {
@@ -55,7 +53,7 @@ const cards = [
 const pageTitle = "SPONGEMM | 联系我们";
 const pageDescription =
   "SPONGE 分子模拟软件团队联系方式：北京大学化学与分子工程学院、西湖大学理学院办公地点，开发者邮箱、QQ 用户群与 GitHub 源码与官网仓库。";
-const siteUrl = "https://spongemm.cn";
+const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
 
 const contactJsonLd = [
   {
@@ -208,23 +206,11 @@ const contactJsonLd = [
           )}
 
           {c.action && (
-            <a
-              class="c-pill"
-              href={c.action.href}
-              target={c.action.icon === "external" ? "_blank" : undefined}
-              rel={c.action.icon === "external" ? "noreferrer" : undefined}
-            >
-              {c.action.icon === "mail" ? (
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="14" rx="2"/>
-                  <path d="m4 7 8 6 8-6"/>
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 19 19 5"/>
-                  <path d="M9 5h10v10"/>
-                </svg>
-              )}
+            <a class="c-pill" href={c.action.href}>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <path d="m4 7 8 6 8-6"/>
+              </svg>
               <span>{c.action.label}</span>
             </a>
           )}
@@ -384,15 +370,6 @@ const contactJsonLd = [
     color: var(--text);
     font-size: 1.05rem;
   }
-  .c-sub-en {
-    margin: 0;
-    color: var(--muted);
-    font-style: italic;
-    font-family: Georgia, "Source Serif Pro", serif;
-    font-size: 0.92rem;
-  }
-
-  /* slot 3 variants — institution / qq / github all live in same row of grid */
   .c-address {
     align-self: end;
     color: var(--muted);

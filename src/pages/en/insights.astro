@@ -17,7 +17,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
   day: "numeric"
 });
 
-const siteUrl = "https://spongemm.cn";
+const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
 const blogJsonLd = [
   {
     "@context": "https://schema.org",

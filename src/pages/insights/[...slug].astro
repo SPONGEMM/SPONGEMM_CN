@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await entry.render();
+const { Content } = await entry.render();
 
 const dateFmt = new Intl.DateTimeFormat("zh-CN", {
   year: "numeric",
@@ -27,7 +27,7 @@ const dateFmt = new Intl.DateTimeFormat("zh-CN", {
 
 const isoDate = entry.data.date.toISOString();
 const isoUpdated = entry.data.updated?.toISOString();
-const siteUrl = "https://spongemm.cn";
+const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
 const articleUrl = `${siteUrl}/insights/${entry.slug}`;
 
 const articleJsonLd = {

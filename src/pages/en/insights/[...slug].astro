@@ -28,7 +28,7 @@ const dateFmt = new Intl.DateTimeFormat("en-US", {
 
 const isoDate = entry.data.date.toISOString();
 const isoUpdated = entry.data.updated?.toISOString();
-const siteUrl = "https://spongemm.cn";
+const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
 const articleUrl = `${siteUrl}/en/insights/${entry.slug}`;
 
 const articleJsonLd = {

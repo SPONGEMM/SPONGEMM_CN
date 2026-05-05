@@ -21,7 +21,7 @@ import {
 const pageTitle = "SPONGEMM | SPONGE Molecular Simulation Software Homepage";
 const pageDescription =
   "The official SPONGE project homepage, with software updates, citation information, representative research outputs, documentation, tutorials, downloads, and related scientific software ecosystem links.";
-const siteUrl = "https://spongemm.cn";
+const siteUrl = (Astro.site?.toString() ?? "https://spongemm.cn/").replace(/\/$/, "");
 const homeJsonLd = [
   {
     "@context": "https://schema.org",
