@@ -47,7 +47,7 @@ const dateFmt = new Intl.DateTimeFormat(labels.dateLocale, {
 const isoDate = entry.data.date.toISOString();
 const isoUpdated = entry.data.updated?.toISOString();
 const siteUrl = getSiteUrl(Astro.site);
-const articleUrl = `${siteUrl}${labels.pathPrefix}/${entry.slug}`;
+const articleUrl = `${siteUrl}${labels.pathPrefix}/${entry.id}`;
 
 const articleJsonLd = {
   "@context": "https://schema.org",
@@ -68,7 +68,7 @@ const articleJsonLd = {
   title={`${entry.data.title} | SPONGEMM`}
   description={entry.data.description}
   lang={labels.htmlLang}
-  canonicalPath={`${labels.pathPrefix}/${entry.slug}`}
+  canonicalPath={`${labels.pathPrefix}/${entry.id}`}
   ogType="article"
   jsonLd={articleJsonLd}
 >

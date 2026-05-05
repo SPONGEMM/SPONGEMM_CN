@@ -1,4 +1,5 @@
 import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const insightsSchema = z.object({
   title: z.string(),
@@ -10,12 +11,12 @@ const insightsSchema = z.object({
 });
 
 const insights = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/insights" }),
   schema: insightsSchema
 });
 
 const insightsEn = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/insights-en" }),
   schema: insightsSchema
 });
 

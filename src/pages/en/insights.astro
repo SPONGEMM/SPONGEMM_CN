@@ -39,7 +39,7 @@ const blogJsonLd = [
     itemListElement: entries.map((entry, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      url: `${siteUrl}/en/insights/${entry.slug}`,
+      url: `${siteUrl}/en/insights/${entry.id}`,
       name: entry.data.title
     }))
   }

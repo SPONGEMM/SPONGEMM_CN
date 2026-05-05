@@ -23,7 +23,7 @@ export async function buildInsightsFeed(opts: FeedOptions) {
       title: entry.data.title,
       description: entry.data.description,
       pubDate: entry.data.date,
-      link: `${opts.linkPrefix}/${entry.slug}/`,
+      link: `${opts.linkPrefix}/${entry.id}/`,
       author: entry.data.author
     }))
   });

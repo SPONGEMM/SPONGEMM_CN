@@ -9,7 +9,7 @@ interface Props {
 const { entry, hrefPrefix, dateFmt } = Astro.props;
 ---
 
-<a class="insights-card" href={`${hrefPrefix}/${entry.slug}`}>
+<a class="insights-card" href={`${hrefPrefix}/${entry.id}`}>
   <h2 class="insights-card-title">{entry.data.title}</h2>
   <p class="insights-card-desc">{entry.data.description}</p>
   <div class="insights-card-foot">
