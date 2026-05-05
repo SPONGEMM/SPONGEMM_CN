@@ -10,10 +10,17 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "astro": "^5.7.0",
+    "astro": "^6.2.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.2"
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "katex": "^0.16.45",
+    "mermaid": "^11.14.0",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
   }
 }

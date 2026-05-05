@@ -8,11 +8,12 @@ import FriendLinksSection from "../components/home/FriendLinksSection.astro";
 import UpdatesSection from "../components/home/UpdatesSection.astro";
 import Header from "../components/site/Header.astro";
 import { citations, highlights } from "../data/homepage";
+import { getSiteUrl } from "../lib/site";
 
 const pageTitle = "SPONGEMM | SPONGE 分子模拟软件主页";
 const pageDescription =
-  "SPONGE 官方项目主页，提供 SPONGE 分子模拟软件的版本通知、论文引用、代表性研究成果、文档、教程、下载入口与相关科研软件生态。";
-const siteUrl = "https://spongemm.cn";
+  "SPONGE 官方项目主页，提供 SPONGE 分子模拟软件的版本通知、论文引用、代表性研究成果、文档、下载入口与相关科研软件生态。";
+const siteUrl = getSiteUrl(Astro.site);
 const homeJsonLd = [
   {
     "@context": "https://schema.org",

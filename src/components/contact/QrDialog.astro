@@ -1,0 +1,126 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  closeLabel?: string;
+}
+
+const { src, alt, closeLabel = "Close" } = Astro.props;
+---
+
+<div class="qr-zoom" data-qr-zoom>
+  <button class="qr-trigger" type="button" data-qr-trigger aria-label={alt}>
+    <img src={src} alt="" loading="lazy" />
+  </button>
+  <dialog class="qr-dialog" data-qr-dialog aria-label={alt}>
+    <button class="qr-dialog-close" type="button" data-qr-close aria-label={closeLabel}>
+      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+        <path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <img src={src} alt={alt} />
+  </dialog>
+</div>
+
+<style>
+  .qr-zoom {
+    align-self: end;
+    display: flex;
+  }
+  .qr-trigger {
+    width: 168px;
+    height: 168px;
+    border-radius: 18px;
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 10px;
+    cursor: zoom-in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .qr-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(17, 41, 68, 0.08);
+  }
+  .qr-trigger img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .qr-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: min(92vmin, 560px);
+    max-height: 92vmin;
+    overflow: visible;
+  }
+  .qr-dialog::backdrop {
+    background: rgba(8, 24, 40, 0.72);
+    backdrop-filter: blur(4px);
+  }
+  .qr-dialog[open] {
+    animation: qr-pop 180ms ease-out;
+  }
+  @keyframes qr-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .qr-dialog img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 92vmin;
+    object-fit: contain;
+    border-radius: 22px;
+    background: #fff;
+  }
+  .qr-dialog-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 160ms ease;
+  }
+  .qr-dialog-close:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+</style>
+
+<script>
+  document.querySelectorAll("[data-qr-zoom]").forEach((wrap) => {
+    const trigger = wrap.querySelector("[data-qr-trigger]");
+    const dialog = wrap.querySelector("[data-qr-dialog]");
+    const close = wrap.querySelector("[data-qr-close]");
+    if (!(dialog instanceof HTMLDialogElement) || !(trigger instanceof HTMLElement)) return;
+
+    trigger.addEventListener("click", () => dialog.showModal());
+    close?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+</script>

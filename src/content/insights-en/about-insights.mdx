@@ -1,0 +1,87 @@
+---
+title: About Insights
+description: Insights is a place to share methods, experiences and reflections on molecular modeling. Contributions are welcome via GitHub.
+date: 2026-05-05
+author: Yijie Xia
+avatar: /assets/avatar/yijiexia.jpg
+---
+
+## What this section is for
+
+Insights collects **perspectives, observations, and practical reflections** on molecular modeling and computational chemistry methods. Article sources live in `src/content/insights-en/`; contributions are welcome through GitHub Pull Request.
+
+Each article is a single `.mdx` file. The YAML frontmatter at the top carries the metadata (title, author, date, avatar); the body is plain Markdown, with the option to embed Astro components when needed.
+
+## Tables
+
+| System | Atoms   | A100 (ns/day) | H100 (ns/day) |
+|--------|--------:|--------------:|--------------:|
+| 1UBQ   | 18,000  | 320           | 540           |
+| 2OOB   | 95,000  | 110           | 175           |
+| 4XCN   | 220,000 | 48            | 78            |
+
+## Formulas
+
+Inline math: the potential energy decomposes into a bonded term $U_{\text{bond}}$ and a non-bonded term $U_{\text{nb}}$, i.e. $U = U_{\text{bond}} + U_{\text{nb}}$.
+
+Block math:
+
+$$
+U_{\text{LJ}}(r) = 4\varepsilon\left[\left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^{6}\right]
+$$
+
+$$
+F_i = -\nabla_i U(\mathbf{r}_1, \dots, \mathbf{r}_N)
+$$
+
+## Code
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, SPONGE!" << std::endl;
+    return 0;
+}
+```
+
+## Mermaid Diagrams
+
+```mermaid
+flowchart LR
+  A["Prepare system"] --> B["Choose model"]
+  B --> C["Run simulation"]
+  C --> D["Analyze results"]
+```
+
+## Images
+
+A schematic of the 1UBQ[^1ubq] protein commonly used in SPONGE, as an example:
+
+![1UBQ structure](/assets/home/1ubq.jpg)
+
+## Interactive structure
+
+The 1UBQ[^1ubq] structure below is rendered with [Mol*](https://molstar.org/)[^molstar][^molstar-web]. Drag to rotate, scroll to zoom, click a residue to see more information:
+
+<iframe
+  src="https://molstar.org/viewer/?pdb=1UBQ&hide-controls=1&collapse-left-panel=1"
+  width="100%"
+  height="520"
+  style={{ border: '1px solid var(--line)', borderRadius: '14px' }}
+  title="1UBQ structure rendered in Mol* viewer"
+  loading="lazy"
+></iframe>
+
+## How to contribute
+
+1. Fork [`spongemm/spongemm_cn`](https://github.com/spongemm/spongemm_cn)
+2. Create a new `.mdx` file under `src/content/insights-en/`
+3. Fill in the frontmatter and body, then preview locally with `npm run dev`
+4. Open a Pull Request; once merged, it ships with the next deploy
+
+[^1ubq]: Vijay-Kumar S, Bugg CE, Cook WJ. *Structure of ubiquitin refined at 1.8 Å resolution.* J Mol Biol. 1987;194(3):531–544. doi:[10.1016/0022-2836(87)90679-6](https://doi.org/10.1016/0022-2836(87)90679-6)
+
+[^molstar]: Sehnal D, Bittrich S, Deshpande M, et al. *Mol\* Viewer: modern web app for 3D visualization and analysis of large biomolecular structures.* Nucleic Acids Research. 2021;49(W1):W431–W437. doi:[10.1093/nar/gkab314](https://doi.org/10.1093/nar/gkab314)
+
+[^molstar-web]: Mol\* Viewer official website. [https://molstar.org/](https://molstar.org/)
