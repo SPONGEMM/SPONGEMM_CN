@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/site/Header.astro";
+import { siteNavEn } from "../../../data/homepage-en";
+import "../../../styles/docs-page.css";
+---
+
+<BaseLayout
+  lang="en"
+  title="SPONGEMM | SPONGE 1.4 Docs"
+  description="Documentation entry point for the stable SPONGE 1.4 release."
+  canonicalPath="/en/docs/1p4"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/docs/1p4" },
+    { hreflang: "en", path: "/en/docs/1p4" },
+    { hreflang: "x-default", path: "/docs/1p4" }
+  ]}
+>
+  <Header navItems={siteNavEn} brandHref="/en" />
+  <main class="docs-page docs-detail-page">
+    <section class="docs-detail-hero section">
+      <div class="container">
+        <h1>SPONGE 1.4 Docs</h1>
+        <p>Content to be added.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

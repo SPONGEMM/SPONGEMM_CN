@@ -7,63 +7,21 @@ import { getSiteUrl } from "../../lib/site";
 import "../../styles/docs-page.css";
 
 const pageTitle = "SPONGEMM | Docs";
-const pageDescription =
-  "Documentation entry point for SPONGE molecular simulation software: quick start, SPONGE core program, Xponge, modules, examples, tutorials, and version notes.";
+const pageDescription = "Choose the documentation for SPONGE 2.0 or SPONGE 1.4.";
 
-const primaryLinks = [
-  { label: "Install SPONGE", href: "/en/install", note: "Choose 2.0, 1.4, or legacy resources" },
-  { label: "View GitHub", href: "https://github.com/SPONGEMM/SPONGE", note: "Source code, issues, and development updates", external: true }
-] as const;
-
-const docTracks = [
+const docVersions = [
   {
-    number: "01",
-    title: "Quick Start",
-    label: "Start here",
-    summary: "Version choice, runtime environment, installation checks, and a first reproducible case to confirm SPONGE works correctly.",
-    items: ["Version choice", "Runtime environment", "First example"]
+    version: "2.0",
+    tone: "beta",
+    href: "/en/docs/2p0",
+    cta: "View Docs"
   },
   {
-    number: "02",
-    title: "SPONGE Core Program",
-    label: "Manual",
-    summary: "Input files, command line usage, control parameters, output files, restart files, and trajectory handling for CudaSPONGE / SPONGE.",
-    items: ["Input files", "Control parameters", "Output and restart"]
-  },
-  {
-    number: "03",
-    title: "Xponge",
-    label: "Preparation",
-    summary: "System preparation, topology and coordinate generation, format conversion, pre-processing, and post-processing workflows.",
-    items: ["System building", "Format conversion", "Post-processing"]
-  },
-  {
-    number: "04",
-    title: "Modules and Extensions",
-    label: "Modules",
-    summary: "Purpose, compatible versions, installation notes, and minimal examples for legacy modules and optional extensions.",
-    items: ["Module catalog", "Compatibility", "Example inputs"]
-  },
-  {
-    number: "05",
-    title: "Simulation Workflows",
-    label: "Workflows",
-    summary: "Task-oriented workflows including minimization, NVT/NPT, enhanced sampling, free energy calculation, and related methods.",
-    items: ["Standard MD", "Enhanced sampling", "Free energy"]
-  },
-  {
-    number: "06",
-    title: "Tutorials and Examples",
-    label: "Examples",
-    summary: "Small runnable cases, workshop material, and video resources so documentation concepts can be reproduced directly.",
-    items: ["Runnable cases", "Workshop", "FAQ"]
+    version: "1.4",
+    tone: "stable",
+    href: "/en/docs/1p4",
+    cta: "View Docs"
   }
-] as const;
-
-const statusItems = [
-  { title: "SPONGE 2.0", body: "Currently in beta testing. Documentation will prioritize current workflows, installation checks, and migration notes." },
-  { title: "SPONGE 1.4", body: "Preserved as the stable source release for reproducing existing workflows, with build instructions and historical parameter notes." },
-  { title: "Legacy Resources", body: "Historical programs, modules, and the VMD plugin will be archived with compatible versions and usage boundaries clearly marked." }
 ] as const;
 
 const siteUrl = getSiteUrl(Astro.site);
@@ -80,12 +38,12 @@ const docsJsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "SPONGE documentation topics",
-    itemListElement: docTracks.map((item, index) => ({
+    name: "SPONGE documentation versions",
+    itemListElement: docVersions.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      name: item.title,
-      description: item.summary
+      name: `SPONGE ${item.version} Documentation`,
+      url: `${siteUrl}${item.href}`
     }))
   }
 ];
@@ -104,87 +62,27 @@ const docsJsonLd = [
   jsonLd={docsJsonLd}
 >
   <Header navItems={siteNavEn} brandHref="/en" />
-  <main class="docs-page">
+  <main class="docs-page docs-version-page">
     <section class="docs-hero section">
       <div class="container docs-hero-grid">
         <div class="docs-hero-copy">
-          <p class="section-eyebrow">Documentation</p>
           <h1>SPONGE Docs</h1>
-          <p>
-            This will be the main entry point for using SPONGE after installation: preparing systems,
-            running simulations, checking outputs, using modules, and reproducing example workflows.
-          </p>
-          <div class="docs-action-row" aria-label="Documentation links">
-            {primaryLinks.map((link) => (
-              <a class="docs-action" href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
-                <span>
-                  <strong>{link.label}</strong>
-                  <small>{link.note}</small>
-                </span>
-                <ArrowOutIcon size={18} />
-              </a>
-            ))}
-          </div>
         </div>
-
-        <aside class="docs-route panel" aria-labelledby="docs-route-title">
-          <p class="docs-route-kicker">Recommended Path</p>
-          <h2 id="docs-route-title">Run first, then go deeper into parameters.</h2>
-          <ol>
-            <li>Install SPONGE and confirm the hardware backend.</li>
-            <li>Run the smallest example and inspect logs, energy, and trajectory output.</li>
-            <li>Learn input files and control parameters.</li>
-            <li>Move on to modules, enhanced sampling, and free-energy workflows.</li>
-          </ol>
-        </aside>
+        <img class="docs-hero-art" src="/assets/docs/molecule-docs.webp" alt="" aria-hidden="true" />
       </div>
     </section>
 
     <section class="docs-section section">
       <div class="container">
-        <div class="section-heading docs-heading">
-          <p class="section-eyebrow">Topics</p>
-          <h2>Documentation Topics</h2>
-          <p class="section-description">
-            This page first establishes a stable documentation structure. Each topic can later expand into pages,
-            parameter tables, and runnable examples.
-          </p>
-        </div>
-
-        <div class="docs-topic-grid">
-          {docTracks.map((item) => (
-            <article class="docs-topic panel">
-              <header>
-                <span class="docs-topic-number">{item.number}</span>
-                <span class="docs-topic-label">{item.label}</span>
-              </header>
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <ul>
-                {item.items.map((entry) => <li>{entry}</li>)}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="docs-section section docs-status-band">
-      <div class="container docs-status-grid">
-        <div class="docs-status-copy">
-          <p class="section-eyebrow">Versions</p>
-          <h2>Version and Documentation Status</h2>
-          <p>
-            SPONGE versions serve different use cases. The documentation needs to support current testing,
-            stable reproduction, and historical compatibility, so future pages will clearly mark version scope.
-          </p>
-        </div>
-        <div class="docs-status-list">
-          {statusItems.map((item) => (
-            <article class="docs-status-item">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
+        <div class="docs-version-grid" aria-label="SPONGE documentation version choices">
+          {docVersions.map((item) => (
+            <a class="docs-version-card" data-tone={item.tone} href={item.href} aria-label={`View SPONGE ${item.version} documentation`}>
+              <p class="docs-version-number">{item.version}</p>
+              <span class="docs-version-cta">
+                {item.cta}
+                <ArrowOutIcon size={16} />
+              </span>
+            </a>
           ))}
         </div>
       </div>

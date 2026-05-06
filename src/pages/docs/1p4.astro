@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/site/Header.astro";
+import "../../styles/docs-page.css";
+---
+
+<BaseLayout
+  title="SPONGEMM | SPONGE 1.4 文档"
+  description="SPONGE 1.4 稳定版本使用文档入口。"
+  canonicalPath="/docs/1p4"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/docs/1p4" },
+    { hreflang: "en", path: "/en/docs/1p4" },
+    { hreflang: "x-default", path: "/docs/1p4" }
+  ]}
+>
+  <Header />
+  <main class="docs-page docs-detail-page">
+    <section class="docs-detail-hero section">
+      <div class="container">
+        <h1>SPONGE 1.4 文档</h1>
+        <p>待补充内容。</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
