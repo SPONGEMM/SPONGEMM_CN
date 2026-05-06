@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/site/Header.astro";
+import { siteNavEn } from "../../../data/homepage-en";
+---
+
+<BaseLayout
+  lang="en"
+  title="SPONGEMM | SPONGE legacy"
+  description="Legacy SPONGE releases and older module resources."
+  canonicalPath="/en/install/legacy"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install/legacy" },
+    { hreflang: "en", path: "/en/install/legacy" },
+    { hreflang: "x-default", path: "/install/legacy" }
+  ]}
+>
+  <Header navItems={siteNavEn} brandHref="/en" />
+  <main>
+    <section class="section">
+      <div class="container placeholder-page">
+        <p class="eyebrow">SPONGE legacy</p>
+        <h1>Legacy Resources Coming Soon</h1>
+        <p>Historical releases, older modules, and compatibility notes will be placed here.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

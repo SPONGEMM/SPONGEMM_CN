@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/site/Header.astro";
+import { siteNavEn } from "../../../data/homepage-en";
+---
+
+<BaseLayout
+  lang="en"
+  title="SPONGEMM | SPONGE 1.4 Install"
+  description="Installation entry point for the stable SPONGE 1.4 source release."
+  canonicalPath="/en/install/1p4"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install/1p4" },
+    { hreflang: "en", path: "/en/install/1p4" },
+    { hreflang: "x-default", path: "/install/1p4" }
+  ]}
+>
+  <Header navItems={siteNavEn} brandHref="/en" />
+  <main>
+    <section class="section">
+      <div class="container placeholder-page">
+        <p class="eyebrow">SPONGE 1.4</p>
+        <h1>Install Guide Coming Soon</h1>
+        <p>Source package downloads and build instructions will be placed here.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

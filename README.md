@@ -7,7 +7,7 @@ SPONGEMM 官网的 Astro 重构版本。
 ## 当前状态
 
 - 首页、联络、洞见（中英双语）已上线
-- 文档、下载页为 placeholder，等待新内容补充
+- 文档页为 placeholder，安装页已补充基础内容
 - RSS、sitemap、JSON-LD、hreflang 等 SEO 基础已就绪
 - GitHub Actions 部署工作流已可用
 
@@ -31,6 +31,6 @@ npm run preview  # 本地预览构建结果
 
 ## 后续工作
 
-1. 补齐文档与下载页内容
+1. 补齐文档内容，并确认安装页中的 SPONGE 2.0 发布方式与遗留资源文件迁移
 2. 视觉风格细节统一
 3. 站内搜索

@@ -1,25 +1,189 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/site/Header.astro";
+import ArrowOutIcon from "../components/icons/ArrowOutIcon.astro";
+import { getSiteUrl } from "../lib/site";
+import "../styles/docs-page.css";
+
+const pageTitle = "SPONGEMM | 文档";
+const pageDescription =
+  "SPONGE 分子模拟软件文档入口：快速开始、SPONGE 核心程序、Xponge、模块、示例、教程与版本说明。";
+
+const primaryLinks = [
+  { label: "安装 SPONGE", href: "/install", note: "选择 2.0、1.4 或 legacy 资源" },
+  { label: "查看 GitHub", href: "https://github.com/SPONGEMM/SPONGE", note: "源码、问题反馈与开发动态", external: true }
+] as const;
+
+const docTracks = [
+  {
+    number: "01",
+    title: "快速开始",
+    label: "Start here",
+    summary: "从版本选择、运行环境、安装检查到第一个可复现实例，帮助新用户确认 SPONGE 已正确工作。",
+    items: ["版本选择", "运行环境", "第一个算例"]
+  },
+  {
+    number: "02",
+    title: "SPONGE 核心程序",
+    label: "Manual",
+    summary: "整理 CudaSPONGE / SPONGE 的输入文件、命令行、控制参数、输出文件、重启与轨迹文件说明。",
+    items: ["输入文件", "控制参数", "输出与重启"]
+  },
+  {
+    number: "03",
+    title: "Xponge",
+    label: "Preparation",
+    summary: "覆盖体系准备、拓扑与坐标生成、格式转换、前处理和后处理工作流。",
+    items: ["体系构建", "格式转换", "后处理"]
+  },
+  {
+    number: "04",
+    title: "模块与扩展",
+    label: "Modules",
+    summary: "说明 legacy 模块和可选扩展的用途、兼容版本、安装方式以及最小使用示例。",
+    items: ["模块清单", "兼容性", "示例输入"]
+  },
+  {
+    number: "05",
+    title: "模拟工作流",
+    label: "Workflows",
+    summary: "按实际任务组织常见流程，包括能量最小化、NVT/NPT、增强采样、自由能计算等。",
+    items: ["标准 MD", "增强采样", "自由能计算"]
+  },
+  {
+    number: "06",
+    title: "教程与示例",
+    label: "Examples",
+    summary: "沉淀可运行的小型案例、工作坊材料和视频入口，让文档中的概念可以被直接复现。",
+    items: ["可运行案例", "工作坊", "常见问题"]
+  }
+] as const;
+
+const statusItems = [
+  { title: "SPONGE 2.0", body: "处于 beta 测试阶段，文档将优先补齐当前工作流、安装检查与迁移说明。" },
+  { title: "SPONGE 1.4", body: "作为稳定源码版本保留，适合复现已有流程，也需要明确源码编译和历史参数说明。" },
+  { title: "Legacy 资源", body: "历史程序、模块和 VMD 插件会被归档说明，重点标注兼容版本和使用边界。" }
+] as const;
+
+const siteUrl = getSiteUrl(Astro.site);
+const docsJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: pageTitle,
+    description: pageDescription,
+    url: `${siteUrl}/docs`,
+    inLanguage: "zh-CN",
+    isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "SPONGE 文档主题",
+    itemListElement: docTracks.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.title,
+      description: item.summary
+    }))
+  }
+];
 ---
 
 <BaseLayout
-  title="SPONGEMM | 文档"
-  description="SPONGE 分子模拟软件的文档页面，内容正在补充中。"
+  title={pageTitle}
+  description={pageDescription}
   canonicalPath="/docs"
   alternateLocales={[
     { hreflang: "zh-CN", path: "/docs" },
     { hreflang: "en", path: "/en/docs" },
     { hreflang: "x-default", path: "/docs" }
   ]}
+  jsonLd={docsJsonLd}
 >
   <Header />
-  <main>
-    <section class="section">
-      <div class="container placeholder-page">
-        <p class="eyebrow">文档</p>
-        <h1>内容待补充</h1>
-        <p>SPONGE 文档正在重新整理，敬请期待。</p>
+  <main class="docs-page">
+    <section class="docs-hero section">
+      <div class="container docs-hero-grid">
+        <div class="docs-hero-copy">
+          <p class="section-eyebrow">Documentation</p>
+          <h1>SPONGE 文档入口</h1>
+          <p>
+            这里将作为 SPONGE 使用文档的总入口，面向安装后的实际使用：如何准备体系、运行模拟、
+            检查输出、使用模块，并复现实例工作流。
+          </p>
+          <div class="docs-action-row" aria-label="文档相关入口">
+            {primaryLinks.map((link) => (
+              <a class="docs-action" href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
+                <span>
+                  <strong>{link.label}</strong>
+                  <small>{link.note}</small>
+                </span>
+                <ArrowOutIcon size={18} />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <aside class="docs-route panel" aria-labelledby="docs-route-title">
+          <p class="docs-route-kicker">推荐阅读路径</p>
+          <h2 id="docs-route-title">新用户先跑通，再深入参数。</h2>
+          <ol>
+            <li>完成安装并确认硬件后端。</li>
+            <li>运行最小示例，检查日志、能量和轨迹输出。</li>
+            <li>学习输入文件和控制参数。</li>
+            <li>再进入模块、增强采样和自由能工作流。</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="docs-section section">
+      <div class="container">
+        <div class="section-heading docs-heading">
+          <p class="section-eyebrow">Topics</p>
+          <h2>文档主题</h2>
+          <p class="section-description">
+            当前页面先建立稳定的信息结构。后续每个主题都可以展开为独立页面、参数表和可运行示例。
+          </p>
+        </div>
+
+        <div class="docs-topic-grid">
+          {docTracks.map((item) => (
+            <article class="docs-topic panel">
+              <header>
+                <span class="docs-topic-number">{item.number}</span>
+                <span class="docs-topic-label">{item.label}</span>
+              </header>
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+              <ul>
+                {item.items.map((entry) => <li>{entry}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="docs-section section docs-status-band">
+      <div class="container docs-status-grid">
+        <div class="docs-status-copy">
+          <p class="section-eyebrow">Versions</p>
+          <h2>版本与文档状态</h2>
+          <p>
+            SPONGE 的新旧版本面向不同使用场景。文档需要同时服务当前测试、稳定复现和历史兼容，
+            所以后续内容会按版本明确标注适用范围。
+          </p>
+        </div>
+        <div class="docs-status-list">
+          {statusItems.map((item) => (
+            <article class="docs-status-item">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   </main>

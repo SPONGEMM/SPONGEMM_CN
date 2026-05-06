@@ -1,0 +1,228 @@
+.install-hub {
+  position: relative;
+  min-height: calc(100vh - 72px);
+  overflow: clip;
+}
+
+.install-hub-hero {
+  padding-top: clamp(48px, 7vw, 92px);
+  padding-bottom: clamp(60px, 8vw, 108px);
+}
+
+.install-hub-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.45fr);
+  gap: clamp(28px, 5vw, 84px);
+  align-items: center;
+  max-width: 1180px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.install-display {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.install-display em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.install-hub-lede {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.15vw, 1.08rem);
+  line-height: 1.78;
+}
+
+.install-hero-art {
+  width: min(420px, 34vw);
+  justify-self: end;
+  opacity: 0.86;
+  filter: saturate(0.92) drop-shadow(0 26px 46px rgba(29, 105, 181, 0.14));
+  transform: translateY(4px) rotate(-3deg);
+}
+
+.install-version-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(29, 105, 181, 0.22);
+  border-bottom: 1px solid rgba(29, 105, 181, 0.22);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.install-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(28px, 3vw, 42px) clamp(22px, 2.4vw, 34px);
+  border-right: 1px solid rgba(29, 105, 181, 0.14);
+  background: transparent;
+  transition: background 200ms ease;
+}
+
+.install-card:last-child {
+  border-right: 0;
+}
+
+.install-card:hover,
+.install-card:focus-visible {
+  background: rgba(255, 255, 255, 0.86);
+  outline: none;
+}
+
+.install-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.install-card-index {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.install-card-status {
+  text-align: right;
+}
+
+.install-card[data-tone="beta"] .install-card-status {
+  color: #b15a14;
+}
+
+.install-card[data-tone="legacy"] .install-card-status {
+  opacity: 0.7;
+}
+
+.install-card-version {
+  margin: 12px 0 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  color: var(--primary);
+}
+
+.install-card[data-tone="legacy"] .install-card-version {
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  letter-spacing: -0.025em;
+  color: var(--muted);
+}
+
+.install-card-rule {
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin: 4px 0;
+  background: var(--primary);
+  opacity: 0.34;
+}
+
+.install-card-title {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+
+.install-card-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.72;
+}
+
+.install-card-specs {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.install-card-specs li {
+  display: flex;
+  gap: 10px;
+}
+
+.install-card-specs li::before {
+  content: "—";
+  color: var(--primary);
+  opacity: 0.55;
+}
+
+.install-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: gap 200ms ease;
+}
+
+.install-card:hover .install-card-cta,
+.install-card:focus-visible .install-card-cta {
+  gap: 14px;
+}
+
+.install-card-cta svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms ease;
+}
+
+.install-card:hover .install-card-cta svg,
+.install-card:focus-visible .install-card-cta svg {
+  transform: translateX(4px);
+}
+
+@media (max-width: 960px) {
+  .install-hub-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .install-hero-art {
+    display: none;
+  }
+
+  .install-version-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .install-card {
+    border-right: 0;
+    border-bottom: 1px solid rgba(29, 105, 181, 0.14);
+  }
+
+  .install-card:last-child {
+    border-bottom: 0;
+  }
+}

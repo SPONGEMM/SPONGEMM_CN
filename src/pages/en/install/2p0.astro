@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Header from "../../../components/site/Header.astro";
+import { siteNavEn } from "../../../data/homepage-en";
+---
+
+<BaseLayout
+  lang="en"
+  title="SPONGEMM | SPONGE 2.0 Install"
+  description="Installation entry point for SPONGE 2.0."
+  canonicalPath="/en/install/2p0"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install/2p0" },
+    { hreflang: "en", path: "/en/install/2p0" },
+    { hreflang: "x-default", path: "/install/2p0" }
+  ]}
+>
+  <Header navItems={siteNavEn} brandHref="/en" />
+  <main>
+    <section class="section">
+      <div class="container placeholder-page">
+        <p class="eyebrow">SPONGE 2.0</p>
+        <h1>Install Guide Coming Soon</h1>
+        <p>CPU, CUDA 12, CUDA 13, and source build instructions will be placed here.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

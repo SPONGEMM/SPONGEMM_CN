@@ -3,7 +3,7 @@ import { highlights } from "./homepage";
 export const siteNavEn = [
   { label: "Home", href: "/en/home" },
   { label: "Docs", href: "/en/docs" },
-  { label: "Download", href: "/en/download" },
+  { label: "Install", href: "/en/install" },
   { label: "Insights", href: "/en/insights" },
   { label: "Contact", href: "/en/contact" },
   { label: "GitHub", href: "https://github.com/SPONGEMM/SPONGE", icon: "github" }

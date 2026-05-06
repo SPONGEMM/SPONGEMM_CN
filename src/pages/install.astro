@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/site/Header.astro";
+import "../styles/install-page.css";
+
+const installOptions = [
+  {
+    index: "01",
+    version: "2.0",
+    title: "SPONGE 2.0",
+    status: "公开测试",
+    tone: "beta",
+    description: "开发中的下一代版本。包含最新功能与性能改进，适合关注新特性、参与测试与反馈的研究者。",
+    specs: ["预编译包", "源码构建"],
+    href: "/install/2p0",
+    cta: "查看安装"
+  },
+  {
+    index: "02",
+    version: "1.4",
+    title: "SPONGE 1.4",
+    status: "稳定版本",
+    tone: "stable",
+    description: "面向正式研究、教学与生产工作流的稳定版本。行为可预测、文档完善、广泛验证。",
+    specs: ["源码包", "源码编译"],
+    href: "/install/1p4",
+    cta: "查看安装"
+  },
+  {
+    index: "03",
+    version: "legacy",
+    title: "SPONGE legacy",
+    status: "历史资源",
+    tone: "legacy",
+    description: "保留早期版本与旧模块资源。供已有项目兼容、复现实验、维护历史流程使用。",
+    specs: ["历史版本", "旧模块", "兼容说明"],
+    href: "/install/legacy",
+    cta: "浏览资源"
+  }
+] as const;
+---
+
+<BaseLayout
+  title="SPONGEMM | 安装 SPONGE"
+  description="选择 SPONGE 2.0 公开测试版、SPONGE 1.4 稳定版或 SPONGE legacy 历史资源的安装入口。"
+  canonicalPath="/install"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install" },
+    { hreflang: "en", path: "/en/install" },
+    { hreflang: "x-default", path: "/install" }
+  ]}
+>
+  <Header />
+  <main class="install-hub">
+    <section class="install-hub-hero section">
+      <div class="container">
+        <header class="install-hub-heading">
+          <div>
+            <h1 class="install-display">
+              安装 <em>SPONGE</em>
+            </h1>
+            <p class="install-hub-lede">
+              选择要安装或获取的版本。SPONGE 2.0 是开发中的公开测试版本，
+              SPONGE 1.4 是当前稳定版本，legacy 仅保留历史版本与旧模块资源。
+            </p>
+          </div>
+          <img class="install-hero-art" src="/assets/install/molecule-hero.png?v=methane-trajectory" alt="" aria-hidden="true" />
+        </header>
+
+        <div class="install-version-grid" aria-label="SPONGE 安装版本选择">
+          {installOptions.map((item) => (
+            <a class="install-card" data-tone={item.tone} href={item.href}>
+              <div class="install-card-head">
+                <span class="install-card-index">{item.index}</span>
+                <span class="install-card-status">{item.status}</span>
+              </div>
+              <p class="install-card-version">{item.version}</p>
+              <span class="install-card-rule" aria-hidden="true"></span>
+              <h2 class="install-card-title">{item.title}</h2>
+              <p class="install-card-desc">{item.description}</p>
+              <ul class="install-card-specs">
+                {item.specs.map((spec) => <li>{spec}</li>)}
+              </ul>
+              <span class="install-card-cta">
+                {item.cta}
+                <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

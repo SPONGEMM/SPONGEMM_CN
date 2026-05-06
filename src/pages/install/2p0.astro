@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/site/Header.astro";
+---
+
+<BaseLayout
+  title="SPONGEMM | SPONGE 2.0 安装"
+  description="SPONGE 2.0 的安装入口。"
+  canonicalPath="/install/2p0"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install/2p0" },
+    { hreflang: "en", path: "/en/install/2p0" },
+    { hreflang: "x-default", path: "/install/2p0" }
+  ]}
+>
+  <Header />
+  <main>
+    <section class="section">
+      <div class="container placeholder-page">
+        <p class="eyebrow">SPONGE 2.0</p>
+        <h1>安装指南待补充</h1>
+        <p>这里将放置 CPU、CUDA 12、CUDA 13 与源码构建说明。</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

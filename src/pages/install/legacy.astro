@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/site/Header.astro";
+---
+
+<BaseLayout
+  title="SPONGEMM | SPONGE legacy"
+  description="SPONGE 历史版本与旧模块资源入口。"
+  canonicalPath="/install/legacy"
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install/legacy" },
+    { hreflang: "en", path: "/en/install/legacy" },
+    { hreflang: "x-default", path: "/install/legacy" }
+  ]}
+>
+  <Header />
+  <main>
+    <section class="section">
+      <div class="container placeholder-page">
+        <p class="eyebrow">SPONGE legacy</p>
+        <h1>历史资源待整理</h1>
+        <p>这里将放置历史版本、旧模块和兼容性说明。</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
