@@ -91,35 +91,35 @@ export const highlights = [
   {
     year: "2025",
     title: "Effective Nucleation Size for Ice Crystallization",
-    image: "/assets/home/2025-1.jpeg",
+    image: "/assets/home/2025-1.webp",
     alt: "Ice crystallization research visualization",
     doi: "https://doi.org/10.1021/acs.jctc.4c01588"
   },
   {
     year: "2025",
     title: "A Sinking Approach to Explore Arbitrary Areas in Free Energy Landscapes",
-    image: "/assets/home/2025-2.jpeg",
+    image: "/assets/home/2025-2.webp",
     alt: "Free energy landscape research visualization",
     doi: "https://doi.org/10.1021/jacsau.5c00460"
   },
   {
     year: "2024",
     title: "Integrating Epigenetics, Proteomics, and Metabolomics to Reveal the Involvement of Wnt/β-Catenin Signaling Pathway in Oridonin-Induced Reproductive Toxicity",
-    image: "/assets/home/2024-2.jpg",
+    image: "/assets/home/2024-2.webp",
     alt: "Multi-omics and Wnt beta-catenin signaling research visualization",
     doi: "https://doi.org/10.3390/toxics12050339"
   },
   {
     year: "2024",
     title: "PMC-IZ: Electrostatics Calculation in Slab Geometric Molecular Dynamics Simulations",
-    image: "/assets/home/2024-1.jpeg",
+    image: "/assets/home/2024-1.webp",
     alt: "Electrostatics simulation visualization",
     doi: "https://doi.org/10.1021/acs.jctc.3c01124"
   },
   {
     year: "2023",
     title: "Nanoscale one-dimensional close packing of interfacial alkali ions",
-    image: "/assets/home/2023-4.png",
+    image: "/assets/home/2023-4.webp",
     alt: "Interfacial alkali ion research visualization",
     doi: "https://doi.org/10.1038/s41565-023-01550-9"
   },
@@ -133,14 +133,14 @@ export const highlights = [
   {
     year: "2023",
     title: "High Li+ coordinated solvation sheaths enable high-quality Li metal anode",
-    image: "/assets/home/2023-2.jpg",
+    image: "/assets/home/2023-2.webp",
     alt: "Li metal anode research visualization",
     doi: "https://doi.org/10.1002/inf2.12411"
   },
   {
     year: "2023",
     title: "Effect of stereoregularity on excitation-dependent fluorescence and room-temperature phosphorescence of poly(2-vinylpyridine)",
-    image: "/assets/home/2023-1.png",
+    image: "/assets/home/2023-1.webp",
     alt: "Poly(vinylpyridine) research visualization",
     doi: "https://doi.org/10.1002/agt2.276"
   },

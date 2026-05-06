@@ -2,12 +2,33 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Header from "../../../components/site/Header.astro";
 import { siteNavEn } from "../../../data/homepage-en";
+import "../../../styles/install-page.css";
+
+const condaPackages = [
+  {
+    label: "CPU build",
+    command: "conda install -c https://conda.spongemm.cn SPONGE-CPU",
+    tag: "CPU"
+  },
+  {
+    label: "CUDA 12 build",
+    command: "conda install -c https://conda.spongemm.cn SPONGE-CUDA12",
+    tag: "CUDA 12"
+  },
+  {
+    label: "CUDA 13 build",
+    command: "conda install -c https://conda.spongemm.cn SPONGE-CUDA13",
+    tag: "CUDA 13"
+  }
+] as const;
+
+const repoUrl = "https://github.com/SPONGEMM/SPONGE";
 ---
 
 <BaseLayout
   lang="en"
-  title="SPONGEMM | SPONGE 2.0 Install"
-  description="Installation entry point for SPONGE 2.0."
+  title="SPONGEMM | Install SPONGE 2.0"
+  description="Installation entry points for SPONGE 2.0: conda pre-built packages, GitHub source, and the companion tools Xponge, the VMD plugin, and prips."
   canonicalPath="/en/install/2p0"
   alternateLocales={[
     { hreflang: "zh-CN", path: "/install/2p0" },
@@ -16,12 +37,101 @@ import { siteNavEn } from "../../../data/homepage-en";
   ]}
 >
   <Header navItems={siteNavEn} brandHref="/en" />
-  <main>
-    <section class="section">
-      <div class="container placeholder-page">
-        <p class="eyebrow">SPONGE 2.0</p>
-        <h1>Install Guide Coming Soon</h1>
-        <p>CPU, CUDA 12, CUDA 13, and source build instructions will be placed here.</p>
+  <main class="legacy-page">
+    <section class="section legacy-hero">
+      <div class="container">
+        <h1>Install SPONGE 2.0</h1>
+      </div>
+    </section>
+
+    <section class="section legacy-section">
+      <div class="container">
+        <div class="legacy-module-band legacy-module-band--lead" id="conda">
+          <div>
+            <p class="legacy-module-eyebrow">01 · Pre-built</p>
+            <h2>Install via conda</h2>
+            <p>SPONGE 2.0 ships pre-built packages for CPU and CUDA. Pick the channel that matches your hardware.</p>
+          </div>
+          <div class="legacy-list">
+            {condaPackages.map((pkg) => (
+              <div class="legacy-row">
+                <span>
+                  <strong>{pkg.label}</strong>
+                  <small><code>{pkg.command}</code></small>
+                </span>
+                <em>{pkg.tag}</em>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="legacy-module-band legacy-module-band--lead" id="source">
+          <div>
+            <p class="legacy-module-eyebrow">02 · Source</p>
+            <h2>GitHub source</h2>
+            <p>Pull the latest SPONGE 2.0 source from GitHub and build it yourself.</p>
+          </div>
+          <div class="legacy-list">
+            <a class="legacy-row" href={repoUrl} target="_blank" rel="noopener noreferrer">
+              <span>
+                <strong>SPONGEMM/SPONGE</strong>
+                <small><code>git clone https://github.com/SPONGEMM/SPONGE.git</code></small>
+              </span>
+              <em>GitHub ↗</em>
+            </a>
+          </div>
+        </div>
+
+        <div class="legacy-module-band legacy-module-band--lead" id="xponge">
+          <div>
+            <p class="legacy-module-eyebrow">03 · Processing</p>
+            <h2>Install Xponge</h2>
+            <p>Xponge is a Python-based pre- and post-processing toolkit for SPONGE.</p>
+          </div>
+          <div class="legacy-list">
+            <div class="legacy-row">
+              <span>
+                <strong>Install via PyPI</strong>
+                <small><code>pip install Xponge</code></small>
+              </span>
+              <em>PyPI</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="legacy-module-band legacy-module-band--lead" id="vmd">
+          <div>
+            <p class="legacy-module-eyebrow">04 · Visualization</p>
+            <h2>Install the VMD plugin</h2>
+            <p>The plugin lets VMD read SPONGE trajectory and topology files directly. See the README inside the archive for usage.</p>
+          </div>
+          <div class="legacy-list">
+            <a class="legacy-row" href="/packages/tools/sponge_vmd_v1.4.3.zip" download>
+              <span>
+                <strong>sponge_vmd_v1.4.3.zip</strong>
+                <small>VMD plugin package, README included.</small>
+              </span>
+              <em>376 KB ↓</em>
+            </a>
+          </div>
+        </div>
+
+        <div class="legacy-module-band legacy-module-band--lead" id="prips">
+          <div>
+            <p class="legacy-module-eyebrow">05 · Runtime interface</p>
+            <h2>Install prips</h2>
+            <p>prips is the Python Runtime Interface Plugin of SPONGE, used together with the main SPONGE program.</p>
+          </div>
+          <div class="legacy-list">
+            <div class="legacy-row">
+              <span>
+                <strong>Install via PyPI</strong>
+                <small><code>pip install prips</code></small>
+              </span>
+              <em>PyPI</em>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>

@@ -2,6 +2,85 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Header from "../../../components/site/Header.astro";
 import { siteNavEn } from "../../../data/homepage-en";
+import "../../../styles/install-page.css";
+
+const programReleases = [
+  {
+    title: "SPONGE 1.3",
+    description: "An unmaintained historical release kept for reproducing and maintaining older projects.",
+    href: "/packages/programs/sponge_v1.3.zip",
+    filename: "sponge_v1.3.zip",
+    size: "4.6 MB"
+  },
+  {
+    title: "SPONGE 1.2.6",
+    description: "An unmaintained historical release that preserves an earlier feature set.",
+    href: "/packages/programs/sponge_v1.2.6.zip",
+    filename: "sponge_v1.2.6.zip",
+    size: "4.5 MB"
+  },
+  {
+    title: "SPONGE 1.1",
+    description: "An early NMD pure release, kept only for compatibility with historical workflows.",
+    href: "/packages/programs/sponge_nmd_pure_v1.1.zip",
+    filename: "sponge_nmd_pure_v1.1.zip",
+    size: "379 KB"
+  }
+] as const;
+
+const pendingModules = [
+  {
+    title: "FGM double layer slab",
+    href: "/packages/modules/fgm_double_layer_mod_v2.zip",
+    filename: "fgm_double_layer_mod_v2.zip",
+    size: "177 KB"
+  },
+  {
+    title: "XRD3D",
+    href: "/packages/modules/xrd3d_meta1d_mod.zip",
+    filename: "xrd3d_meta1d_mod.zip",
+    size: "1.5 MB"
+  },
+  {
+    title: "DPD",
+    href: "/packages/modules/dpd_and_spring_cuboid_mod.zip",
+    filename: "dpd_and_spring_cuboid_mod.zip",
+    size: "285 KB"
+  }
+] as const;
+
+const integratedModules = [
+  {
+    title: "External force",
+    href: "/packages/modules/exforce.zip",
+    filename: "exforce.zip",
+    size: "6.6 KB"
+  },
+  {
+    title: "1D metadynamics",
+    href: "/packages/modules/meta1d_mod.zip",
+    filename: "meta1d_mod.zip",
+    size: "14 KB"
+  },
+  {
+    title: "Classic SITS",
+    href: "/packages/modules/classic_sits_mod_v1p2p5.zip",
+    filename: "classic_sits_mod_v1p2p5.zip",
+    size: "100 KB"
+  },
+  {
+    title: "CMAP",
+    href: "/packages/modules/cmap_module.zip",
+    filename: "cmap_module.zip",
+    size: "12 KB"
+  },
+  {
+    title: "Python interface",
+    href: "/packages/modules/pyplugin.zip",
+    filename: "pyplugin.zip",
+    size: "4.5 KB"
+  }
+] as const;
 ---
 
 <BaseLayout
@@ -16,12 +95,87 @@ import { siteNavEn } from "../../../data/homepage-en";
   ]}
 >
   <Header navItems={siteNavEn} brandHref="/en" />
-  <main>
-    <section class="section">
-      <div class="container placeholder-page">
-        <p class="eyebrow">SPONGE legacy</p>
-        <h1>Legacy Resources Coming Soon</h1>
-        <p>Historical releases, older modules, and compatibility notes will be placed here.</p>
+  <main class="legacy-page">
+    <section class="section legacy-hero">
+      <div class="container">
+        <h1>Legacy Resources</h1>
+        <p class="legacy-lede">
+          This page keeps unmaintained SPONGE releases and older module resources for compatibility,
+          reproducibility, and maintenance of historical workflows. For new projects, use
+          <a href="/en/install/2p0">SPONGE 2.0</a> or <a href="/en/install/1p4">SPONGE 1.4</a>.
+        </p>
+
+        <div class="legacy-notice" role="note">
+          <strong>Compatibility note</strong>
+          <span>These resources are not updated with the current stable release. Check old input files, module interfaces, and build environments before use.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section legacy-section">
+      <div class="container">
+        <div class="legacy-section-heading">
+          <h2>Historical Program Releases</h2>
+        </div>
+        <div class="legacy-grid">
+          {programReleases.map((item) => (
+            <a class="legacy-download" href={item.href} download>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <span class="legacy-file">
+                <span>{item.filename}</span>
+                <small>{item.size}</small>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section legacy-section">
+      <div class="container">
+        <div class="legacy-section-heading">
+          <h2>Older Modules</h2>
+          <p>
+            Module resources are grouped by compatibility status. Modules that have not been updated require review and adaptation; integrated modules are kept for older workflows.
+          </p>
+        </div>
+
+        <div class="legacy-module-band">
+          <div>
+            <h3>Modules not updated</h3>
+            <p>These modules cannot be used directly with the latest stable SPONGE release and usually require modification.</p>
+          </div>
+          <div class="legacy-list">
+            {pendingModules.map((item) => (
+              <a class="legacy-row" href={item.href} download>
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.filename}</small>
+                </span>
+                <em>{item.size}</em>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="legacy-module-band">
+          <div>
+            <h3>Integrated modules</h3>
+            <p>These modules have been integrated into newer SPONGE versions. The links are retained for compatibility with older releases.</p>
+          </div>
+          <div class="legacy-list">
+            {integratedModules.map((item) => (
+              <a class="legacy-row" href={item.href} download>
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.filename}</small>
+                </span>
+                <em>{item.size}</em>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   </main>

@@ -1,6 +1,85 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/site/Header.astro";
+import "../../styles/install-page.css";
+
+const programReleases = [
+  {
+    title: "SPONGE 1.3",
+    description: "不再维护的历史版本，供旧项目复现和兼容使用。",
+    href: "/packages/programs/sponge_v1.3.zip",
+    filename: "sponge_v1.3.zip",
+    size: "4.6 MB"
+  },
+  {
+    title: "SPONGE 1.2.6",
+    description: "不再维护的历史版本，包含早期功能状态。",
+    href: "/packages/programs/sponge_v1.2.6.zip",
+    filename: "sponge_v1.2.6.zip",
+    size: "4.5 MB"
+  },
+  {
+    title: "SPONGE 1.1",
+    description: "早期 NMD pure 版本，仅用于历史工作流兼容。",
+    href: "/packages/programs/sponge_nmd_pure_v1.1.zip",
+    filename: "sponge_nmd_pure_v1.1.zip",
+    size: "379 KB"
+  }
+] as const;
+
+const pendingModules = [
+  {
+    title: "FGM 双层平板",
+    href: "/packages/modules/fgm_double_layer_mod_v2.zip",
+    filename: "fgm_double_layer_mod_v2.zip",
+    size: "177 KB"
+  },
+  {
+    title: "XRD3D",
+    href: "/packages/modules/xrd3d_meta1d_mod.zip",
+    filename: "xrd3d_meta1d_mod.zip",
+    size: "1.5 MB"
+  },
+  {
+    title: "DPD",
+    href: "/packages/modules/dpd_and_spring_cuboid_mod.zip",
+    filename: "dpd_and_spring_cuboid_mod.zip",
+    size: "285 KB"
+  }
+] as const;
+
+const integratedModules = [
+  {
+    title: "外力",
+    href: "/packages/modules/exforce.zip",
+    filename: "exforce.zip",
+    size: "6.6 KB"
+  },
+  {
+    title: "1 维 metadynamics",
+    href: "/packages/modules/meta1d_mod.zip",
+    filename: "meta1d_mod.zip",
+    size: "14 KB"
+  },
+  {
+    title: "经典 SITS",
+    href: "/packages/modules/classic_sits_mod_v1p2p5.zip",
+    filename: "classic_sits_mod_v1p2p5.zip",
+    size: "100 KB"
+  },
+  {
+    title: "CMAP",
+    href: "/packages/modules/cmap_module.zip",
+    filename: "cmap_module.zip",
+    size: "12 KB"
+  },
+  {
+    title: "Python 接口",
+    href: "/packages/modules/pyplugin.zip",
+    filename: "pyplugin.zip",
+    size: "4.5 KB"
+  }
+] as const;
 ---
 
 <BaseLayout
@@ -14,12 +93,86 @@ import Header from "../../components/site/Header.astro";
   ]}
 >
   <Header />
-  <main>
-    <section class="section">
-      <div class="container placeholder-page">
-        <p class="eyebrow">SPONGE legacy</p>
-        <h1>历史资源待整理</h1>
-        <p>这里将放置历史版本、旧模块和兼容性说明。</p>
+  <main class="legacy-page">
+    <section class="section legacy-hero">
+      <div class="container">
+        <h1>历史资源</h1>
+        <p class="legacy-lede">
+          这里保留不再维护的 SPONGE 历史版本和旧模块资源，用于旧项目兼容、结果复现和历史工作流维护。
+          新项目建议使用 <a href="/install/2p0">SPONGE 2.0</a> 或 <a href="/install/1p4">SPONGE 1.4</a>。
+        </p>
+
+        <div class="legacy-notice" role="note">
+          <strong>兼容性说明</strong>
+          <span>这些资源不会随当前稳定版本同步更新。使用前请确认旧输入文件、模块接口和编译环境是否匹配。</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section legacy-section">
+      <div class="container">
+        <div class="legacy-section-heading">
+          <h2>历史程序版本</h2>
+        </div>
+        <div class="legacy-grid">
+          {programReleases.map((item) => (
+            <a class="legacy-download" href={item.href} download>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <span class="legacy-file">
+                <span>{item.filename}</span>
+                <small>{item.size}</small>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section legacy-section">
+      <div class="container">
+        <div class="legacy-section-heading">
+          <h2>旧模块</h2>
+          <p>
+            模块资源按兼容状态分组。未更新模块需要自行检查和适配；已整合模块保留给旧版本工作流使用。
+          </p>
+        </div>
+
+        <div class="legacy-module-band">
+          <div>
+            <h3>未更新的模块</h3>
+            <p>这些模块不能直接在最新稳定版本的 SPONGE 中使用，通常需要稍加修改。</p>
+          </div>
+          <div class="legacy-list">
+            {pendingModules.map((item) => (
+              <a class="legacy-row" href={item.href} download>
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.filename}</small>
+                </span>
+                <em>{item.size}</em>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="legacy-module-band">
+          <div>
+            <h3>已整合的模块</h3>
+            <p>这些模块已整合至较新的 SPONGE 版本，这里保留链接以兼容老版本。</p>
+          </div>
+          <div class="legacy-list">
+            {integratedModules.map((item) => (
+              <a class="legacy-row" href={item.href} download>
+                <span>
+                  <strong>{item.title}</strong>
+                  <small>{item.filename}</small>
+                </span>
+                <em>{item.size}</em>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   </main>

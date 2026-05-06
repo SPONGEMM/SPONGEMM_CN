@@ -161,14 +161,17 @@ const contactJsonLd = [
     <div class="contact-bg" aria-hidden="true"></div>
 
     <section class="contact-hero container">
-      <p class="eyebrow">Contact</p>
-      <h1 class="contact-title">
-        <span class="contact-title-en-main">Drop us</span>
-        <span class="contact-title-en">a line<span class="contact-title-period">.</span></span>
-      </h1>
-      <p class="contact-lede">
-        SPONGE is developed and maintained by the Yi Qin Gao group at Peking University together with collaborating teams.
-      </p>
+      <div class="contact-hero-copy">
+        <p class="eyebrow">Contact</p>
+        <h1 class="contact-title">
+          <span class="contact-title-en-main">Drop us</span>
+          <span class="contact-title-en">a line<span class="contact-title-period">.</span></span>
+        </h1>
+        <p class="contact-lede">
+          SPONGE is developed and maintained by the Yi Qin Gao group at Peking University together with collaborating teams.
+        </p>
+      </div>
+      <img class="contact-hero-art" src="/assets/contact/molecule-contact.webp" alt="" aria-hidden="true" />
     </section>
 
     <section class="contact-grid container">
@@ -243,7 +246,21 @@ const contactJsonLd = [
   }
 
   .contact-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
     padding-bottom: 64px;
+  }
+  .contact-hero-copy {
+    min-width: 0;
+  }
+  .contact-hero-art {
+    width: min(420px, 34vw);
+    justify-self: end;
+    opacity: 0.9;
+    filter: saturate(0.94) drop-shadow(0 26px 46px rgba(29, 105, 181, 0.12));
+    transform: translateY(6px) rotate(2deg);
   }
   .contact-title {
     margin: 24px 0 0;
@@ -457,6 +474,12 @@ const contactJsonLd = [
   }
 
   @media (max-width: 880px) {
+    .contact-hero {
+      grid-template-columns: 1fr;
+    }
+    .contact-hero-art {
+      display: none;
+    }
     .contact-grid {
       grid-template-columns: 1fr;
     }
