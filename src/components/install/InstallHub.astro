@@ -1,0 +1,67 @@
+---
+import type { InstallHubData } from "../../data/install";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import { siteNavEn } from "../../data/homepage-en";
+import "../../styles/install-page.css";
+
+interface Props {
+  data: InstallHubData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/install" },
+    { hreflang: "en", path: "/en/install" },
+    { hreflang: "x-default", path: "/install" }
+  ]}
+>
+  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <main class="install-hub">
+    <section class="install-hub-hero section">
+      <div class="container">
+        <header class="install-hub-heading">
+          <div>
+            <h1 class="install-display">
+              {data.hero.titleHtml.lead}<em>{data.hero.titleHtml.emphasis}</em>
+            </h1>
+            <p class="install-hub-lede">{data.hero.lede}</p>
+          </div>
+          <img class="install-hero-art" src="/assets/install/molecule-hero.webp" alt="" aria-hidden="true" />
+        </header>
+
+        <div class="install-version-grid" aria-label={data.gridLabel}>
+          {data.options.map((item) => (
+            <a class="install-card" data-tone={item.tone} href={item.href}>
+              <div class="install-card-head">
+                <span class="install-card-index">{item.index}</span>
+                <span class="install-card-status">{item.status}</span>
+              </div>
+              <p class="install-card-version">{item.version}</p>
+              <span class="install-card-rule" aria-hidden="true"></span>
+              <h2 class="install-card-title">{item.title}</h2>
+              <p class="install-card-desc">{item.description}</p>
+              <ul class="install-card-specs">
+                {item.specs.map((spec) => <li>{spec}</li>)}
+              </ul>
+              <span class="install-card-cta">
+                {item.cta}
+                <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

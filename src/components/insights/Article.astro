@@ -148,22 +148,25 @@ const articleJsonLd = {
         }
       });
 
-      let index = 0;
-
-      for (const block of blocks) {
+      const wrappers = Array.from(blocks, (block) => {
         const wrapper = document.createElement("div");
         wrapper.className = "mermaid-diagram";
         wrapper.textContent = block.textContent ?? "";
         block.replaceWith(wrapper);
-        try {
-          const id = `mermaid-${index++}`;
-          const { svg } = await mermaid.render(id, wrapper.textContent);
-          wrapper.innerHTML = svg;
-        } catch (error) {
-          wrapper.classList.add("mermaid-diagram--error");
-          console.error("Failed to render Mermaid diagram", error);
-        }
-      }
+        return wrapper;
+      });
+
+      await Promise.all(
+        wrappers.map(async (wrapper, index) => {
+          try {
+            const { svg } = await mermaid.render(`mermaid-${index}`, wrapper.textContent ?? "");
+            wrapper.innerHTML = svg;
+          } catch (error) {
+            wrapper.classList.add("mermaid-diagram--error");
+            console.error("Failed to render Mermaid diagram", error);
+          }
+        })
+      );
     };
 
     if (document.readyState === "loading") {

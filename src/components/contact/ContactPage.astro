@@ -1,0 +1,149 @@
+---
+import type { ContactPageData } from "../../data/contact";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import { siteNavEn } from "../../data/homepage-en";
+import GitHubIcon from "../icons/GitHubIcon.astro";
+import MailIcon from "../icons/MailIcon.astro";
+import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
+import QrDialog from "./QrDialog.astro";
+import { getSiteUrl } from "../../lib/site";
+import "../../styles/contact-page.css";
+
+interface Props {
+  data: ContactPageData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+
+const siteUrl = getSiteUrl(Astro.site);
+const pageUrl = `${siteUrl}${data.canonicalPath}`;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: data.pageTitle,
+    description: data.pageDescription,
+    url: pageUrl,
+    inLanguage: data.inLanguage,
+    isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SPONGEMM",
+    url: siteUrl,
+    parentOrganization: {
+      "@type": "CollegeOrUniversity",
+      name: data.jsonLd.parentOrgName,
+      url: data.jsonLd.parentOrgUrl
+    },
+    contactPoint: data.jsonLd.contactPoints.map((p) => ({
+      "@type": "ContactPoint",
+      contactType: p.contactType,
+      email: p.email,
+      areaServed: p.areaServed,
+      availableLanguage: p.availableLanguage
+    })),
+    location: data.jsonLd.locations.map((l) => ({
+      "@type": "Place",
+      name: l.name,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: l.streetAddress,
+        postalCode: l.postalCode,
+        addressLocality: l.addressLocality,
+        addressRegion: l.addressRegion,
+        addressCountry: l.addressCountry
+      }
+    })),
+    sameAs: data.jsonLd.sameAs
+  }
+];
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/contact" },
+    { hreflang: "en", path: "/en/contact" },
+    { hreflang: "x-default", path: "/contact" }
+  ]}
+  ogImage="/assets/home/sponge-logo-notext.png"
+  jsonLd={jsonLd}
+>
+  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <main class="contact-page">
+    <div class="contact-bg" aria-hidden="true"></div>
+
+    <section class="contact-hero container">
+      <div class="contact-hero-copy">
+        <p class="eyebrow">{data.hero.eyebrow}</p>
+        <h1 class="contact-title">
+          {data.hero.titleLines.map((line) => (
+            <span class={line.italic ? "contact-title-italic" : ""}>
+              {line.text}
+              {line.period && <span class="contact-title-period">{line.period}</span>}
+            </span>
+          ))}
+        </h1>
+        <p class="contact-lede">{data.hero.lede}</p>
+      </div>
+      <img class="contact-hero-art" src="/assets/contact/molecule-contact.webp" alt="" aria-hidden="true" />
+    </section>
+
+    <section class="contact-grid container">
+      {data.cards.map((c) => (
+        <article class="c-card">
+          <header class="c-head">
+            <span class="c-num">{c.num}</span>
+            <span class="c-tag">{c.tag}</span>
+          </header>
+
+          <div class="c-body">
+            <h2 class="c-title">{c.title}</h2>
+            <p class="c-sub">{c.subtitle}</p>
+          </div>
+
+          {c.kind === "institution" && (
+            <>
+              <div class="c-address">
+                {c.addressLines.map((line) => <p>{line}</p>)}
+              </div>
+              <a class="c-pill" href={c.action.href}>
+                <MailIcon />
+                <span>{c.action.label}</span>
+              </a>
+            </>
+          )}
+
+          {c.kind === "qq" && (
+            <QrDialog src={c.image} alt={c.imageAlt} closeLabel={data.qrCloseLabel} />
+          )}
+
+          {c.kind === "github" && (
+            <div class="c-repos">
+              {c.repos.map((r) => (
+                <a class="c-repo-row" href={r.href} target="_blank" rel="noreferrer">
+                  <span class="c-repo-icon" aria-hidden="true">
+                    <GitHubIcon size={20} />
+                  </span>
+                  <span class="c-repo-text">
+                    <span class="c-repo-name">{r.label}</span>
+                    <span class="c-repo-note">{r.note}</span>
+                  </span>
+                  <ArrowOutIcon size={16} />
+                </a>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </section>
+  </main>
+</BaseLayout>

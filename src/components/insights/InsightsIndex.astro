@@ -1,0 +1,125 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import InsightCard from "./InsightCard.astro";
+import { siteNavEn } from "../../data/homepage-en";
+import { getSiteUrl } from "../../lib/site";
+import "../../styles/insights-page.css";
+
+interface Props {
+  lang: "zh" | "en";
+}
+
+const { lang } = Astro.props;
+
+const labels = lang === "en"
+  ? {
+      htmlLang: "en" as const,
+      pageTitle: "SPONGEMM | Insights",
+      pageDescription:
+        "SPONGE Insights — notes on molecular simulation, molecular modelling and computational chemistry methods. Articles are written in Chinese; contributors can submit via GitHub Pull Request.",
+      canonicalPath: "/en/insights",
+      hrefPrefix: "/en/insights",
+      rssTitle: "SPONGEMM Insights RSS",
+      rssHref: "/en/rss.xml",
+      dateLocale: "en-US",
+      eyebrow: "Insights",
+      emptyText: "No posts yet.",
+      blogName: "SPONGEMM Insights",
+      itemListName: "SPONGEMM Insights articles",
+      inLanguage: "en"
+    }
+  : {
+      htmlLang: "zh-CN" as const,
+      pageTitle: "SPONGEMM | 观点洞见",
+      pageDescription:
+        "SPONGE 观点洞见栏目，记录与分子模拟、分子建模、计算化学方法相关的观点、观察与经验，欢迎以 GitHub PR 的方式投稿。",
+      canonicalPath: "/insights",
+      hrefPrefix: "/insights",
+      rssTitle: "SPONGEMM 观点洞见 RSS",
+      rssHref: "/rss.xml",
+      dateLocale: "zh-CN",
+      eyebrow: "观点洞见",
+      emptyText: "暂无文章。",
+      blogName: "SPONGEMM 观点洞见",
+      itemListName: "SPONGEMM 观点洞见文章列表",
+      inLanguage: "zh-CN"
+    };
+
+const entries = lang === "en"
+  ? (await getCollection("insights-en")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  : (await getCollection("insights")).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const dateFmt = new Intl.DateTimeFormat(labels.dateLocale, {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+
+const siteUrl = getSiteUrl(Astro.site);
+
+const blogJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: labels.blogName,
+    description: labels.pageDescription,
+    url: `${siteUrl}${labels.canonicalPath}`,
+    inLanguage: labels.inLanguage,
+    isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: labels.itemListName,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    numberOfItems: entries.length,
+    itemListElement: entries.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteUrl}${labels.hrefPrefix}/${entry.id}`,
+      name: entry.data.title
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title={labels.pageTitle}
+  description={labels.pageDescription}
+  lang={labels.htmlLang}
+  canonicalPath={labels.canonicalPath}
+  alternateLocales={[
+    { hreflang: "zh-CN", path: "/insights" },
+    { hreflang: "en", path: "/en/insights" },
+    { hreflang: "x-default", path: "/insights" }
+  ]}
+  jsonLd={blogJsonLd}
+>
+  <link
+    slot="head"
+    rel="alternate"
+    type="application/rss+xml"
+    title={labels.rssTitle}
+    href={labels.rssHref}
+  />
+  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <main class="insights-page">
+    <div class="insights-shell">
+      <p class="eyebrow">{labels.eyebrow}</p>
+
+      {entries.length === 0 ? (
+        <p class="insights-empty">{labels.emptyText}</p>
+      ) : (
+        <ul class="insights-list">
+          {entries.map((entry) => (
+            <li>
+              <InsightCard entry={entry} hrefPrefix={labels.hrefPrefix} dateFmt={dateFmt} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </main>
+</BaseLayout>

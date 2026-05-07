@@ -1,0 +1,295 @@
+---
+title: "文件格式"
+description: "SPONGE 1.4 的 CudaSPONGE 文件格式说明。"
+version: "SPONGE 1.4"
+section: "CudaSPONGE 文档"
+order: 3
+---
+
+> 所有原子序号均从0开始计数
+
+# 控制文件
+
+## `mdin`
+
+```
+        第一行是标题行，必须有
+        # 井号后面的是注释
+        # 命令 = 值
+        mode = NVT
+        thermostat = middle_langevin
+        # 花括号 A { B = C } 代表 A_B = C
+        middle_langevin
+        {
+            gamma = 10
+        }
+        # 两个井号注释掉整个花括号
+        ## amber
+        {
+            parm7 = test.parm7
+            rst7 = test.rst7
+        }
+        default_in_file_prefix = example
+```
+
+在 `mdin` 中的命令均可以在命令行中输入，例如上面等效于:
+
+```
+SPONGE -mode NVT -thermostat middle_langevin -middle_langevin_gamma 10 -default_in_file_prefix example
+```
+
+## `cv_in_file`
+
+```
+        # 井号后面的是注释
+        # 命令 = 值
+        ####################
+        # 定义虚原子
+        ####################
+        com1 #任意不与内建关键词重复的名字
+        {
+            vatom_type = center_of_mass
+            atom = 3 5 7
+        }
+        com2
+        {
+            vatom_type = center_of_mass
+            atom = 4 6 9
+        }
+        ####################
+        # CV 定义
+        ####################
+        rmsd_test #任意不与内建关键词重复的名字
+        {
+            CV_type = rmsd
+            atom_in_file = test_atom.txt
+            coordinate_in_file = test_coordinate.txt
+        }
+         nice_day #任意不与内建关键词重复的名字
+        {
+            CV_type = angle
+            atom = com1 3 com2 #所有要求输入整数处均可以使用虚原子名作为代替
+        }
+        ######################
+        # CV使用
+        ######################
+        print
+        {
+            CV = nice_day rmsd_test
+        }
+        restrain
+        {
+            CV = rmsd_test
+            weight = middle_langevin_gamma # 所有要求输入整数或浮点数的值都可以使用mdin中的变量
+            reference = 0.
+        }
+        ##meta1d # 双引号注释整个大括号
+        {
+            CV = nice_day
+            dCV = 0.01
+            CV_minimal = 0
+            CV_maximum = 3.14
+            height = 10
+            sigma = 0.1
+            welltemp_factor = 50
+        }
+        ###################
+        # 系统控制
+        ###################
+        dont_check_input = 0
+```
+
+# 力场文件
+
+## AMBER格式
+
+`amber_parm7`
+`amber_rst7`
+参见AMBER官网
+
+## `bond_in_file`
+
+```
+            键总数
+            原子a 原子b 力常数 平衡位置
+            ...
+            原子a 原子b 力常数 平衡位置
+```
+
+## `angle_in_file`
+
+```
+            键角总数
+            原子a 原子b 原子c 力常数 平衡位置
+            ...
+            原子a 原子b 原子c 力常数 平衡位置
+```
+
+## `dihedral_in_file`
+
+```
+            二面角总数
+            原子a 原子b 原子c 原子d n倍角 力常数 偏移角
+            ...
+            原子a 原子b 原子c 原子d n倍角 力常数 偏移角
+```
+
+## `nb14_in_file`
+
+```
+            nb14总数
+            原子a 原子b LJ修正系数 静电修正系数
+            ...
+            原子a 原子b LJ修正系数 静电修正系数
+```
+
+## `cmap_in_file`
+
+```
+            cmap种类数 cmap总数
+            第一种cmap分辨率 第二种cmap分辨率 ... 第x种cmap分辨率
+
+            第一种cmap参数，共 第一种cmap分辨率^2 个
+
+            第二种cmap参数，共 第二种cmap分辨率^2 个
+
+            ...
+
+            第x种cmap分辨率，共 第x种cmap分辨率^2 个
+
+            原子a 原子b 原子c 原子d 原子e cmap种类
+            ...
+            原子a 原子b 原子c 原子d 原子e cmap种类
+```
+
+## `LJ_in_file`
+
+```
+            原子个数 LJ种类数
+
+            LJ0-LJ0的A系数
+            LJ1-LJ0的A系数 LJ1-LJ1的A系数
+            ...
+            LJx-LJ0的A系数 LJx-LJ1的A系数 ... LJx-LJx的A系数
+
+            LJ0-LJ0的B系数
+            LJ1-LJ0的B系数 LJ1-LJ1的B系数
+            ...
+            LJx-LJ0的B系数 LJx-LJ1的B系数 ... LJx-LJx的B系数
+
+            原子1的LJ种类
+            原子2的LJ种类
+            ...
+            原子n的LJ种类
+```
+
+## `charge_in_file`
+
+> 这里使用了独特的电荷单位，使得 $E = \frac {q_A q_B} {r_{AB}}$，不再需要乘力常数。
+> 在该单位制下，一个电子带18.2223的负电荷
+
+```
+           原子个数
+           原子1的电荷
+           原子2的电荷
+           ...
+           原子n的电荷
+```
+
+## `residue_in_file`
+
+```
+            原子个数 残基个数
+            残基1的原子个数
+            残基2的原子个数
+            ...
+            残基n的原子个数
+```
+
+# 自定义力场形式文件
+
+在给定下面的力场形式定义文件以后，还需要给出力场参数文件，力场参数文件参考上面的SPONGE自带标准格式
+
+## `listed_forces_in_file`
+
+定义成键相互作用。
+
+```
+            [[[ 名字1 ]]]
+            [[ parameters ]]
+            int atom_i, int atom_j, ..., int atom_l, 参数类型(float/int) 参数名, 参数类型(float/int) 参数名, ... 参数类型(float/int) 参数名
+            [[ potential ]]
+            势能函数
+            E = f(r_ij, theta_ijk, phi_ijkl)
+            其中r_ij表示 atom_i和atom_j的距离，theta_ijl表示对应的角度，phi_ijkl表示对应的二面角
+            [[ connected_atoms ]]
+            ij （表示i和j原子是连在一起的，用于周期性映射和自动寻找约束原子，如无则不填该section）
+            [[ constrain_distance ]]
+            表示约束距离的参数名，如无则不填该section
+            [[ end ]]
+            [[[ 名字2 ]]]
+            ...
+            [[ end ]]
+            ... ...
+```
+
+## `pairwise_force_in_file`
+
+定义非键相互作用
+
+```
+            [[[ 名字 ]]]
+            [[ parameters ]]
+            参数类型(float/int) 参数名, 参数类型(float/int) 参数名, ... 参数类型(float/int) 参数名
+            [[ potential ]]
+            势能函数
+            E = f(r_ij)
+            [[ with_ele ]]
+            true/false
+            [[ electrostatic_potential ]]
+            静电势能函数
+            E_ele = f(r_ij, q_i, q_j)
+            [[ end ]]
+```
+
+## `soft_walls_in_file`
+
+定义软墙
+
+```
+            [[[ 名字1 ]]]
+            [[ potential ]]
+            势能函数 E = f(x, y, z)
+            [[ end ]]
+            [[[ 名字2 ]]]
+            ...
+            [[ end ]]
+            ... ...
+```
+
+# 坐标和速度文件格式
+
+## `coordinate_in_file`
+
+输入坐标文件
+
+```
+            原子数  [时间戳，可有可无]
+            原子1的x坐标  原子1的y坐标  原子1的z坐标
+            原子2的x坐标  原子2的y坐标  原子2的z坐标
+            ... ...
+            原子n的x坐标  原子n的y坐标  原子n的z坐标
+            盒子的x基矢长度 盒子的y基矢长度 盒子的z基矢长度 盒子的y基矢和z基矢的夹角 盒子的x基矢和z基矢的夹角 盒子的x基矢和y基矢的夹角
+```
+
+## `velocity_in_file`
+
+输入速度文件，注意速度的单位是SPONGE内部单位制。
+
+```
+            原子数  [时间戳，可有可无]
+            原子1的x速度  原子1的y速度  原子1的z速度
+            原子2的x速度  原子2的y速度  原子2的z速度
+            ... ...
+            原子n的x速度  原子n的y速度  原子n的z速度
+```
