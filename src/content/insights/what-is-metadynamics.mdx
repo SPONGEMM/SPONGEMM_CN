@@ -1,0 +1,81 @@
+---
+title: Metadynamics 是什么意思？为什么不该简单译作“元动力学”
+description: Metadynamics 常被译作“元动力学”，但这一中文译名并不准确。本文从前缀 meta- 的词义出发，并结合 metadynamics 在原有动力学过程中施加历史依赖偏置的原理，梳理这一术语的命名逻辑。相比“元动力学”，本文更倾向于将 metadynamics 译为“埋拓动力学”：这一译名既保留了它与动力学过程的关系，也突出其通过不断“埋入”偏置来拓展采样空间的核心思想；同时，“埋拓”与 meta 在读音上也形成呼应。
+date: 2026-05-07
+author: 夏义杰
+avatar: /assets/avatar/yijiexia.webp
+---
+
+## Metadynamics 是什么？
+
+`Metadynamics` 是 Laio 和 Parrinello 在 2002 年提出的一种分子动力学模拟增强采样方法[^laio-parrinello-2002]。它要解决的问题很直接：普通分子动力学模拟常常会被困在某个自由能低谷里，短时间内很难跨过自由能垒，因此也就很难采到构象变化、反应路径、相变等低频但重要的事件。
+
+Metadynamics 的基本思路，是在动力学模拟过程中选择少数几个能够描述慢过程的集体变量，然后沿着这些变量不断加入**历史依赖偏置**。体系到过哪里，偏置就逐渐“填”到哪里；已经访问过的自由能低谷被逐步抬高之后，体系就更容易离开原来的局部区域，继续探索新的构象空间。随着偏置势不断积累，研究者还可以反推出体系在这些集体变量上的自由能面。
+
+![Metadynamics 通过在已访问位置沉积 Gaussian bias，逐步填充自由能低谷并推动轨迹跨越势垒。](/assets/insights/metadynamics-bias-deposition.webp)
+
+## meta- 在这里是什么意思？
+
+`Metadynamics` 显然是由前缀 `meta-` 和 `dynamics` 构成的。`Dynamics` 在这里译作“动力学”基本没有争议；当然，中文里也存在类似 [Molecular Modeling 和 Molecular Simulation 同译为“分子模拟”](/insights/what-is-molecular-simulation-and-molecular-modeling) 的问题，`dynamics` 和 `kinetics` 有时也都会被译作“动力学”，但这不是本文要讨论的重点，以后再讲。
+
+那么 `meta-` 是什么意思呢？
+
+笔者个人喜欢的 BBC 喜剧《是，大臣》（*Yes Minister*）里，有这样一段：牛津大学古典学三等学位的汉弗莱爵士解释二恶英 `dioxin` 和变形二恶英 `meta-dioxin` 中 `meta-` 的含义。
+
+<div class="article-video">
+  <iframe
+    src="https://player.bilibili.com/player.html?bvid=BV1yU4y1z73R&t=309&autoplay=0&muted=0"
+    title="Bilibili video BV1yU4y1z73R"
+    loading="lazy"
+    allowFullScreen
+  />
+</div>
+
+相关视频可见 Bilibili `BV1yU4y1z73R` 约 05:08 处。如果播放器没有正常加载，也可以[直接打开对应片段](https://www.bilibili.com/video/BV1yU4y1z73R/?t=308.9)。
+
+这里当然是在喜剧语境里调侃官僚语言，但它也提示了 `meta-` 这个前缀在英语里本身就相当复杂：它可以有 `beyond`、`after`、`with` 等含义，落到不同词语中时侧重点也并不相同。
+
+在中文场景里，我们经常使用“元”来翻译 `meta-`。这类译法通常表达的是“某物的某物”。例如：
+
+| 中文译名 | 英文词 | 直观含义 |
+| --- | --- | --- |
+| 元数据 | `metadata` | 数据的数据 |
+| 元理论 | `metatheory` | 理论的理论 |
+| 元认知 | `metacognition` | 认知的认知 |
+| 元分析 | `meta-analysis` | 分析的分析 |
+
+放到 `metadynamics` 里，很多人会这样理解：它是在原本的动力学模拟上，额外加入一套随轨迹演化的规则；如果把这套规则也看作一种“动力学”，那么 `metadynamics` 就可以被解释成“动力学的动力学”。再加上中文里已有的“元数据”“元理论”“元认知”等译法，“元动力学”这个翻译也就很自然地出现了。
+
+所以问题并不是“元动力学”这个译法完全错误。这个译名已经比较常见，写论文、写报告、查资料时也基本能被同行理解。但它的问题在于：metadynamics 中这套随轨迹演化的历史依赖规则，远远还达不到一套“动力学”的程度。如果只看“元动力学”这四个字，读者很容易误以为它是在讨论某种关于动力学的动力学，或者某种更高阶、更根本的动力学理论。
+
+但在分子模拟语境里，`metadynamics` 的重点并不是提出一套新的动力学基本定律，也不是把动力学本身再提升一个层级，而是在已有的动力学模拟过程中，沿着选定的集体变量不断加入历史相关的偏置势，帮助体系离开已经访问过的自由能区域，从而更有效地探索自由能面。
+
+事实也正如《是，大臣》里所调侃的那样：`meta-` 本身的英文含义就已经很复杂，再进入中文翻译时，问题只会更复杂。一些常见的科技词汇里，`meta-` 并不会被统一译成“元”，而是会根据具体词源和学科习惯转成完全不同的中文表达。例如：
+
+| 英文词 | 常见中文译名 | 构词或语义线索 |
+| --- | --- | --- |
+| `metathesis` | 复分解 | `meta-` 有“变化”义，`thesis` 与“位置”相关 |
+| `metaplasia` | 化生 | `meta-` 有“变化”义，`plasia` 与发育、形成相关 |
+| `metabolism` | 新陈代谢 | `meta-` 有“变化”义，`bol` 与放置、抛投相关，`-ism` 为名词化后缀 |
+| `Metazoa` | 后生动物 | `meta-` 取“after”一类含义 |
+| `metanephros` | 后肾 | `meta-` 取“after”一类含义 |
+| `meta-xylene` | 间二甲苯 | `meta-` 表示芳环取代位置关系 |
+| `metastate` | 亚稳态 | `meta-` 表示介于稳定与不稳定之间的状态 |
+
+其实如果只从 `meta-` 的字面义出发，很多译法都可以勉强说得过去：变换动力学、后动力学、亚动力学、元动力学，似乎都能各自找到一点解释空间。那么理论上到底应该怎么翻译呢？这个时候，问问提出者的想法可能是最好的。
+
+笔者的师兄曾在 Parrinello 组里做过博士后，当时他问过 Parrinello 本人这个问题。他的原话是：“No special meaning. It's just a name”（没有特殊含义，只是一个名字而已）。最初提出这一方法的 Laio 和 Parrinello 那篇文章里[^laio-parrinello-2002]，甚至还没有直接使用 `metadynamics` 这个名称，而是使用了 `metastep`、`metatrajectory`、`metastates` 等概念；后来的 `metadynamics`，可以理解为从这些概念中进一步提炼出的名称。
+
+因此，在提出者本人已经明确表示名称含义模糊的情况下，为了达到翻译的准确性，此时音译反而是更容易接受的选择。如果音译还能更准确地反映方法含义，效果就更好。
+
+## 那么应该怎么译？
+
+因此，我们组内一直更推荐使用**埋拓动力学**：其中“埋拓”本身是 `meta-` 的音译，同时“埋”对应埋入偏置势，“拓”对应拓展采样空间。
+
+不过，鉴于 `metadynamics` 在各种场景中已经被广泛使用，大家也都有各自习惯的译法，很多时候维持 `metadynamics` 本身的英文写法，可能反而是更现实的妥协选择。事实上，`metadynamics` 在缩写（如 `mtd` / `metad`）、衍生方法翻译（如 `well-tempered metadynamics`）等方面也仍有不少争议。
+
+[^laio-parrinello-2002]: Laio A, Parrinello M. *Escaping free-energy minima.* Proceedings of the National Academy of Sciences. 2002;99(20):12562-12566. doi:[10.1073/pnas.202427399](https://doi.org/10.1073/pnas.202427399)
+
+[^barducci-2008]: Barducci A, Bussi G, Parrinello M. *Well-Tempered Metadynamics: A Smoothly Converging and Tunable Free-Energy Method.* Physical Review Letters. 2008;100(2):020603. doi:[10.1103/PhysRevLett.100.020603](https://doi.org/10.1103/PhysRevLett.100.020603)
+
+[^laio-2020]: Laio A, Gervasio FL. *Using metadynamics to explore complex free-energy landscapes.* Nature Reviews Physics. 2020;2:99-111. doi:[10.1038/s42254-020-0153-0](https://doi.org/10.1038/s42254-020-0153-0)

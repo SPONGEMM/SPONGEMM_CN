@@ -1,0 +1,75 @@
+---
+import type { InstallDetailPageData } from "../../data/install";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import { buildAlternates } from "../../lib/site";
+import "../../styles/install-page.css";
+
+interface Props {
+  data: InstallDetailPageData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={buildAlternates(data.canonicalPath)}
+>
+  <Header lang={lang} />
+  <main class="install-detail-page">
+    <section class="section install-detail-hero">
+      <div class="container">
+        <h1>{data.heroTitle}</h1>
+      </div>
+    </section>
+
+    <section class="section install-detail-section">
+      <div class="container">
+        {data.bands.map((band) => (
+          <div class="install-detail-module-band install-detail-module-band--lead" id={band.id}>
+            <div>
+              <p class="install-detail-module-eyebrow">{band.eyebrow}</p>
+              <h2>{band.title}</h2>
+              <p>{band.description}</p>
+            </div>
+            <div class="install-detail-list">
+              {band.rows.map((row) => {
+                const inner = (
+                  <>
+                    <span>
+                      <strong>{row.title}</strong>
+                      <small>
+                        {row.subtitleAsCode ? <code>{row.subtitle}</code> : row.subtitle}
+                      </small>
+                    </span>
+                    <em>{row.badge}</em>
+                  </>
+                );
+                if (row.href && row.external) {
+                  return (
+                    <a class="install-detail-row" href={row.href} target="_blank" rel="noopener noreferrer">
+                      {inner}
+                    </a>
+                  );
+                }
+                if (row.href) {
+                  return (
+                    <a class="install-detail-row" href={row.href} download={row.download}>
+                      {inner}
+                    </a>
+                  );
+                }
+                return <div class="install-detail-row">{inner}</div>;
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,86 @@
+---
+import type { InstallLegacyPageData } from "../../data/install";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import { buildAlternates } from "../../lib/site";
+import "../../styles/install-page.css";
+
+interface Props {
+  data: InstallLegacyPageData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={buildAlternates(data.canonicalPath)}
+>
+  <Header lang={lang} />
+  <main class="install-detail-page">
+    <section class="section install-detail-hero">
+      <div class="container">
+        <h1>{data.heroTitle}</h1>
+        <p class="install-detail-lede" set:html={data.ledeHtml}></p>
+
+        <div class="install-detail-notice" role="note">
+          <strong>{data.notice.strong}</strong>
+          <span>{data.notice.text}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section install-detail-section">
+      <div class="container">
+        <div class="install-detail-section-heading">
+          <h2>{data.programs.heading}</h2>
+        </div>
+        <div class="install-detail-grid">
+          {data.programs.downloads.map((item) => (
+            <a class="install-detail-download" href={item.href} download>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <span class="install-detail-file">
+                <span>{item.filename}</span>
+                <small>{item.size}</small>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section install-detail-section">
+      <div class="container">
+        <div class="install-detail-section-heading">
+          <h2>{data.modules.heading}</h2>
+          <p>{data.modules.description}</p>
+        </div>
+
+        {data.modules.bands.map((band) => (
+          <div class="install-detail-module-band">
+            <div>
+              <h3>{band.title}</h3>
+              <p>{band.description}</p>
+            </div>
+            <div class="install-detail-list">
+              {band.rows.map((row) => (
+                <a class="install-detail-row" href={row.href} download>
+                  <span>
+                    <strong>{row.title}</strong>
+                    <small>{row.filename}</small>
+                  </span>
+                  <em>{row.size}</em>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>

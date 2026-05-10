@@ -1,0 +1,101 @@
+---
+title: "版本迭代"
+description: "SPONGE 1.4 的 CudaSPONGE 版本迭代记录。"
+version: "SPONGE 1.4"
+section: "CudaSPONGE 文档"
+order: 5
+---
+
+# 版本迭代
+
+## 1.4 -> 1.5
+
+开发中...
+
+1. PME修改，使得能够支持大体系（原子数>524280）
+2. 最小化算法优化（madam算法）
+
+## 1.3 -> 1.4
+
+1. 输入命令修改：
+   A. 将`nve_velocity_max`、`middle_langevin_velocity_max`、`langevin_velocity_max`等等统一为`velocity_max`
+   B. 删除`molecule_map_output`命令，分子映射进行优化
+2. 输出修改：
+   A. 每项输出宽度由12字符变为15字符
+   B. 势能输出、构象输出和子能量项统一到同一帧
+   C. mdinfo.txt不设缓存区实时刷新，以获得错误信息
+   D. restart文件打印间隔默认值从1000修改为最后帧
+   E. 所有轨迹文件的在输出时额外加入一个临时内存中储存，每隔一定帧数（而非步数）后打印。默认为每1000帧输出一次。
+3. 错误提示优化：
+   A. 编译和运行时，使用显卡架构不同的问题
+   B. Windows下使用Linux的输入文件和Linux下使用Windows文件的问题
+4. 速度优化：相比1.2.6约20%~100%的速度提升（根据体系而定）
+   A. 添加了对水单独处理的近程非键相互作用的计算（solvent\_LJ），可在命令行中使用`solvent_LJ = 0`关闭。
+   B. 添加了多步长方案的MD，PME的长程作用可每隔一定步数更新一次
+   C. 近邻表添加了更新的容忍度`skin_permit`，当`skin_permit` = 0.5时为严格更新，当大于0.5时将会得到提速
+5. 功能优化：
+   A. 重跑模式（mode = rerun）删除了无用的命令，保持相对长时间重跑模式的准确性
+   B. 对分子的映射进行了优化，自动识别跨周期性分子，对跨周期性分子和普通分子进行区分：跨周期性分子保证每个原子都在盒子内，而普通分子则保证其坐标(x,y,z)最小的点在盒子内
+6. 添加墙（wall）
+   A. 硬墙：当粒子运动超过该墙时，对应速度分量反向
+   B. 软墙：给粒子一个与墙距离的势能
+7. CV调整
+   A. 添加新CV：combine，该CV能够自定义结合其他CV
+   B. 添加新CV：tabulated，该CV能够能够对其他CV进行插值计算
+   C. 取消了RMSD对cublas的依赖
+8. NOPBC合并入主程序
+9. 添加plugin模块，提供外界的动态库入口
+10. 开发功能添加：
+    A. Makefile将自动引用子文件夹的Makefile，方便拓展
+    B. 添加自动微分/动态并行/即时编译功能，可以方便相应的功能实现
+11. 添加metadynamics和SITS方法在NPT系综下的支持
+12. 删除SPONGE\_FEP，使用rerun模式进行FEP后处理计算
+
+## 1.2 -> 1.3
+
+1. 模拟速度提升约5%~10%
+2. 能量最小化算法添加动态步长的梯度下降算法
+3. 内置错误处理系统，用于提示错误原因
+4. 致命错误修复
+   A. Berendsen控温限制速度修正因子在0.1~10.0，以防速度变化过快而造成系统崩溃。
+   B. cmap的内存溢出问题修复
+5. 新添加 `make_output_whole`命令，可以将两个分子映射到同一周期性边界条件内
+6. 命令关键词修改
+   A. 单词拼写修正:
+   `charge_pertubated`->`charge_perturbated`
+   `compressiblity`->`compressibility`
+   `dV/dt`->`dV_dt`
+
+   B. 蒙卡控压中各向异性控制唯一变化方向命令使用字符串而非数字
+   C. 各bool型命令中，等效false为0，true为1
+   D. SITS命令简化
+7. TI计算中，将`charge_perturbated`由bool型变量变为int型变量，代表电荷变化的次方，也即下式中的$\lambda$:
+
+$$
+E = \frac{1}{2} \sum_{ij} \frac{(q_{i,A} \lambda^p + q_{i,B} (1 - \lambda)^p) (q_{j,A} \lambda^p + q_{j,B} (1 - \lambda)^p)} {r}
+$$
+
+8. 增加CV系统，用于增强采样
+
+## 1.1 -> 1.2
+
+> 该版本无升级记录，内容为粗略信息
+
+1. 实现多种控温控压方式
+2. 模拟速度提升
+3. 力场补充（cmap、improper dihedral）
+4. 非周期性体系模拟，隐式溶剂模型
+
+## 1.0 -> 1.1
+
+> 该版本无升级记录，内容为粗略信息
+
+1. NPT系综模拟，定步长能量最小化
+2. 使用in file文件作为输入
+
+## 测试版 -> 1.0
+
+> 该版本无升级记录，内容为粗略信息
+
+1. NVE系综模拟，NVT系综模拟
+2. 使用amber文件作为输入

@@ -1,0 +1,133 @@
+---
+import "katex/dist/katex.min.css";
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import "../../styles/docs-page.css";
+
+interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  entry: CollectionEntry<"docs"> | CollectionEntry<"docs-en">;
+  headings: TocHeading[];
+  lang?: "zh" | "en";
+}
+
+const { entry, headings, lang = "zh" } = Astro.props;
+const versionSlug = entry.id.startsWith("2p0/") ? "2p0" : "1p4";
+const versionLabel = versionSlug === "2p0" ? "SPONGE 2.0" : "SPONGE 1.4";
+const slugParts = entry.id.replace(/^(1p4|2p0)\//, "").split("/");
+const isXpongeNestedPage = slugParts[0] === "xponge" && slugParts.length > 1;
+
+const labels = lang === "en"
+  ? {
+      htmlLang: "en",
+      basePath: "/en/docs",
+      currentPath: `/en/docs/${entry.id}`,
+      docsLabel: "Docs",
+      docsHref: "/en/docs",
+      versionHref: `/en/docs/${versionSlug}`,
+      sidebarLabel: `${versionLabel} page contents`,
+      tocLabel: "On this page"
+    }
+  : {
+      htmlLang: "zh-CN",
+      basePath: "/docs",
+      currentPath: `/docs/${entry.id}`,
+      docsLabel: "文档",
+      docsHref: "/docs",
+      versionHref: `/docs/${versionSlug}`,
+      sidebarLabel: `${versionLabel} 文档导航`,
+      tocLabel: "当前页面目录"
+    };
+
+const toc = headings.filter((heading) => heading.depth <= 2);
+const tocGroups = toc.reduce<Array<TocHeading & { children: TocHeading[] }>>((groups, heading) => {
+  if (heading.depth === 1 || groups.length === 0) {
+    groups.push({ ...heading, children: [] });
+  } else {
+    groups[groups.length - 1].children.push(heading);
+  }
+  return groups;
+}, []);
+
+const breadcrumbBase = `${labels.basePath}/${versionSlug}`;
+const breadcrumbPath = isXpongeNestedPage
+  ? slugParts.map((part, index) => ({
+      label: part,
+      href: `${breadcrumbBase}/${slugParts.slice(0, index + 1).join("/")}`,
+      current: index === slugParts.length - 1
+    }))
+  : [];
+const displayDescription = lang === "en" && slugParts[0] === "xponge"
+  ? "SPONGE 1.4 Xponge API documentation."
+  : entry.data.description;
+---
+
+<BaseLayout
+  title={`${entry.data.title} | SPONGEMM`}
+  description={entry.data.description}
+  lang={labels.htmlLang}
+  canonicalPath={labels.currentPath}
+>
+  <Header lang={lang} />
+  <main class="docs-page docs-reader-page">
+    <div class="container docs-reader-shell">
+      <aside class="docs-reader-sidebar" aria-label={labels.sidebarLabel}>
+        <a class="docs-reader-back" href={labels.versionHref}>{versionLabel}</a>
+        {tocGroups.length > 0 && (
+          <nav aria-label={labels.tocLabel}>
+            {tocGroups.map((group) => (
+              group.children.length > 0 ? (
+                <details class="docs-toc-group" open>
+                  <summary>
+                    <a href={`#${group.slug}`}>{group.text}</a>
+                  </summary>
+                  <div>
+                    {group.children.map((item) => (
+                      <a href={`#${item.slug}`}>
+                        {item.text}
+                      </a>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <a class="docs-toc-link" href={`#${group.slug}`}>{group.text}</a>
+              )
+            ))}
+          </nav>
+        )}
+      </aside>
+
+      <article class="docs-reader-article">
+        <header class="docs-reader-head">
+          <nav class="docs-breadcrumb" aria-label={lang === "en" ? "Breadcrumb" : "面包屑导航"}>
+            <a href={labels.docsHref}>{labels.docsLabel}</a>
+            <a href={labels.versionHref}>{versionLabel}</a>
+            {breadcrumbPath.length > 0 ? (
+              breadcrumbPath.map((item) => (
+                item.current ? (
+                  <strong>{item.label}</strong>
+                ) : (
+                  <a href={item.href}>{item.label}</a>
+                )
+              ))
+            ) : (
+              <strong>{entry.data.title}</strong>
+            )}
+          </nav>
+          <h1>{entry.data.title}</h1>
+          <span>{displayDescription}</span>
+        </header>
+
+        <div class="docs-reader-body">
+          <slot />
+        </div>
+      </article>
+    </div>
+  </main>
+</BaseLayout>

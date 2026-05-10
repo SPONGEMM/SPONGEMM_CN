@@ -1,0 +1,54 @@
+---
+import type { DocsLandingData } from "../../data/docs";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
+import { buildAlternates } from "../../lib/site";
+import "../../styles/docs-page.css";
+
+interface Props {
+  data: DocsLandingData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={buildAlternates(data.canonicalPath)}
+>
+  <Header lang={lang} />
+  <main class="docs-page docs-detail-page">
+    <section class="docs-section section">
+      <div class="container">
+        <nav class="docs-breadcrumb docs-breadcrumb-standalone" aria-label={data.breadcrumbAriaLabel}>
+          <a href={data.breadcrumb.href}>{data.breadcrumb.label}</a>
+          <strong>{data.breadcrumb.current}</strong>
+        </nav>
+
+        <div class="docs-docset-grid" aria-label={data.gridAriaLabel}>
+          {data.sections.map((item) => (
+            item.state === "available" && item.href ? (
+              <a class="docs-docset-card" href={item.href} data-state={item.state}>
+                <span>{item.title}</span>
+                <strong>
+                  {data.ctaAvailable}
+                  <ArrowOutIcon size={15} />
+                </strong>
+              </a>
+            ) : (
+              <span class="docs-docset-card" data-state={item.state}>
+                <span>{item.title}</span>
+                <em>{data.pendingLabel}</em>
+              </span>
+            )
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

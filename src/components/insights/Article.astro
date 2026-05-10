@@ -3,7 +3,6 @@ import "katex/dist/katex.min.css";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
-import { siteNavEn } from "../../data/homepage-en";
 import { getSiteUrl } from "../../lib/site";
 
 interface Props {
@@ -81,7 +80,7 @@ const articleJsonLd = {
     title={labels.rssTitle}
     href={labels.rssHref}
   />
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="article-page">
     <article
       class="article container"
@@ -148,22 +147,25 @@ const articleJsonLd = {
         }
       });
 
-      let index = 0;
-
-      for (const block of blocks) {
+      const wrappers = Array.from(blocks, (block) => {
         const wrapper = document.createElement("div");
         wrapper.className = "mermaid-diagram";
         wrapper.textContent = block.textContent ?? "";
         block.replaceWith(wrapper);
-        try {
-          const id = `mermaid-${index++}`;
-          const { svg } = await mermaid.render(id, wrapper.textContent);
-          wrapper.innerHTML = svg;
-        } catch (error) {
-          wrapper.classList.add("mermaid-diagram--error");
-          console.error("Failed to render Mermaid diagram", error);
-        }
-      }
+        return wrapper;
+      });
+
+      await Promise.all(
+        wrappers.map(async (wrapper, index) => {
+          try {
+            const { svg } = await mermaid.render(`mermaid-${index}`, wrapper.textContent ?? "");
+            wrapper.innerHTML = svg;
+          } catch (error) {
+            wrapper.classList.add("mermaid-diagram--error");
+            console.error("Failed to render Mermaid diagram", error);
+          }
+        })
+      );
     };
 
     if (document.readyState === "loading") {
@@ -367,6 +369,23 @@ const articleJsonLd = {
     margin: 32px auto;
     border-radius: 14px;
     border: 1px solid var(--line);
+  }
+  .prose :global(.article-video) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 32px 0 14px;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: #f7fbff;
+  }
+  .prose :global(.article-video iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   .prose :global(.mermaid-diagram) {

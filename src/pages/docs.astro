@@ -1,26 +1,6 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Header from "../components/site/Header.astro";
+import DocsHub from "../components/docs/DocsHub.astro";
+import { docsHubZh } from "../data/docs";
 ---
 
-<BaseLayout
-  title="SPONGEMM | 文档"
-  description="SPONGE 分子模拟软件的文档页面，内容正在补充中。"
-  canonicalPath="/docs"
-  alternateLocales={[
-    { hreflang: "zh-CN", path: "/docs" },
-    { hreflang: "en", path: "/en/docs" },
-    { hreflang: "x-default", path: "/docs" }
-  ]}
->
-  <Header />
-  <main>
-    <section class="section">
-      <div class="container placeholder-page">
-        <p class="eyebrow">文档</p>
-        <h1>内容待补充</h1>
-        <p>SPONGE 文档正在重新整理，敬请期待。</p>
-      </div>
-    </section>
-  </main>
-</BaseLayout>
+<DocsHub data={docsHubZh} lang="zh" />

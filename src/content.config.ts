@@ -20,7 +20,27 @@ const insightsEn = defineCollection({
   schema: insightsSchema
 });
 
+const docsSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  version: z.string(),
+  section: z.string(),
+  order: z.number().optional()
+});
+
+const docs = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/docs" }),
+  schema: docsSchema
+});
+
+const docsEn = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/docs-en" }),
+  schema: docsSchema
+});
+
 export const collections = {
   insights,
-  "insights-en": insightsEn
+  "insights-en": insightsEn,
+  docs,
+  "docs-en": docsEn
 };

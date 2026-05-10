@@ -1,0 +1,76 @@
+---
+import type { DocsHubData } from "../../data/docs";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../site/Header.astro";
+import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
+import { buildAlternates, getSiteUrl } from "../../lib/site";
+import "../../styles/docs-page.css";
+
+interface Props {
+  data: DocsHubData;
+  lang: "zh" | "en";
+}
+
+const { data, lang } = Astro.props;
+const siteUrl = getSiteUrl(Astro.site);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: data.pageTitle,
+    description: data.pageDescription,
+    url: `${siteUrl}${data.canonicalPath}`,
+    inLanguage: data.htmlLang,
+    isPartOf: { "@type": "WebSite", name: "SPONGEMM", url: siteUrl }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: data.itemListName,
+    itemListElement: data.versions.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.itemName,
+      url: `${siteUrl}${item.href}`
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title={data.pageTitle}
+  description={data.pageDescription}
+  lang={data.htmlLang}
+  canonicalPath={data.canonicalPath}
+  alternateLocales={buildAlternates(data.canonicalPath)}
+  jsonLd={jsonLd}
+>
+  <Header lang={lang} />
+  <main class="docs-page docs-version-page">
+    <section class="docs-hero section">
+      <div class="container docs-hero-grid">
+        <div class="docs-hero-copy">
+          <h1>{data.heroTitle}</h1>
+        </div>
+        <img class="docs-hero-art" src="/assets/docs/molecule-docs.webp" alt="" aria-hidden="true" />
+      </div>
+    </section>
+
+    <section class="docs-section section">
+      <div class="container">
+        <div class="docs-version-grid" aria-label={data.gridLabel}>
+          {data.versions.map((item) => (
+            <a class="docs-version-card" data-tone={item.tone} href={item.href} aria-label={item.ariaLabel}>
+              <p class="docs-version-number">{item.version}</p>
+              <span class="docs-version-cta">
+                {item.cta}
+                <ArrowOutIcon size={16} />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import DocsArticle from "../../../../components/docs/DocsArticle.astro";
+
+export async function getStaticPaths() {
+  const [entries, xpongeEntries] = await Promise.all([
+    getCollection("docs-en", ({ id }) => id.startsWith("1p4/")),
+    getCollection("docs", ({ id }) => id.startsWith("1p4/xponge/"))
+  ]);
+  return [...entries, ...xpongeEntries].map((entry) => ({
+    params: { slug: entry.id.replace(/^1p4\//, "") },
+    props: { entry }
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"docs-en"> | CollectionEntry<"docs">;
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<DocsArticle entry={entry} headings={headings} lang="en">
+  <Content />
+</DocsArticle>

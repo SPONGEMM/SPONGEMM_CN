@@ -1,0 +1,544 @@
+.install-hub {
+  position: relative;
+  min-height: calc(100vh - 72px);
+  overflow: clip;
+}
+
+.install-hub-hero {
+  padding-top: clamp(48px, 7vw, 92px);
+  padding-bottom: clamp(60px, 8vw, 108px);
+}
+
+.install-hub-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.45fr);
+  gap: clamp(28px, 5vw, 84px);
+  align-items: center;
+  max-width: 1180px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.install-display {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.install-display em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.install-hub-lede {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.15vw, 1.08rem);
+  line-height: 1.78;
+}
+
+.install-hero-art {
+  width: min(420px, 34vw);
+  justify-self: end;
+  opacity: 0.86;
+  filter: saturate(0.92) drop-shadow(0 26px 46px rgba(29, 105, 181, 0.14));
+  transform: translateY(4px) rotate(-3deg);
+}
+
+.install-version-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(29, 105, 181, 0.22);
+  border-bottom: 1px solid rgba(29, 105, 181, 0.22);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.install-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(28px, 3vw, 42px) clamp(22px, 2.4vw, 34px);
+  border-right: 1px solid rgba(29, 105, 181, 0.14);
+  background: transparent;
+  transition: background 200ms ease;
+}
+
+.install-card:last-child {
+  border-right: 0;
+}
+
+.install-card:hover,
+.install-card:focus-visible {
+  background: rgba(255, 255, 255, 0.86);
+  outline: none;
+}
+
+.install-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.install-card-index {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.install-card-status {
+  text-align: right;
+}
+
+.install-card[data-tone="beta"] .install-card-status {
+  color: #b15a14;
+}
+
+.install-card[data-tone="legacy"] .install-card-status {
+  opacity: 0.7;
+}
+
+.install-card-version {
+  margin: 12px 0 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  color: var(--primary);
+}
+
+.install-card[data-tone="legacy"] .install-card-version {
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  letter-spacing: -0.025em;
+  color: var(--muted);
+}
+
+.install-card-rule {
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin: 4px 0;
+  background: var(--primary);
+  opacity: 0.34;
+}
+
+.install-card-title {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+
+.install-card-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.96rem;
+  line-height: 1.72;
+}
+
+.install-card-specs {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.install-card-specs li {
+  display: flex;
+  gap: 10px;
+}
+
+.install-card-specs li::before {
+  content: "—";
+  color: var(--primary);
+  opacity: 0.55;
+}
+
+.install-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 18px;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: gap 200ms ease;
+}
+
+.install-card:hover .install-card-cta,
+.install-card:focus-visible .install-card-cta {
+  gap: 14px;
+}
+
+.install-card-cta svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms ease;
+}
+
+.install-card:hover .install-card-cta svg,
+.install-card:focus-visible .install-card-cta svg {
+  transform: translateX(4px);
+}
+
+@media (max-width: 960px) {
+  .install-hub-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .install-hero-art {
+    display: none;
+  }
+
+  .install-version-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .install-card {
+    border-right: 0;
+    border-bottom: 1px solid rgba(29, 105, 181, 0.14);
+  }
+
+  .install-card:last-child {
+    border-bottom: 0;
+  }
+}
+
+.install-detail-page {
+  min-height: calc(100vh - 72px);
+}
+
+.install-detail-hero {
+  padding-bottom: 28px;
+}
+
+.install-detail-hero h1,
+.install-detail-section-heading h2 {
+  margin: 12px 0 0;
+  font-family: "Space Grotesk", "Inter", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 650;
+  letter-spacing: 0;
+  color: var(--text);
+}
+
+.install-detail-hero h1 {
+  font-size: clamp(2.6rem, 4.8vw, 4.6rem);
+  line-height: 1.04;
+}
+
+.install-detail-lede {
+  max-width: 760px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.install-detail-lede a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.install-detail-notice {
+  display: grid;
+  gap: 8px;
+  max-width: 880px;
+  margin-top: 28px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--primary);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.install-detail-notice strong {
+  color: var(--text);
+}
+
+.install-detail-section {
+  padding-top: 34px;
+}
+
+.install-detail-section-heading {
+  margin-bottom: 22px;
+}
+
+.install-detail-section-heading h2 {
+  font-size: clamp(1.7rem, 2.6vw, 2.55rem);
+}
+
+.install-detail-section-heading p:not(.section-eyebrow) {
+  max-width: 760px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.install-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.install-detail-download,
+.install-detail-module-band {
+  border: 1px solid rgba(29, 105, 181, 0.14);
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.install-detail-download {
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  padding: 24px;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.install-detail-download:hover,
+.install-detail-download:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.install-detail-download h3 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.3rem;
+  color: var(--text);
+}
+
+.install-detail-download p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.install-detail-file {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 22px;
+  color: var(--primary);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.install-detail-file small {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.install-detail-module-band {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.38fr) minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px;
+}
+
+.install-detail-module-band + .install-detail-module-band {
+  margin-top: 18px;
+}
+
+.install-detail-module-band h3 {
+  margin: 0 0 10px;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  color: var(--text);
+}
+
+.install-detail-module-band p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.install-detail-list {
+  display: grid;
+  border-top: 1px solid rgba(29, 105, 181, 0.12);
+}
+
+.install-detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(29, 105, 181, 0.12);
+}
+
+.install-detail-row strong,
+.install-detail-row small {
+  display: block;
+}
+
+.install-detail-row strong {
+  color: var(--text);
+}
+
+.install-detail-row small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+.install-detail-row em {
+  flex: 0 0 auto;
+  color: var(--primary);
+  font-style: normal;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 960px) {
+  .install-detail-grid,
+  .install-detail-module-band {
+    grid-template-columns: 1fr;
+  }
+
+  .install-detail-download {
+    min-height: 0;
+  }
+
+  .install-detail-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.install-detail-module-band--lead {
+  padding: clamp(28px, 3vw, 38px) clamp(24px, 3vw, 32px);
+  align-items: center;
+}
+
+.install-detail-module-band--lead + .install-detail-module-band--lead {
+  margin-top: 14px;
+}
+
+.install-detail-module-band--lead > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.install-detail-module-band--lead h2 {
+  margin: 0;
+  font-family: "Space Grotesk", "Inter", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 650;
+  font-size: clamp(1.55rem, 2.2vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+.install-detail-module-band--lead .install-detail-module-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.install-detail-module-band--lead .install-detail-module-eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--primary);
+  opacity: 0.55;
+}
+
+.install-detail-module-band--lead p {
+  margin: 0;
+  max-width: 38ch;
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.install-detail-module-band--lead .install-detail-list {
+  border-top: 0;
+}
+
+.install-detail-module-band--lead .install-detail-row {
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(29, 105, 181, 0.12);
+}
+
+.install-detail-module-band--lead .install-detail-row:first-child {
+  padding-top: 0;
+}
+
+.install-detail-module-band--lead .install-detail-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.install-detail-module-band--lead .install-detail-row code {
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+  background: transparent;
+  color: inherit;
+  font-size: 0.84rem;
+}
+
+.install-detail-module-band--lead a.install-detail-row em,
+.install-detail-module-band--lead a.install-detail-row:hover em,
+.install-detail-module-band--lead a.install-detail-row:focus-visible em {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.install-detail-module-band--lead a.install-detail-row {
+  transition: background 160ms ease;
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.install-detail-module-band--lead a.install-detail-row:hover,
+.install-detail-module-band--lead a.install-detail-row:focus-visible {
+  background: rgba(29, 105, 181, 0.06);
+  outline: none;
+}
+
+@media (max-width: 960px) {
+  .install-detail-module-band--lead {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .install-detail-module-band--lead p {
+    max-width: 60ch;
+  }
+}
