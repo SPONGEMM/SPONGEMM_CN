@@ -116,4 +116,26 @@ const homeJsonLd = [
     <UpdatesSection />
     <FriendLinksSection />
   </main>
+  <footer class="home-record-footer">
+    <div class="container">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备2021017649号</a>
+    </div>
+  </footer>
 </BaseLayout>
+
+<style>
+  .home-record-footer {
+    padding: 20px 0 28px;
+    color: var(--muted);
+    font-size: 0.86rem;
+    text-align: center;
+  }
+
+  .home-record-footer a {
+    transition: color 160ms ease;
+  }
+
+  .home-record-footer a:hover {
+    color: var(--primary);
+  }
+</style>
