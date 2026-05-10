@@ -2,12 +2,11 @@
 import type { ContactPageData } from "../../data/contact";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
-import { siteNavEn } from "../../data/homepage-en";
 import GitHubIcon from "../icons/GitHubIcon.astro";
 import MailIcon from "../icons/MailIcon.astro";
 import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
 import QrDialog from "./QrDialog.astro";
-import { getSiteUrl } from "../../lib/site";
+import { buildAlternates, getSiteUrl } from "../../lib/site";
 import "../../styles/contact-page.css";
 
 interface Props {
@@ -69,15 +68,11 @@ const jsonLd = [
   description={data.pageDescription}
   lang={data.htmlLang}
   canonicalPath={data.canonicalPath}
-  alternateLocales={[
-    { hreflang: "zh-CN", path: "/contact" },
-    { hreflang: "en", path: "/en/contact" },
-    { hreflang: "x-default", path: "/contact" }
-  ]}
+  alternateLocales={buildAlternates(data.canonicalPath)}
   ogImage="/assets/home/sponge-logo-notext.png"
   jsonLd={jsonLd}
 >
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="contact-page">
     <div class="contact-bg" aria-hidden="true"></div>
 

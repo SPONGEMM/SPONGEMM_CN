@@ -3,7 +3,7 @@ import type { DocsLandingData } from "../../data/docs";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
 import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
-import { siteNavEn } from "../../data/homepage-en";
+import { buildAlternates } from "../../lib/site";
 import "../../styles/docs-page.css";
 
 interface Props {
@@ -12,10 +12,6 @@ interface Props {
 }
 
 const { data, lang } = Astro.props;
-
-const altPath = data.canonicalPath.startsWith("/en/")
-  ? data.canonicalPath.slice(3)
-  : data.canonicalPath;
 ---
 
 <BaseLayout
@@ -23,13 +19,9 @@ const altPath = data.canonicalPath.startsWith("/en/")
   description={data.pageDescription}
   lang={data.htmlLang}
   canonicalPath={data.canonicalPath}
-  alternateLocales={[
-    { hreflang: "zh-CN", path: altPath },
-    { hreflang: "en", path: `/en${altPath}` },
-    { hreflang: "x-default", path: altPath }
-  ]}
+  alternateLocales={buildAlternates(data.canonicalPath)}
 >
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="docs-page docs-detail-page">
     <section class="docs-section section">
       <div class="container">

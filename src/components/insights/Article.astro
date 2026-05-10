@@ -3,7 +3,6 @@ import "katex/dist/katex.min.css";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
-import { siteNavEn } from "../../data/homepage-en";
 import { getSiteUrl } from "../../lib/site";
 
 interface Props {
@@ -81,7 +80,7 @@ const articleJsonLd = {
     title={labels.rssTitle}
     href={labels.rssHref}
   />
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="article-page">
     <article
       class="article container"

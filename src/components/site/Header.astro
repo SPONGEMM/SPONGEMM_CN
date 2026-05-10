@@ -1,22 +1,28 @@
 ---
 import { siteNav } from "../../data/homepage";
+import { siteNavEn } from "../../data/homepage-en";
 import GitHubIcon from "../icons/GitHubIcon.astro";
 
-const {
-  navItems = siteNav,
-  brandHref = "/",
-  githubLabel = "GitHub"
-} = Astro.props;
+interface Props {
+  lang?: "zh" | "en";
+  navItems?: typeof siteNav;
+  brandHref?: string;
+  githubLabel?: string;
+}
+
+const { lang, navItems, brandHref, githubLabel = "GitHub" } = Astro.props as Props;
+const resolvedNav = navItems ?? (lang === "en" ? siteNavEn : siteNav);
+const resolvedBrand = brandHref ?? (lang === "en" ? "/en" : "/");
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href={brandHref}>
+    <a class="brand" href={resolvedBrand}>
       <img class="brand-logo" src="/assets/home/sponge-logo-notext.webp" alt="SPONGE logo" />
       <span>SPONGEMM</span>
     </a>
     <nav class="nav">
-      {navItems.map((item) => (
+      {resolvedNav.map((item) => (
         item.icon === "github" ? (
           <a class="nav-icon-link" href={item.href} target="_blank" rel="noreferrer" aria-label={githubLabel}>
             <GitHubIcon />

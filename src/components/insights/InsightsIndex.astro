@@ -3,8 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
 import InsightCard from "./InsightCard.astro";
-import { siteNavEn } from "../../data/homepage-en";
-import { getSiteUrl } from "../../lib/site";
+import { buildAlternates, getSiteUrl } from "../../lib/site";
 import "../../styles/insights-page.css";
 
 interface Props {
@@ -90,11 +89,7 @@ const blogJsonLd = [
   description={labels.pageDescription}
   lang={labels.htmlLang}
   canonicalPath={labels.canonicalPath}
-  alternateLocales={[
-    { hreflang: "zh-CN", path: "/insights" },
-    { hreflang: "en", path: "/en/insights" },
-    { hreflang: "x-default", path: "/insights" }
-  ]}
+  alternateLocales={buildAlternates(labels.canonicalPath)}
   jsonLd={blogJsonLd}
 >
   <link
@@ -104,7 +99,7 @@ const blogJsonLd = [
     title={labels.rssTitle}
     href={labels.rssHref}
   />
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="insights-page">
     <div class="insights-shell">
       <p class="eyebrow">{labels.eyebrow}</p>

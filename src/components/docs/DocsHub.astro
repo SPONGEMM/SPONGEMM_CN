@@ -3,8 +3,7 @@ import type { DocsHubData } from "../../data/docs";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../site/Header.astro";
 import ArrowOutIcon from "../icons/ArrowOutIcon.astro";
-import { siteNavEn } from "../../data/homepage-en";
-import { getSiteUrl } from "../../lib/site";
+import { buildAlternates, getSiteUrl } from "../../lib/site";
 import "../../styles/docs-page.css";
 
 interface Props {
@@ -44,14 +43,10 @@ const jsonLd = [
   description={data.pageDescription}
   lang={data.htmlLang}
   canonicalPath={data.canonicalPath}
-  alternateLocales={[
-    { hreflang: "zh-CN", path: "/docs" },
-    { hreflang: "en", path: "/en/docs" },
-    { hreflang: "x-default", path: "/docs" }
-  ]}
+  alternateLocales={buildAlternates(data.canonicalPath)}
   jsonLd={jsonLd}
 >
-  {lang === "en" ? <Header navItems={siteNavEn} brandHref="/en" /> : <Header />}
+  <Header lang={lang} />
   <main class="docs-page docs-version-page">
     <section class="docs-hero section">
       <div class="container docs-hero-grid">
