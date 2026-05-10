@@ -10,9 +10,40 @@ interface Props {
   githubLabel?: string;
 }
 
-const { lang, navItems, brandHref, githubLabel = "GitHub" } = Astro.props as Props;
+const { lang = "zh", navItems, brandHref, githubLabel = "GitHub" } = Astro.props as Props;
 const resolvedNav = navItems ?? (lang === "en" ? siteNavEn : siteNav);
 const resolvedBrand = brandHref ?? (lang === "en" ? "/en" : "/");
+const searchLabelsByLang = {
+  zh: {
+    search: "搜索",
+    placeholder: "搜索 SPONGEMM",
+    language: "语言",
+    currentLanguage: "当前语言",
+    allLanguages: "所有语言",
+    scope: "范围",
+    noResults: "没有结果",
+    startTyping: "输入关键词搜索文档、洞见和站内页面。",
+    loading: "正在加载搜索索引...",
+    error: "搜索暂时不可用。",
+    sectionLabels: { docs: "文档", insights: "洞见", other: "其余" },
+    langLabels: { zh: "中文", en: "English" }
+  },
+  en: {
+      search: "Search",
+      placeholder: "Search SPONGEMM",
+      language: "Language",
+      currentLanguage: "Current",
+      allLanguages: "All",
+    scope: "Scope",
+    noResults: "No results",
+    startTyping: "Type to search docs, insights, and site pages.",
+    loading: "Loading search index...",
+    error: "Search is unavailable.",
+    sectionLabels: { docs: "Docs", insights: "Insights", other: "Other" },
+    langLabels: { zh: "中文", en: "English" }
+  }
+};
+const searchLabels = searchLabelsByLang[lang];
 ---
 
 <header class="site-header">
@@ -21,6 +52,60 @@ const resolvedBrand = brandHref ?? (lang === "en" ? "/en" : "/");
       <img class="brand-logo" src="/assets/home/sponge-logo-notext.webp" alt="SPONGE logo" />
       <span>SPONGEMM</span>
     </a>
+    <div
+      class="site-search"
+      data-site-search
+      data-current-lang={lang}
+      data-labels={JSON.stringify(searchLabels)}
+    >
+      <label class="site-search-label" for={`site-search-input-${lang}`}>{searchLabels.search}</label>
+      <div class="site-search-box">
+        <span class="site-search-icon" aria-hidden="true">⌕</span>
+        <input
+          id={`site-search-input-${lang}`}
+          class="site-search-input"
+          type="search"
+          placeholder={searchLabels.placeholder}
+          autocomplete="off"
+          spellcheck="false"
+          aria-label={searchLabels.search}
+          data-search-input
+        />
+      </div>
+      <div class="site-search-panel" data-search-panel hidden>
+        <div class="site-search-controls">
+          <fieldset>
+            <legend>{searchLabels.language}</legend>
+            <label>
+              <input type="radio" name={`site-search-lang-${lang}`} value="current" data-search-lang />
+              <span>{searchLabels.currentLanguage}</span>
+            </label>
+            <label>
+              <input type="radio" name={`site-search-lang-${lang}`} value="all" data-search-lang />
+              <span>{searchLabels.allLanguages}</span>
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>{searchLabels.scope}</legend>
+            <label>
+              <input type="checkbox" value="docs" data-search-scope />
+              <span>{searchLabels.sectionLabels.docs}</span>
+            </label>
+            <label>
+              <input type="checkbox" value="insights" data-search-scope />
+              <span>{searchLabels.sectionLabels.insights}</span>
+            </label>
+            <label>
+              <input type="checkbox" value="other" data-search-scope />
+              <span>{searchLabels.sectionLabels.other}</span>
+            </label>
+          </fieldset>
+        </div>
+        <div class="site-search-results" data-search-results>
+          <p>{searchLabels.startTyping}</p>
+        </div>
+      </div>
+    </div>
     <nav class="nav">
       {resolvedNav.map((item) => (
         item.icon === "github" ? (
@@ -34,3 +119,205 @@ const resolvedBrand = brandHref ?? (lang === "en" ? "/en" : "/");
     </nav>
   </div>
 </header>
+
+<script>
+  const SEARCH_INDEX_URL = "/search-index.json";
+  const LANG_STORAGE_KEY = "spongemm-search-language-mode";
+  const SCOPES_STORAGE_KEY = "spongemm-search-scopes";
+  const DEFAULT_SCOPES = ["docs", "insights", "other"];
+  const INPUT_DEBOUNCE_MS = 120;
+  const ESCAPE_MAP = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  };
+  let searchIndexPromise;
+
+  function normalizeSearchText(value) {
+    return (value ?? "").toString().toLowerCase().trim();
+  }
+
+  function escapeSearchHtml(value) {
+    return (value ?? "").toString().replace(/[&<>"']/g, (char) => ESCAPE_MAP[char]);
+  }
+
+  function safeStorageGet(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      /* storage disabled — silently ignore */
+    }
+  }
+
+  function getSearchIndex() {
+    if (!searchIndexPromise) {
+      searchIndexPromise = fetch(SEARCH_INDEX_URL)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to load search index");
+          }
+          return response.json();
+        })
+        .then((entries) => entries.map((entry) => ({
+          ...entry,
+          _title: normalizeSearchText(entry.title),
+          _description: normalizeSearchText(entry.description),
+          _content: normalizeSearchText(entry.content)
+        })))
+        .catch((err) => {
+          searchIndexPromise = undefined;
+          throw err;
+        });
+    }
+    return searchIndexPromise;
+  }
+
+  function scoreSearchEntry(entry, terms) {
+    let score = 0;
+    for (const term of terms) {
+      let matched = false;
+      if (entry._title.includes(term)) { score += 10; matched = true; }
+      if (entry._description.includes(term)) { score += 4; matched = true; }
+      if (entry._content.includes(term)) { score += 1; matched = true; }
+      if (!matched) return 0;
+    }
+    return score;
+  }
+
+  function readScopes() {
+    const stored = safeStorageGet(SCOPES_STORAGE_KEY);
+    return stored === null ? DEFAULT_SCOPES : stored.split(",").filter(Boolean);
+  }
+
+  function writeScopes(scopes) {
+    safeStorageSet(SCOPES_STORAGE_KEY, scopes.join(","));
+  }
+
+  function renderSearchResults(container, results, labels) {
+    if (results.length === 0) {
+      container.innerHTML = `<p>${labels.noResults}</p>`;
+      return;
+    }
+
+    container.innerHTML = `<ul>${results
+      .map((entry) => {
+        const sectionLabel = escapeSearchHtml(labels.sectionLabels[entry.section] || entry.section);
+        const langLabel = escapeSearchHtml(labels.langLabels[entry.lang] || entry.lang);
+        const title = escapeSearchHtml(entry.title);
+        const url = escapeSearchHtml(entry.url);
+        const description = entry.description ? `<span>${escapeSearchHtml(entry.description)}</span>` : "";
+        return `<li>
+          <a href="${url}">
+            <strong>${title}</strong>
+            ${description}
+            <small>${sectionLabel} · ${langLabel} · ${url}</small>
+          </a>
+        </li>`;
+      })
+      .join("")}</ul>`;
+  }
+
+  function initSiteSearch(root) {
+    const input = root.querySelector("[data-search-input]");
+    const panel = root.querySelector("[data-search-panel]");
+    const resultsContainer = root.querySelector("[data-search-results]");
+    const langRadios = Array.from(root.querySelectorAll("[data-search-lang]"));
+    const scopeCheckboxes = Array.from(root.querySelectorAll("[data-search-scope]"));
+    const currentLang = root.dataset.currentLang || "zh";
+    const labels = JSON.parse(root.dataset.labels || "{}");
+
+    const storedLangMode = safeStorageGet(LANG_STORAGE_KEY) || "current";
+    langRadios.forEach((radio) => {
+      radio.checked = radio.value === storedLangMode;
+    });
+
+    const storedScopes = readScopes();
+    scopeCheckboxes.forEach((checkbox) => {
+      checkbox.checked = storedScopes.includes(checkbox.value);
+    });
+
+    function openPanel() {
+      panel.hidden = false;
+    }
+
+    function closePanel() {
+      panel.hidden = true;
+    }
+
+    async function updateResults() {
+      const query = normalizeSearchText(input.value);
+      const langMode = langRadios.find((radio) => radio.checked)?.value || "current";
+      const scopes = scopeCheckboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
+
+      if (!query) {
+        resultsContainer.innerHTML = `<p>${labels.startTyping}</p>`;
+        return;
+      }
+
+      resultsContainer.innerHTML = `<p>${labels.loading}</p>`;
+
+      try {
+        const index = await getSearchIndex();
+        const terms = query.split(/\s+/).filter(Boolean);
+        const results = index
+          .filter((entry) => (langMode === "all" || entry.lang === currentLang) && scopes.includes(entry.section))
+          .map((entry) => ({ ...entry, score: scoreSearchEntry(entry, terms) }))
+          .filter((entry) => entry.score > 0)
+          .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+          .slice(0, 8);
+
+        renderSearchResults(resultsContainer, results, labels);
+      } catch {
+        resultsContainer.innerHTML = `<p>${labels.error}</p>`;
+      }
+    }
+
+    let debounceHandle;
+    function scheduleUpdate() {
+      clearTimeout(debounceHandle);
+      debounceHandle = setTimeout(updateResults, INPUT_DEBOUNCE_MS);
+    }
+
+    input.addEventListener("focus", () => {
+      openPanel();
+      updateResults();
+    });
+    input.addEventListener("input", scheduleUpdate);
+    langRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        safeStorageSet(LANG_STORAGE_KEY, radio.value);
+        updateResults();
+      });
+    });
+    scopeCheckboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const scopes = scopeCheckboxes.filter((item) => item.checked).map((item) => item.value);
+        writeScopes(scopes);
+        updateResults();
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!root.contains(event.target)) {
+        closePanel();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closePanel();
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-site-search]").forEach(initSiteSearch);
+</script>
