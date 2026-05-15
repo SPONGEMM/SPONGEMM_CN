@@ -485,7 +485,7 @@
   margin: 14px 0;
 }
 
-.docs-reader-body code {
+.docs-reader-body :not(pre) > code {
   border: 1px solid rgba(29, 105, 181, 0.1);
   border-radius: 5px;
   padding: 0.08em 0.34em 0.1em;
@@ -519,6 +519,8 @@
   color: inherit;
   background: transparent;
   font-size: inherit;
+  white-space: inherit;
+  font-weight: inherit;
 }
 
 .docs-reader-body pre .line {
