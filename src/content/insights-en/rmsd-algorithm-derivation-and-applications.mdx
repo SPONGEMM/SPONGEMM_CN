@@ -1,0 +1,97 @@
+---
+title: RMSD Algorithm Derivation and Practical Applications
+description: When choosing different levels of theory for structure-related calculations on different systems, RMSD and the Kabsch algorithm can be used to evaluate structural similarity between methods.
+date: 2026-05-11
+author: Sidereus Ferrocene
+avatar: /assets/avatar/sidereus-ferrocene.webp
+---
+
+> This page was translated by GPT-5.5 AI.
+
+## Introduction
+
+Choosing different computational levels (functional/basis set) for structure-related calculations on different systems is a problem that every applied computational chemist keeps learning, discussing, and testing. At the same time, new methods are proposed almost every year. For some systems, comparing structural similarity between a new method and previous methods has both theoretical value and practical value.
+
+## Introduction to the Principle of Superposition Algorithms
+
+### The Foundation of the Foundation: `SVD` Decomposition
+
+Before introducing the algorithm, we first need to introduce the concept of `SVD` decomposition. Any real matrix $A$ (not necessarily square) can be decomposed into the product of three matrices:
+
+$$
+A = USV^T
+$$
+
+Here, the $U$ and $V$ matrices are both orthogonal matrices. An orthogonal matrix means that the matrix and its own transpose are inverses of each other, namely:
+
+$$
+VV^T = I,\quad UU^T = I
+$$
+
+The $S$ matrix is a square diagonal matrix.
+
+### Mathematical Description of the Molecular Maximum Superposition Problem and the `Kabsch` Algorithm:
+
+If we obtain two fairly similar molecules, the first thing to do is to maximally superpose the two molecules. What we have are two sets of `xyz` coordinates whose atom indices correspond to each other. From a geometric point of view, the transformation between two structures is nothing more than translation and rotation. We therefore need to handle translation and rotation separately.
+
+### Handling Translation:
+
+Handling translation is quite easy. We only need to make the centers of mass of the two molecules before and after transformation coincide. A common treatment is to convert the coordinates of the two molecules from absolute coordinates into relative coordinates whose origin is the molecular center (center of mass). This eliminates the translation problem to the greatest extent.
+
+### Handling Rotation:
+
+At this point, we have obtained two sets of transformed `xyz` coordinates. The most common idea is to represent the transformation with the classic `3D` rotation matrix, using `RMSD` as the objective function.
+
+The definition of `Root-Mean-Square Deviation` (`RMSD`) is:
+
+$$
+RMSD = \sqrt{\frac{1}{N}\sum_{i=1}^{N}d_i^2}
+$$
+
+Minimizing the objective function is very similar to the `RMSD` above. Since our structures correspond one-to-one, removing the square root and the coefficient $1/N$ above does not matter. The following expression must be minimized when `RMSD` is minimized. Here, $R$ is the rotation matrix, $P_i$ is the `xyz` coordinate of atom $i$ in the first structure, and $Q_i$ is the `xyz` coordinate of atom $i$ in the final structure:
+
+$$
+E = \sum_{i=1}^{N}\left\|RP_i-Q_i\right\|^2
+= \sum_{i=1}^{N}\left(P_i^TR^TRP_i - 2Q_i^TRP_i + Q_i^TQ_i\right)
+$$
+
+Because the rotation matrix itself is an orthogonal matrix, and $P$ and $Q$ themselves are fixed values, these terms can be completely ignored. Meanwhile, based on the non-negativity in the definition, we only need to maximize the following term:
+
+$$
+\sum_{i=1}^{N}Q_i^TRP_i
+$$
+
+Machine-learning enthusiasts would probably start back-propagation optimization here without hesitation and get a brute-force result. Since the `3D` rotation matrix $R$ has three parameters, the estimation and calculation may still give machine-learning enthusiasts some trouble. In the end, they can certainly obtain the same result. But this is actually a problem that does not require machine learning.
+
+Note that the summation above can be written as a product, and multiplication inside $\operatorname{Tr}$ is cyclically interchangeable:
+
+$$
+\sum_{i=1}^{N}Q_i^TRP_i = \operatorname{Tr}(Q^TRP) = \operatorname{Tr}(RPQ^T)
+$$
+
+Now perform `SVD` decomposition on $PQ^T$. Again using the cyclic property of matrices inside $\operatorname{Tr}$, and noting that $V/R/U$ are all orthogonal matrices, their product must also be an orthogonal matrix. We can denote it as $A$:
+
+$$
+\operatorname{Tr}(RPQ^T) = \operatorname{Tr}(RUSV^T) = \operatorname{Tr}(V^TRUS) = \operatorname{Tr}(AS)
+$$
+
+$S$ is a diagonal matrix, and $A$ is an orthogonal matrix. The best case is that $A$ is the identity matrix, which maximizes this $\operatorname{Tr}$.
+
+$$
+V^TRU = I \rightarrow R = VU^T
+$$
+
+We directly obtain the rotation matrix $R$. After the rotation matrix is obtained, all remaining work becomes manual labor. The whole process above is called the `Kabsch` algorithm[^kabsch-1976]. It obtains the maximally matching rotation matrix using only a highly efficient `SVD` decomposition, turning an inverse calculation problem into a direct calculation problem.
+
+## Example Demonstration
+
+At the beginning of this year, Professor Leo Liu's group at Southern University of Science and Technology published a study in `Nature` on the aluminium-carbene-catalyzed cyclotrimerization of alkynes[^zhang-liu-2026]. The reaction was characterized in detail, and of course the work also included `DFT` calculations of the reaction path. This paper used the very, even somewhat overly robust, `M06-2X-D3/def2-SVP` level for gas-phase geometry optimization, and then used `M06-2X-D3/def2-TZVP` `SMD(Benzene)` for single-point energies. All calculations were completed with `Gaussian`, and the results were consistent with experiment. But if I were to reproduce the computational part of this paper with `ORCA`, I would not really want to use `M06-2x`. There are two reasons:
+
+- `M06-2X` is relatively sensitive to grids. To obtain robust results, one needs to use at least a `Grid3`-level grid, which requires considerably more computational cost than the default `Grid2` grid.
+- `M06-2X` is a hybrid functional, and it does not run as fast as pure functionals in `ORCA`.
+
+Based on the two points above, it is natural to think of composite methods such as `B97-3c`. But a subsequent question is whether `B97-3c`-type methods can produce similar structures. This is exactly where `RMSD` can be used to verify whether `B97-3c` can, to some extent, replace `M06-2X-D3/def2-SVP` for geometry optimization. For structure `1a` in this paper, using `B97-3c` gives an `RMSD` of only $0.11\ \text{\AA}$. If hydrogen atoms are simply not considered during center-of-mass matching, the `RMSD` further decreases to $0.086\ \text{\AA}$. For a system with more than 100 atoms, this can completely be regarded as the same structure. Therefore, at least at this stage, using `B97-3c` is completely OK. However, it should be noted that this single example alone is not enough to prove substitutability. One needs a considerable understanding of the entire reaction potential energy surface and proper `Benchmark` before making that judgment. This is only meant as a starting point for discussion.
+
+[^kabsch-1976]: Kabsch W. *A solution for the best rotation to relate two sets of vectors.* Acta Crystallographica Section A. 1976;32(5):922-923. doi:[10.1107/S0567739476001873](https://doi.org/10.1107/S0567739476001873)
+
+[^zhang-liu-2026]: Zhang X, Liu L L. *Aluminium redox catalysis enables cyclotrimerization of alkynes.* Nature. 2026;650:353-360. doi:[10.1038/s41586-025-09941-9](https://doi.org/10.1038/s41586-025-09941-9)
