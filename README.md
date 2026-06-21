@@ -20,6 +20,24 @@ npm run build    # 构建
 npm run preview  # 本地预览构建结果
 ```
 
+## 洞见文章
+
+中文：
+
+- [洞见首页](https://spongemm.cn/insights)
+- [关于观点洞见](https://spongemm.cn/insights/about-insights)
+- [我的分子模拟应该选择什么分子动力学软件？SPONGE、GROMACS、AMBER 与 LAMMPS？](https://spongemm.cn/insights/how-to-choose-molecular-dynamics-software)
+- [RMSD 算法推导和实际应用](https://spongemm.cn/insights/rmsd-algorithm-derivation-and-applications)
+- [Metadynamics 是什么意思？为什么不该简单译作“元动力学”](https://spongemm.cn/insights/what-is-metadynamics)
+- [什么是分子模拟？从 SPONGE 的中文翻译说起](https://spongemm.cn/insights/what-is-molecular-simulation-and-molecular-modeling)
+
+English:
+
+- [Insights](https://spongemm.cn/en/insights)
+- [About Insights](https://spongemm.cn/en/insights/about-insights)
+- [Which Molecular Dynamics Software Should I Choose for My Molecular Simulation? SPONGE, GROMACS, AMBER, or LAMMPS?](https://spongemm.cn/en/insights/how-to-choose-molecular-dynamics-software)
+- [RMSD Algorithm Derivation and Practical Applications](https://spongemm.cn/en/insights/rmsd-algorithm-derivation-and-applications)
+
 ## 目录说明
 
 - `src/pages/`：Astro 页面入口（中文为根路由，英文位于 `/en/`）
