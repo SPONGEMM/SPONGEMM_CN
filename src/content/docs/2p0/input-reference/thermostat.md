@@ -1,20 +1,20 @@
 ---
 title: "恒温器"
-description: "SPONGE 2.0 恒温器，迁自主仓库的英文文档。"
+description: "SPONGE 2.0 恒温器，译自主仓库文档。"
 version: "SPONGE 2.0"
 section: "SPONGE 2.0 文档"
 order: 7
 ---
 
-> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+> 本页由 GPT-6-Astra 整理并翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
 >
 > [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/input-reference/thermostat.md)。
 
-# Thermostat Parameters
+# 恒温器参数
 
-SPONGE requires a thermostat in `nvt` and `npt` modes.
+SPONGE 在 `nvt` 和 `npt` 模式下需要恒温器。
 
-For TOML input, prefer the grouped form:
+TOML 输入推荐使用分组形式：
 
 ```toml
 mode = "nvt"
@@ -26,53 +26,49 @@ tau = 0.1
 seed = 2026
 ```
 
-The parser also accepts the flat compatibility keys `thermostat`,
-`thermostat_tau`, and `thermostat_seed`, but new documentation should use the
-grouped TOML form above.
+解析器也接受旧版扁平参数 `thermostat`、`thermostat_tau` 和 `thermostat_seed`，但新文档推荐使用上述 TOML 分组形式。
 
-## Thermostat Selection
+## 选择恒温器
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `mode` | `thermostat` | string | required for NVT/NPT | Thermostat algorithm |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `mode` | `thermostat` | string | NVT/NPT 必填 | 恒温算法 |
 
-Supported values:
+支持的取值：
 
-| Value | Description |
-|-------|-------------|
-| `"middle_langevin"` | Middle Langevin dynamics |
-| `"langevin"` | Deprecated alias of `middle_langevin` |
-| `"andersen"` | Andersen thermostat |
-| `"berendsen_thermostat"` | Berendsen thermostat |
-| `"bussi_thermostat"` | Bussi velocity-rescaling thermostat |
-| `"nose_hoover_chain"` | Nose-Hoover chain thermostat |
+| 取值 | 说明 |
+|------|------|
+| `"middle_langevin"` | Middle Langevin 动力学 |
+| `"langevin"` | `middle_langevin` 的弃用别名 |
+| `"andersen"` | Andersen 恒温器 |
+| `"berendsen_thermostat"` | Berendsen 恒温器 |
+| `"bussi_thermostat"` | Bussi 速度重缩放恒温器 |
+| `"nose_hoover_chain"` | Nosé–Hoover 链恒温器 |
 
-## Top-level Parameters
+## 顶层参数
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `target_temperature` | `top-level` | float | `300.0` | Target temperature (K) |
-| `velocity_max` | `top-level` | float | disabled | Velocity cap used by some thermostats |
+| 参数 | 所属位置 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `target_temperature` | 顶层 | float | `300.0` | 目标温度，单位 K |
+| `velocity_max` | 顶层 | float | 禁用 | 部分恒温器使用的速度上限 |
 
-`target_temperature` is not part of `[thermostat]`. It stays at the top level
-and is also the quantity affected by temperature schedules.
+`target_temperature` 不属于 `[thermostat]`，必须保留在顶层；温度变化计划也作用于此参数。
 
-## Common Thermostat Parameters
+## 通用恒温器参数
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `tau` | `thermostat` | float | `1.0` | Coupling time constant in ps |
-| `seed` | `thermostat` | int | random | Random seed for stochastic thermostats |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `tau` | `thermostat` | float | `1.0` | 耦合时间常数，单位 ps |
+| `seed` | `thermostat` | int | 随机 | 随机恒温器的随机种子 |
 
-Notes:
+说明：
 
-- `seed` is used by `middle_langevin`, `andersen`, and `bussi_thermostat`
-- `berendsen_thermostat` and `nose_hoover_chain` do not read `seed`
-- `middle_langevin` converts `tau` internally to a friction coefficient
-  `gamma = 1 / tau`
-- `andersen` converts `tau` to an internal collision update interval
+- `middle_langevin`、`andersen`、`bussi_thermostat` 使用 `seed`。
+- `berendsen_thermostat` 和 `nose_hoover_chain` 不读取 `seed`。
+- `middle_langevin` 在内部将 `tau` 转换为摩擦系数 `gamma = 1 / tau`。
+- `andersen` 将 `tau` 转换为内部碰撞更新间隔。
 
-## Algorithm-specific Parameters
+## 各算法参数
 
 ### `middle_langevin`
 
@@ -83,8 +79,7 @@ tau = 0.1
 seed = 2026
 ```
 
-Uses `tau` and `seed` in the `thermostat` scope, plus the top-level
-`velocity_max`.
+使用 `thermostat` 分组下的 `tau`、`seed`，以及顶层 `velocity_max`。
 
 ### `andersen`
 
@@ -95,8 +90,7 @@ tau = 0.1
 seed = 2026
 ```
 
-Uses `tau` and `seed` in the `thermostat` scope, plus the top-level
-`velocity_max`.
+使用 `thermostat` 分组下的 `tau`、`seed`，以及顶层 `velocity_max`。
 
 ### `berendsen_thermostat`
 
@@ -106,7 +100,7 @@ mode = "berendsen_thermostat"
 tau = 0.1
 ```
 
-Uses only `tau` in the `thermostat` scope.
+仅使用 `thermostat` 分组下的 `tau`。
 
 ### `bussi_thermostat`
 
@@ -117,10 +111,7 @@ tau = 0.1
 seed = 2026
 ```
 
-Uses `tau` and `seed` in the `thermostat` scope.
-New H5 checkpoints store the Bussi random stream as typed portable Philox
-state; scalar standard-library engine text is accepted only when reading older
-checkpoints.
+使用 `thermostat` 分组下的 `tau` 和 `seed`。新的 H5 检查点将 Bussi 随机流保存为带类型的可移植 Philox 状态；标准库标量随机数引擎的文本形式仅在读取旧检查点时兼容接受。
 
 ### `nose_hoover_chain`
 
@@ -137,30 +128,29 @@ crd = "nhc_crd.dat"
 vel = "nhc_vel.dat"
 ```
 
-Additional parameters:
+额外参数：
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `length` | `nose_hoover_chain` | int | `1` | Chain length |
-| `restart_input` | `nose_hoover_chain` | string | - | Read initial chain state from file |
-| `restart_output` | `nose_hoover_chain` | string | - | Write chain state to file |
-| `crd` | `nose_hoover_chain` | string | - | Write chain coordinate trajectory |
-| `vel` | `nose_hoover_chain` | string | - | Write chain velocity trajectory |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `length` | `nose_hoover_chain` | int | `1` | 链长度 |
+| `restart_input` | `nose_hoover_chain` | string | - | 从文件读取初始链状态 |
+| `restart_output` | `nose_hoover_chain` | string | - | 将链状态写入文件 |
+| `crd` | `nose_hoover_chain` | string | - | 输出链坐标轨迹 |
+| `vel` | `nose_hoover_chain` | string | - | 输出链速度轨迹 |
 
-`nose_hoover_chain` also reads the top-level `velocity_max`.
+`nose_hoover_chain` 也读取顶层 `velocity_max`。
 
-## Temperature Schedule
+## 温度变化计划
 
-Temperature schedules are controlled by top-level keys, not by `[thermostat]`:
+温度变化计划由顶层参数控制，不属于 `[thermostat]`：
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `target_temperature_schedule_mode` | string | `"step"` or `"linear"` |
-| `target_temperature_schedule_steps` | array | Inline schedule: `[{ step = N, value = T }, ...]` |
-| `target_temperature_schedule_file` | string | Path to a TOML schedule file |
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `target_temperature_schedule_mode` | string | `"step"`（阶梯变化）或 `"linear"`（线性变化） |
+| `target_temperature_schedule_steps` | array | 内联计划：`[{ step = N, value = T }, ...]` |
+| `target_temperature_schedule_file` | string | TOML 计划文件路径 |
 
-Inline `target_temperature_schedule_steps` only works when the main mdin file is
-TOML.
+内联 `target_temperature_schedule_steps` 仅在主 mdin 文件为 TOML 时有效。
 
 ```toml
 target_temperature = 300.0

@@ -63,19 +63,7 @@ export const docs2p0En: DocsLandingData = {
   sections: [
     { title: "Getting Started", href: "/en/docs/2p0/getting-started", state: "available" },
     { title: "Build Guide", href: "/en/docs/2p0/build-guide", state: "available" },
-    { title: "Contributing", href: "/en/docs/2p0/contributing", state: "available" },
     { title: "Input File Reference", href: "/en/docs/2p0/input-reference", state: "available" },
-    { title: "Core Simulation Parameters", href: "/en/docs/2p0/input-reference/core", state: "available" },
-    { title: "Input/Output Parameters", href: "/en/docs/2p0/input-reference/io", state: "available" },
-    { title: "Thermostat Parameters", href: "/en/docs/2p0/input-reference/thermostat", state: "available" },
-    { title: "Barostat Parameters", href: "/en/docs/2p0/input-reference/barostat", state: "available" },
-    { title: "Atom Restrain Parameters", href: "/en/docs/2p0/input-reference/restrain", state: "available" },
-    { title: "Constraint Algorithm Parameters", href: "/en/docs/2p0/input-reference/constraint", state: "available" },
-    { title: "Neighbor List Parameters", href: "/en/docs/2p0/input-reference/neighbor-list", state: "available" },
-    { title: "PME Electrostatics Parameters", href: "/en/docs/2p0/input-reference/pme", state: "available" },
-    { title: "Collective Variables Guide", href: "/en/docs/2p0/input-reference/collective-variables", state: "available" },
-    { title: "Enhanced Sampling Parameters", href: "/en/docs/2p0/input-reference/enhanced-sampling", state: "available" },
-    { title: "SinkMeta/meta Input Parameters", href: "/en/docs/2p0/input-reference/sinkmeta", state: "available" },
-    { title: "Advanced Parameters", href: "/en/docs/2p0/input-reference/advanced", state: "available" }
+    { title: "Contributing", href: "/en/docs/2p0/contributing", state: "available" }
   ]
 };

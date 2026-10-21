@@ -1,91 +1,86 @@
 ---
 title: "输入、输出与重启"
-description: "SPONGE 2.0 输入、输出与重启，迁自主仓库的英文文档。"
+description: "SPONGE 2.0 输入、输出与重启，译自主仓库文档。"
 version: "SPONGE 2.0"
 section: "SPONGE 2.0 文档"
 order: 6
 ---
 
-> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+> 本页由 GPT-6-Astra 整理并翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
 >
 > [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/input-reference/io.md)。
 
-# Input/Output Parameters
+# 输入输出参数
 
-SPONGE has three mutually exclusive structure/topology input families:
+SPONGE 有三种互斥的结构／拓扑输入方式：
 
-- native text inputs loaded by Xponge
-- AMBER inputs loaded from `amber_parm7` / `amber_rst7`
-- GROMACS inputs loaded from `gromacs_top` / `gromacs_gro`
+- 由 Xponge 加载的原生文本输入。
+- 由 `amber_parm7` / `amber_rst7` 加载的 AMBER 输入。
+- 由 `gromacs_top` / `gromacs_gro` 加载的 GROMACS 输入。
 
-If either GROMACS key exists, SPONGE uses the GROMACS loader. Otherwise, if
-either AMBER key exists, SPONGE uses the AMBER loader. If neither family is
-selected, SPONGE falls back to native inputs.
+只要存在任一 GROMACS 参数，就使用 GROMACS 加载器；否则，若存在任一 AMBER 参数，则使用 AMBER 加载器。两类均未指定时，使用原生输入。
 
-## Input Files
+## 输入文件
 
-### Common Prefix
+### 通用前缀
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `default_in_file_prefix` | string | - | Input filename prefix, auto-matches `<prefix>_coordinate.txt` etc. |
-| `default_out_file_prefix` | string | - | Output filename prefix |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `default_in_file_prefix` | string | - | 输入文件名前缀，自动匹配 `<prefix>_coordinate.txt` 等文件 |
+| `default_out_file_prefix` | string | - | 输出文件名前缀 |
 
-Setting `default_in_file_prefix = "WAT"` causes SPONGE to look for:
-- `WAT_coordinate.txt` — coordinates
-- `WAT_mass.txt` — masses
-- `WAT_charge.txt` — charges
-- `WAT_LJ.txt` — LJ parameters
-- `WAT_bond.txt` — bonds
-- `WAT_exclude.txt` — exclusion list
-- etc.
+设置 `default_in_file_prefix = "WAT"` 后，SPONGE 将查找：
 
-### Native Input Files
+- `WAT_coordinate.txt`：坐标。
+- `WAT_mass.txt`：质量。
+- `WAT_charge.txt`：电荷。
+- `WAT_LJ.txt`：LJ 参数。
+- `WAT_bond.txt`：键参数。
+- `WAT_exclude.txt`：排除列表。
+- 以及其他对应模块文件。
 
-The native loader reads a family of `<module>_in_file` keys. The most common
-ones are:
+### 原生输入文件
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `coordinate_in_file` | string | Coordinate file path |
-| `velocity_in_file` | string | Velocity file path |
-| `mass_in_file` | string | Mass file path |
-| `charge_in_file` | string | Charge file path |
-| `residue_in_file` | string | Residue membership file |
-| `exclude_in_file` | string | Exclusion list file |
-| `bond_in_file` | string | Bond parameter file |
-| `angle_in_file` | string | Angle parameter file |
-| `dihedral_in_file` | string | Dihedral parameter file |
-| `improper_dihedral_in_file` | string | Improper dihedral file |
-| `cmap_in_file` | string | CMAP file |
-| `lj_in_file` | string | Lennard-Jones parameter file |
-| `LJ_soft_core_in_file` | string | Soft-core Lennard-Jones parameter file |
-| `nb14_in_file` | string | 1-4 interaction file |
-| `nb14_extra_in_file` | string | Extra 1-4 interaction file |
-| `urey_bradley_in_file` | string | Urey-Bradley file |
-| `virtual_atom_in_file` | string | Native virtual-atom definition file |
+原生加载器读取一组 `<module>_in_file` 参数，常用项如下：
 
-Some modules add their own native files, for example `lj_soft_in_file`,
-`gb_in_file`, and module-specific `in_file` keys documented on their
-corresponding pages.
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `coordinate_in_file` | string | 坐标文件路径 |
+| `velocity_in_file` | string | 速度文件路径 |
+| `mass_in_file` | string | 质量文件路径 |
+| `charge_in_file` | string | 电荷文件路径 |
+| `residue_in_file` | string | 残基归属文件 |
+| `exclude_in_file` | string | 排除列表文件 |
+| `bond_in_file` | string | 键参数文件 |
+| `angle_in_file` | string | 键角参数文件 |
+| `dihedral_in_file` | string | 二面角参数文件 |
+| `improper_dihedral_in_file` | string | 非正常二面角文件 |
+| `cmap_in_file` | string | CMAP 文件 |
+| `lj_in_file` | string | Lennard-Jones 参数文件 |
+| `LJ_soft_core_in_file` | string | 软核 Lennard-Jones 参数文件 |
+| `nb14_in_file` | string | 1-4 相互作用文件 |
+| `nb14_extra_in_file` | string | 额外 1-4 相互作用文件 |
+| `urey_bradley_in_file` | string | Urey-Bradley 文件 |
+| `virtual_atom_in_file` | string | 原生虚拟原子定义文件 |
 
-### External Format Import
+部分模块还有专用文件，例如 `lj_soft_in_file`、`gb_in_file`，以及各模块文档中的 `in_file` 参数。
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `amber_parm7` | string | AMBER parm7 topology/parameter file |
-| `amber_rst7` | string | AMBER rst7 coordinate/velocity file |
-| `gromacs_gro` | string | GROMACS .gro coordinate file |
-| `gromacs_top` | string | GROMACS .top topology file |
-| `gromacs_include_dir` | string list | Extra include directories used when reading `.top` |
-| `gromacs_define` | string list | Extra preprocessor defines used when reading `.top` |
+### 导入外部格式
 
-## H5 Bundle Input Files
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `amber_parm7` | string | AMBER parm7 拓扑／参数文件 |
+| `amber_rst7` | string | AMBER rst7 坐标／速度文件 |
+| `gromacs_gro` | string | GROMACS .gro 坐标文件 |
+| `gromacs_top` | string | GROMACS .top 拓扑文件 |
+| `gromacs_include_dir` | string list | 读取 `.top` 时使用的额外包含目录 |
+| `gromacs_define` | string list | 读取 `.top` 时使用的额外预处理宏定义 |
 
-SPONGE keeps large input data and restart state in HDF5 containers while
-retaining `mdin.spg.toml` as the editable binding and launch-policy file.
+## H5 数据包输入
 
-Use the following TOML tables to bind topology, protocol, and restart bundles:
+SPONGE 使用 HDF5 容器保存大型输入数据和重启状态，同时保留 `mdin.spg.toml` 作为可编辑的数据绑定和启动策略文件。
+
+以下 TOML 分组分别绑定拓扑、模拟协议和重启数据包：
 
 ```toml
 [input.h5.topology]
@@ -99,7 +94,7 @@ path = "runs/prod_0007.restart.spgr.h5"
 load = "structural"
 ```
 
-For rerun input:
+rerun 输入示例：
 
 ```toml
 mode = "rerun"
@@ -118,45 +113,34 @@ path = "runs/prod.spg.h5md"
 particle_stream = "all"
 ```
 
-### Legacy Input Mapping
+### 旧版输入对应关系
 
-| Legacy key | H5 bundle replacement |
-|------------|-----------------------|
-| `coordinate_in_file` | `input.h5.restart.path`, structural position state |
-| `velocity_in_file` | `input.h5.restart.path`, structural velocity state |
+| 旧版参数 | 对应的 H5 数据包设置 |
+|----------|---------------------|
+| `coordinate_in_file` | `input.h5.restart.path` 中的结构位置状态 |
+| `velocity_in_file` | `input.h5.restart.path` 中的结构速度状态 |
 | `amber_rst7` / `rst7` | `input.h5.restart.path` |
-| `crd` | `input.h5.trajectory.path`, position frames |
-| `box` | `input.h5.trajectory.path`, box edge frames |
-| `vel` | `input.h5.trajectory.path`, optional velocity frames |
-| `frame_limit` | Keep as a top-level flat key, or use `rerun_frame_limit` |
-| `rerun_start` | Unchanged top-level flat key |
-| `rerun_strip` | Unchanged top-level flat key |
-| `rerun_need_box_update` | Unchanged top-level flat key |
+| `crd` | `input.h5.trajectory.path` 中的位置帧 |
+| `box` | `input.h5.trajectory.path` 中的盒子边矢量帧 |
+| `vel` | `input.h5.trajectory.path` 中的可选速度帧 |
+| `frame_limit` | 保留为顶层扁平参数，或使用 `rerun_frame_limit` |
+| `rerun_start` | 保留原顶层扁平参数 |
+| `rerun_strip` | 保留原顶层扁平参数 |
+| `rerun_need_box_update` | 保留原顶层扁平参数 |
 
-H5 and legacy inputs for the same role are mutually exclusive. For example,
-`input_h5_restart_path` cannot be combined with `coordinate_in_file`,
-`velocity_in_file`, or `rst7`; `input_h5_trajectory_path` cannot be combined
-with rerun `crd`, `box`, or `vel`.
+相同用途的 H5 输入与旧版输入互斥。例如，`input_h5_restart_path` 不能与 `coordinate_in_file`、`velocity_in_file` 或 `rst7` 同用；`input_h5_trajectory_path` 不能与 rerun 的 `crd`、`box`、`vel` 同用。
 
-For structural restart input, `/particles/all/velocity/value` is optional. If
-it is absent, SPONGE initializes every atomic velocity component to zero before
-copying the launch state to the device. Thermostats may introduce stochastic
-motion during later integration steps, but input assembly does not sample a
-Maxwell-Boltzmann distribution.
+结构重启输入中的 `/particles/all/velocity/value` 是可选的。若缺失，SPONGE 在将启动状态复制到设备前，把所有原子的各速度分量设为零。恒温器可能在后续积分中引入随机运动，但输入装配阶段不会采样 Maxwell–Boltzmann 分布。
 
-### Restart Load Policy
+### 重启加载策略
 
-`input.h5.restart.load = "structural"` restores coordinates, velocity, box,
-step, and time. `dynamic` additionally restores compatible integrator,
-thermostat, barostat, and RNG state; `protocol` restores compatible SITS,
-MetaD, restraint-reference, and CV-reference continuation state; `full`
-combines both. Each enabled module validates ownership and schema compatibility
-before applying state. `custom` is reserved until explicit component-list keys
-are defined.
+`input.h5.restart.load = "structural"` 恢复坐标、速度、盒子、步数和时间。`dynamic` 还恢复兼容的积分器、恒温器、恒压器和随机数生成器状态；`protocol` 恢复兼容的 SITS、MetaD、限制参考和 CV 参考的续算状态；`full` 合并两者。
 
-## H5 Bundle Output Files
+每个启用的模块都在应用状态前验证归属和数据模式兼容性。`custom` 是保留选项，须等显式组件列表参数定义后才能使用。
 
-New SPONGE bundle output should use structured H5 output settings:
+## H5 数据包输出
+
+新的 SPONGE 数据包输出应使用结构化 H5 设置：
 
 ```toml
 [output.h5.trajectory]
@@ -177,81 +161,63 @@ protocol_hash = "sha256:..."
 path = "prod.obs.spg.h5md"
 ```
 
-With the current TOML flattening parser, these keys are visible as:
+当前 TOML 解析器展平后对应的参数如下：
 
-| Flattened key | Type | Default | Description |
-|---------------|------|---------|-------------|
-| `output_h5_trajectory_path` | string | - | Canonical trajectory H5MD output path; recommended suffix `*.spg.h5md` |
-| `output_h5_trajectory_vds` | bool | `false` | Use chunked H5MD shards plus HDF5 VDS wrapper |
-| `output_h5_trajectory_chunk_size` | int | `20` | VDS file-level shard size in trajectory frames |
-| `output_h5_trajectory_repair_policy` | string | `strict` | VDS finalize policy: `strict` or `complete_prefix` |
-| `output_h5_restart_path` | string | - | Canonical restart H5 output path; recommended suffix `*.spgr.h5` |
-| `output_h5_restart_topology_hash` | string | derived from H5 topology | Canonical topology lineage required for raw-input H5 restart output |
-| `output_h5_restart_atom_order_hash` | string | derived from H5 topology | Canonical atom-order lineage required for raw-input H5 restart output |
-| `output_h5_restart_protocol_hash` | string | derived/optional | Canonical producer protocol lineage |
-| `output_h5_observable_path` | string | - | Optional observable-only H5MD output path; recommended suffix `*.obs.spg.h5md` |
+| 展平参数名 | 类型 | 默认值 | 说明 |
+|------------|------|--------|------|
+| `output_h5_trajectory_path` | string | - | 标准 H5MD 轨迹输出路径，推荐后缀 `*.spg.h5md` |
+| `output_h5_trajectory_vds` | bool | `false` | 使用 H5MD 分片文件及 HDF5 VDS 汇总文件 |
+| `output_h5_trajectory_chunk_size` | int | `20` | VDS 文件级分片大小，以轨迹帧数计 |
+| `output_h5_trajectory_repair_policy` | string | `strict` | VDS 收尾策略：`strict` 或 `complete_prefix` |
+| `output_h5_restart_path` | string | - | 标准 H5 重启输出路径，推荐后缀 `*.spgr.h5` |
+| `output_h5_restart_topology_hash` | string | 从 H5 拓扑推导 | 从原始输入启动并输出 H5 重启时必需的拓扑来源标识 |
+| `output_h5_restart_atom_order_hash` | string | 从 H5 拓扑推导 | 从原始输入启动并输出 H5 重启时必需的原子顺序来源标识 |
+| `output_h5_restart_protocol_hash` | string | 推导／可选 | 生成该文件的模拟协议来源标识 |
+| `output_h5_observable_path` | string | - | 可选的仅观测量 H5MD 输出路径，推荐后缀 `*.obs.spg.h5md` |
 
-`output_h5_trajectory_chunk_size` is only meaningful when
-`output_h5_trajectory_vds = true`. It is not an HDF5 dataset internal chunk
-shape, and it does not change `write_trajectory_interval`.
+`output_h5_trajectory_chunk_size` 仅在 `output_h5_trajectory_vds = true` 时有效。它不是 HDF5 数据集内部的数据块形状，也不改变 `write_trajectory_interval`。
 
-The observable-only H5MD file contains `/h5md`, `/observables`, and
-`/parameters`, but no `/particles` trajectory fields.
+仅观测量 H5MD 文件包含 `/h5md`、`/observables` 和 `/parameters`，不包含 `/particles` 轨迹字段。
 
-An H5 restart is always a strict `sponge.input.v2` launch artifact. When
-`input_h5_topology_path` is bound, SPONGE derives and verifies its lineage from
-the topology and optional protocol bundles. A raw-input launch must provide
-`topology_hash` and `atom_order_hash` under `[output.h5.restart]`; SPONGE fails
-at initialization instead of writing a restart with missing lineage.
+H5 重启文件始终严格遵循 `sponge.input.v2` 启动格式。绑定 `input_h5_topology_path` 后，SPONGE 从拓扑和可选协议数据包推导并校验来源。由原始输入启动时，必须在 `[output.h5.restart]` 中提供 `topology_hash` 和 `atom_order_hash`；缺失时会在初始化阶段报错，而不会输出缺少来源信息的重启文件。
 
-Shard directories are writer-internal and are derived from
-`output_h5_trajectory_path`; they are not configurable mdin fields.
+分片目录由写入器根据 `output_h5_trajectory_path` 内部生成，不是可配置的 mdin 参数。
 
-`output_h5_trajectory_repair_policy = "complete_prefix"` is only valid with
-`output_h5_trajectory_vds = true`. It allows explicit finalization from the
-complete contiguous shard prefix and does not delete orphan shard files.
+`output_h5_trajectory_repair_policy = "complete_prefix"` 仅在 `output_h5_trajectory_vds = true` 时有效。它允许利用从起点开始连续完整的分片显式完成收尾，不会删除孤立分片文件。
 
-## Legacy Output Files
+## 旧版输出文件
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `mdout` | string | controller default or `default_out_file_prefix + ".out"` | Legacy scalar output file |
-| `mdinfo` | string | controller default or `default_out_file_prefix + ".info"` | Legacy simulation info/log file |
-| `crd` | string | - | Legacy coordinate trajectory file (binary), or rerun trajectory input |
-| `vel` | string | - | Legacy velocity trajectory file (binary), or rerun velocity input |
-| `frc` | string | - | Legacy force trajectory file (binary) |
-| `box` | string | - | Legacy box information trajectory file, or rerun box input |
-| `rst` | string | `SPONGE` or `default_out_file_prefix` | Legacy restart filename prefix |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `mdout` | string | controller 默认值或 `default_out_file_prefix + ".out"` | 旧版标量输出文件 |
+| `mdinfo` | string | controller 默认值或 `default_out_file_prefix + ".info"` | 旧版模拟信息／日志文件 |
+| `crd` | string | - | 旧版二进制坐标轨迹，或 rerun 轨迹输入 |
+| `vel` | string | - | 旧版二进制速度轨迹，或 rerun 速度输入 |
+| `frc` | string | - | 旧版二进制力轨迹 |
+| `box` | string | - | 旧版盒子信息轨迹，或 rerun 盒子输入 |
+| `rst` | string | `SPONGE` 或 `default_out_file_prefix` | 旧版重启文件名前缀 |
 
-If any canonical H5 output is enabled, legacy output files are disabled by
-default. Legacy files are written only when their legacy path keys are
-explicitly set.
+启用任意标准 H5 输出后，旧版输出文件默认禁用。只有显式设置相应的旧版路径参数，才会写入对应文件。
 
-## Output Frequency Control
+## 输出频率控制
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `write_information_interval` | int | `1000` | mdinfo/mdout write interval (steps) |
-| `write_mdout_interval` | int | `1000` | mdout write interval |
-| `write_trajectory_interval` | int | same as `write_information_interval` | Trajectory write interval |
-| `write_restart_file_interval` | int | `step_limit` | Restart file write interval |
-| `max_restart_export_count` | int | `1` | Maximum number of restart files to keep in rotation |
-| `buffer_frame` | int | `10` | File buffer frame count (affects I/O performance) |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `write_information_interval` | int | `1000` | mdinfo/mdout 写入间隔，单位为步 |
+| `write_mdout_interval` | int | `1000` | mdout 写入间隔 |
+| `write_trajectory_interval` | int | 与 `write_information_interval` 相同 | 轨迹写入间隔 |
+| `write_restart_file_interval` | int | `step_limit` | 重启文件写入间隔 |
+| `max_restart_export_count` | int | `1` | 轮换保留的重启文件数上限 |
+| `buffer_frame` | int | `10` | 文件缓冲帧数，影响 I/O 性能 |
 
-For TOML mdin files, `[write.interval] information`, `trajectory`, `mdout`,
-and `restart`/`restart_file` are accepted aliases for the corresponding
-`write_*_interval` keys.
+TOML mdin 中的 `[write.interval]` 分组支持 `information`、`trajectory`、`mdout` 和 `restart`/`restart_file`，作为对应 `write_*_interval` 参数的别名。
 
-## Output Content Control
+## 输出内容控制
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `print_zeroth_frame` | bool | `false` | Whether to output step 0 frame |
-| `print_pressure` | bool | `false` | Whether to append pressure and virial terms to `mdout` |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `print_zeroth_frame` | bool | `false` | 是否输出第零步帧 |
+| `print_pressure` | bool | `false` | 是否向 `mdout` 追加压力和维里项 |
 
-`mdout` and `mdinfo` are controller-managed output files. Trajectory-related
-files are created only when the corresponding key exists or when the default
-coordinate/box trajectories are enabled by `write_trajectory_interval`. In H5
-bundle mode, their canonical data owners are the H5 output files rather than
-these legacy sidecars.
+`mdout` 和 `mdinfo` 由 controller 管理。只有存在对应参数，或通过 `write_trajectory_interval` 启用默认坐标／盒子轨迹时，才会创建相关轨迹文件。在 H5 数据包模式下，标准数据存于 H5 输出文件，而不是这些旧版配套文件。
 

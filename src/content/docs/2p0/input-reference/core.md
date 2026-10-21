@@ -1,81 +1,76 @@
 ---
 title: "核心模拟参数"
-description: "SPONGE 2.0 核心模拟参数，迁自主仓库的英文文档。"
+description: "SPONGE 2.0 核心模拟参数，译自主仓库文档。"
 version: "SPONGE 2.0"
 section: "SPONGE 2.0 文档"
 order: 5
 ---
 
-> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+> 本页由 GPT-6-Astra 整理并翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
 >
 > [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/input-reference/core.md)。
 
-# Core Simulation Parameters
+# 核心模拟参数
 
-## Simulation Identity
+## 模拟任务名称
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `md_name` | string | `"Default SPONGE MD Task Name"` | Simulation task name |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `md_name` | string | `"Default SPONGE MD Task Name"` | 模拟任务名称 |
 
-## Simulation Mode
+## 模拟模式
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `mode` | string | **required** | Simulation mode |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `mode` | string | **必填** | 模拟模式 |
 
-`mode` options:
+`mode` 可选值：
 
-| Value | Description |
-|-------|-------------|
-| `"nve"` | Microcanonical ensemble (constant energy) |
-| `"nvt"` | Canonical ensemble (constant temperature), requires thermostat |
-| `"npt"` | Isothermal-isobaric ensemble, requires thermostat + barostat |
-| `"minimization"` / `"min"` | Energy minimization |
-| `"rerun"` | Trajectory reanalysis |
+| 取值 | 说明 |
+|------|------|
+| `"nve"` | 微正则系综，能量保持不变 |
+| `"nvt"` | 正则系综，温度保持不变，需要恒温器 |
+| `"npt"` | 等温等压系综，需要恒温器和恒压器 |
+| `"minimization"` / `"min"` | 能量最小化 |
+| `"rerun"` | 轨迹重新分析 |
 
-## Periodic Boundary Conditions
+## 周期性边界条件
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `pbc` | bool | `true` | Enable periodic boundary conditions |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `pbc` | bool | `true` | 启用周期性边界条件 |
 
-If `pbc = false`, SPONGE switches to the no-PBC path. This cannot be used with
-`npt`, is not supported in multi-process mode, and expects a very large box.
+`pbc = false` 时进入非周期计算路径。此路径不能用于 `npt`，不支持多进程模式，并要求设置足够大的盒子。
 
-## Time and Steps
+## 时间与步数
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `step_limit` | int | `1000` | Total simulation steps |
-| `dt` | float | `0.001` | Time step (ps) |
-| `frame_limit` | int | - | Frame limit for rerun mode |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `step_limit` | int | `1000` | 模拟总步数 |
+| `dt` | float | `0.001` | 时间步长，单位 ps |
+| `frame_limit` | int | - | rerun 模式的帧数上限 |
 
-## Force Cutoff
+## 相互作用截断
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `cutoff` | float | `8.0` | Non-bonded interaction cutoff distance (A) |
-| `skin` | float | `2.0` | Neighbor list skin distance (A) |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `cutoff` | float | `8.0` | 非键相互作用截断距离，单位 Å |
+| `skin` | float | `2.0` | 邻居表缓冲距离，单位 Å |
 
-## Temperature and Pressure Targets
+## 目标温度与压力
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `target_temperature` | float | `300.0` | Top-level target temperature (K), used in NVT/NPT |
-| `target_pressure` | float | `1.0` | Top-level target pressure (bar), used in NPT |
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `target_temperature` | float | `300.0` | 顶层目标温度，单位 K，用于 NVT/NPT |
+| `target_pressure` | float | `1.0` | 顶层目标压力，单位 bar，用于 NPT |
 
-These two keys stay at the top level even when thermostat and barostat options are
-written in `[thermostat]` and `[barostat]`.
+即使恒温器和恒压器参数写在 `[thermostat]`、`[barostat]` 下，这两个参数也必须保留在顶层。
 
-Temperature and pressure also support schedules through the top-level keys
-`target_temperature_schedule_*` and `target_pressure_schedule_*`. See
-[Thermostat](/docs/2p0/input-reference/thermostat) and [Barostat](/docs/2p0/input-reference/barostat).
+温度和压力还支持通过顶层 `target_temperature_schedule_*`、`target_pressure_schedule_*` 参数设置变化计划，详见[恒温器](/docs/2p0/input-reference/thermostat)和[恒压器](/docs/2p0/input-reference/barostat)。
 
-## Initial Velocities
+## 初始速度
 
-SPONGE preserves the velocities supplied by the selected input loader unless
-initialization is requested explicitly:
+除非显式请求初始化，否则 SPONGE 保留所选输入加载器提供的速度：
 
 ```toml
 [initial_velocity]
@@ -83,16 +78,13 @@ mode = "maxwell"
 seed = 202607220001
 ```
 
-`mode = "maxwell"` samples velocities at the step-zero target temperature,
-removes center-of-mass motion, projects constrained systems onto the
-SHAKE/SETTLE velocity manifold without moving their coordinates, and rescales
-using the final system degrees of freedom. `seed` is required and must be an
-integer in `0..INT64_MAX`; it is independent of thermostat seeds. This mode is
-available for dynamical simulations, not minimization or rerun.
+`mode = "maxwell"` 按第零步的目标温度采样速度，去除质心运动；对于受约束体系，在不改变坐标的情况下将速度投影到 SHAKE/SETTLE 约束流形，再按最终体系自由度重新缩放。
 
-## Working Directory
+`seed` 为必填项，必须是 `0..INT64_MAX` 范围内的整数，与恒温器随机种子独立。此模式仅适用于动力学模拟，不适用于最小化或 rerun。
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `workspace` | string | directory of mdin file | Working directory path, can be absolute or relative |
+## 工作目录
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `workspace` | string | mdin 文件所在目录 | 工作目录，可使用绝对或相对路径 |
 

@@ -1,48 +1,40 @@
 ---
 title: "增强采样"
-description: "SPONGE 2.0 增强采样，迁自主仓库的英文文档。"
+description: "SPONGE 2.0 增强采样，译自主仓库文档。"
 version: "SPONGE 2.0"
 section: "SPONGE 2.0 文档"
 order: 14
 ---
 
-> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+> 本页由 GPT-6-Astra 整理并翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
 >
 > [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/input-reference/enhanced-sampling.md)。
 
-# Enhanced Sampling Parameters
+# 增强采样参数
 
-## Collective Variables (CV)
+## 集体变量（CV）
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `cv_in_file` | string | Collective variable definition file path |
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `cv_in_file` | string | 集体变量定义文件路径 |
 
-CV definitions are loaded from the file pointed to by `cv_in_file`. New CV
-files should use TOML; the legacy block format remains supported for
-compatibility. See
-[Collective Variables Guide](/docs/2p0/input-reference/collective-variables) for the supported CV
-types, virtual atoms, printing, and complete examples.
+CV 定义从 `cv_in_file` 指向的文件加载。新 CV 文件推荐使用 TOML；旧版分块格式仍保留兼容。支持的 CV 类型、虚拟原子、输出方式和完整示例见[集体变量指南](/docs/2p0/input-reference/collective-variables)。
 
-Bundled `sponge.input.v2` protocols store CV virtual atoms as typed HDF5
-objects below `/cv/virtual_atom/<name>`. Each object contains `type`,
-`atom_indices`, `enabled_default`, and, for a `center`, `weight`. A regular CV
-can use `/cv/<name>/atom_refs` to mix physical atom indices and virtual-atom
-names without embedding a large legacy configuration string.
+`sponge.input.v2` 协议数据包将 CV 虚拟原子保存为 `/cv/virtual_atom/<name>` 下的带类型 HDF5 对象。每个对象包含 `type`、`atom_indices`、`enabled_default`；`center` 类型还包含 `weight`。普通 CV 可通过 `/cv/<name>/atom_refs` 混合引用真实原子索引和虚拟原子名称，无需嵌入长篇旧版配置字符串。
 
 ## Metadynamics
 
-Configured via `[META]` or `[meta]` section:
+通过 `[META]` 或 `[meta]` 分组配置：
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `sink` | string | Sink metadynamics mode |
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `sink` | string | Sink metadynamics 模式 |
 
-Detailed SinkMeta parameter list: [sinkmeta.md](/docs/2p0/input-reference/sinkmeta)
+详细参数见 [SinkMeta](/docs/2p0/input-reference/sinkmeta)。
 
 ## SITS
 
-SITS parameters live under the `[SITS]` scope:
+SITS 参数位于 `[SITS]` 分组下：
 
 ```toml
 [SITS]
@@ -55,62 +47,59 @@ record_interval = 1
 update_interval = 100
 ```
 
-### Common Parameters
+### 通用参数
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `mode` | `SITS` | string | required | SITS run mode |
-| `atom_in_file` | `SITS` | string | - | File-based atom partition definition for selective enhancement |
-| `atom_numbers` | `SITS` | int or string | required if `atom_in_file` is absent | Number of leading atoms in the selectively enhanced set, or `"ALL"` / `"ITS"` |
-| `cross_enhance_factor` | `SITS` | float | `0.5` | Enhancement factor for the cross term |
-| `fb_interval` | `SITS` | int | `1` | Feedback-bias update interval |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `mode` | `SITS` | string | 必填 | SITS 运行模式 |
+| `atom_in_file` | `SITS` | string | - | 用文件定义选择性增强的原子分区 |
+| `atom_numbers` | `SITS` | int 或 string | 未设置 `atom_in_file` 时必填 | 从开头计入选择性增强集合的原子数，或 `"ALL"` / `"ITS"` |
+| `cross_enhance_factor` | `SITS` | float | `0.5` | 交叉项增强因子 |
+| `fb_interval` | `SITS` | int | `1` | 反馈偏置更新间隔 |
 
-Exactly one atom-selection method is required: `atom_in_file` or
-`atom_numbers`.
+必须且只能选择一种原子选择方式：`atom_in_file` 或 `atom_numbers`。
 
-### Iteration / Production Parameters
+### 迭代／生产阶段参数
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `k_numbers` | `SITS` | int | `40` | Number of temperature points |
-| `T_low` | `SITS` | float | - | Lower temperature bound for generated ladder |
-| `T_high` | `SITS` | float | - | Upper temperature bound for generated ladder |
-| `T` | `SITS` | slash-separated string | - | Explicit temperature ladder used instead of `T_low` / `T_high` |
-| `record_interval` | `SITS` | int | `1` | Energy record interval |
-| `update_interval` | `SITS` | int | `100` | Parameter update interval |
-| `pe_a` | `SITS` | float | `1.0` | Multiplicative energy scaling factor |
-| `pe_b` | `SITS` | float | `0.0` | Additive energy offset |
-| `fb_bias` | `SITS` | float | `0.0` | Additional bias applied to `fb` |
-| `nk_rest` | `SITS` | bool | `false` in `iteration`, `true` otherwise | Whether to read restart `Nk` values |
-| `nk_in_file` | `SITS` | string | required when `nk_rest = true` or in `production` mode | Input file for restarting `Nk` |
-| `nk_fix` | `SITS` | bool | `false` in `iteration`, `true` otherwise | Freeze `Nk` during the run |
-| `nk_rest_file` | `SITS` | string | auto-generated | Output file for restart `Nk` values when `nk_fix = false` |
-| `nk_traj_file` | `SITS` | string | auto-generated | Output file for `Nk` history when `nk_fix = false` |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `k_numbers` | `SITS` | int | `40` | 温度点数 |
+| `T_low` | `SITS` | float | - | 自动生成温度序列的下限 |
+| `T_high` | `SITS` | float | - | 自动生成温度序列的上限 |
+| `T` | `SITS` | 斜杠分隔字符串 | - | 显式温度序列，替代 `T_low` / `T_high` |
+| `record_interval` | `SITS` | int | `1` | 能量记录间隔 |
+| `update_interval` | `SITS` | int | `100` | 参数更新间隔 |
+| `pe_a` | `SITS` | float | `1.0` | 能量乘性缩放系数 |
+| `pe_b` | `SITS` | float | `0.0` | 能量加性偏移 |
+| `fb_bias` | `SITS` | float | `0.0` | 施加到 `fb` 的额外偏置 |
+| `nk_rest` | `SITS` | bool | `iteration` 中为 `false`，其他模式为 `true` | 是否读取重启 `Nk` |
+| `nk_in_file` | `SITS` | string | `nk_rest = true` 或 `production` 模式时必填 | `Nk` 重启输入文件 |
+| `nk_fix` | `SITS` | bool | `iteration` 中为 `false`，其他模式为 `true` | 运行时是否固定 `Nk` |
+| `nk_rest_file` | `SITS` | string | 自动生成 | `nk_fix = false` 时输出 `Nk` 重启值的文件 |
+| `nk_traj_file` | `SITS` | string | 自动生成 | `nk_fix = false` 时输出 `Nk` 历史的文件 |
 
-`mode` options:
+`mode` 可选值：
 
-| Value | Description |
-|-------|-------------|
-| `"observation"` | Observation phase |
-| `"iteration"` | Iteration phase |
-| `"production"` | Production phase |
-| `"empirical"` | Empirical mode |
-| `"amd"` | AMD mode |
-| `"gamd"` | GaMD mode |
+| 取值 | 说明 |
+|------|------|
+| `"observation"` | 观测阶段 |
+| `"iteration"` | 迭代阶段 |
+| `"production"` | 生产阶段 |
+| `"empirical"` | 经验模式 |
+| `"amd"` | AMD 模式 |
+| `"gamd"` | GaMD 模式 |
 
-### Empirical / AMD / GaMD Parameters
+### Empirical / AMD / GaMD 参数
 
-| Parameter | Scope | Type | Default | Description |
-|-----------|-------|------|---------|-------------|
-| `pe_a` | `SITS` | float | required in `amd` / `gamd`, `1.0` in `empirical` | Bias strength parameter |
-| `pe_b` | `SITS` | float | required in `amd` / `gamd`, `0.0` in `empirical` | Bias threshold parameter |
-| `T_low` | `SITS` | float | required in `empirical` | Lower temperature bound |
-| `T_high` | `SITS` | float | required in `empirical` | Upper temperature bound |
+| 参数 | 所属分组 | 类型 | 默认值 | 说明 |
+|------|----------|------|--------|------|
+| `pe_a` | `SITS` | float | `amd` / `gamd` 必填，`empirical` 中为 `1.0` | 偏置强度参数 |
+| `pe_b` | `SITS` | float | `amd` / `gamd` 必填，`empirical` 中为 `0.0` | 偏置阈值参数 |
+| `T_low` | `SITS` | float | `empirical` 中必填 | 温度下限 |
+| `T_high` | `SITS` | float | `empirical` 中必填 | 温度上限 |
 
-Notes:
+说明：
 
-- `amd`, `gamd`, and `empirical` do not use the full `k_numbers` / `Nk` update
-  workflow.
-- The current source reads `T` as a slash-separated string rather than a TOML
-  numeric array.
+- `amd`、`gamd` 和 `empirical` 不使用完整的 `k_numbers` / `Nk` 更新流程。
+- 当前源码把 `T` 读取为斜杠分隔字符串，而不是 TOML 数值数组。
 

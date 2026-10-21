@@ -1,18 +1,18 @@
 ---
 title: "源码编译指南"
-description: "SPONGE 2.0 源码编译指南，迁自主仓库的英文文档。"
+description: "SPONGE 2.0 源码编译指南，译自主仓库文档。"
 version: "SPONGE 2.0"
 section: "SPONGE 2.0 文档"
 order: 2
 ---
 
-> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+> 本页由 GPT-6-Astra 整理并翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
 >
 > [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/build-guide.md)。
 
-# Build Guide
+# 源码编译指南
 
-## Build workflow
+## 构建流程
 
 ```bash
 pixi install -e <env>             # install dependencies
@@ -20,46 +20,46 @@ pixi run -e <env> configure       # CMake configure
 pixi run -e <env> compile         # build and install into the environment
 ```
 
-The binary is installed to `$CONDA_PREFIX/bin/SPONGE`. Build artifacts go into `build-<env>`.
+可执行文件安装到 `$CONDA_PREFIX/bin/SPONGE`，构建产物放在 `build-<env>` 中。
 
-## Environments
+## 环境选择
 
-| Environment | Purpose | Parallel backend |
-|-------------|---------|------------------|
-| `dev-cuda13` | CUDA 13 development (recommended) | CUDA |
-| `dev-cuda12` | CUDA 12 development | CUDA |
-| `dev-hip` | AMD GPU / Hygon DCU development | HIP |
-| `dev-cpu` | CPU development | defaults to `none`, SIMD can be specified manually |
-| `dev-cpu-mpi` | CPU + MPI development | defaults to `none` + MPI, SIMD can be specified manually |
-| `cuda13` / `cuda12` / `hip` / `cpu` / `cpu-mpi` | build-only (no dev tools) | corresponding backend |
+| 环境 | 用途 | 并行后端 |
+|------|------|----------|
+| `dev-cuda13` | CUDA 13 开发（推荐） | CUDA |
+| `dev-cuda12` | CUDA 12 开发 | CUDA |
+| `dev-hip` | AMD GPU／海光 DCU 开发 | HIP |
+| `dev-cpu` | CPU 开发 | 默认为 `none`，可手动指定 SIMD |
+| `dev-cpu-mpi` | CPU + MPI 开发 | 默认为 `none` + MPI，可手动指定 SIMD |
+| `cuda13` / `cuda12` / `hip` / `cpu` / `cpu-mpi` | 仅构建，不含开发工具 | 对应后端 |
 
-`dev-*` environments include development tools (python, pytest, clang-format, ruff, etc.). Benchmark and format tasks are only available in `dev-*` environments.
+`dev-*` 环境包含 Python、pytest、clang-format、ruff 等开发工具。基准测试和格式化任务仅在这些环境中提供。
 
-## CUDA build
+## CUDA 构建
 
 ```bash
 pixi run -e dev-cuda13 configure
 pixi run -e dev-cuda13 compile
 ```
 
-pixi automatically installs `cuda-nvcc`, `libcufft-dev`, `libcublas-dev`, and other CUDA dependencies.
+Pixi 会自动安装 `cuda-nvcc`、`libcufft-dev`、`libcublas-dev` 等 CUDA 依赖。
 
-Compilation parallelism defaults to 4 threads. Pass a positional argument to adjust:
+默认使用 4 个线程并行编译，可通过位置参数调整：
 
 ```bash
 pixi run -e dev-cuda13 compile 8     # 8 threads
 ```
 
-## HIP build
+## HIP 构建
 
 ```bash
 pixi run -e dev-hip configure
 pixi run -e dev-hip compile
 ```
 
-> **Note:** pixi does not install the HIP/ROCm SDK. It must be pre-installed on the system, e.g. via `apt install`, from the official ROCm repository, or via `module load`. CMake detects the HIP environment by looking for `hipcc` / `hipconfig` in the system PATH.
+> **注意：** Pixi 不会安装 HIP/ROCm SDK。请提前通过系统包管理器（如 `apt install`）、ROCm 官方软件源或 `module load` 配置好 SDK。CMake 通过系统 PATH 中的 `hipcc` / `hipconfig` 检测 HIP 环境。
 
-## CPU build
+## CPU 构建
 
 ```bash
 pixi run -e dev-cpu configure          # defaults to no SIMD
@@ -67,98 +67,86 @@ pixi run -e dev-cpu configure avx2     # specify AVX2
 pixi run -e dev-cpu compile
 ```
 
-Available SIMD backends:
+可用的 SIMD 后端：
 
 | x86_64 | ARM |
 |--------|-----|
-| `avx512`, `avx2`, `avx`, `sse42` | `sve2`, `sve`, `neon` |
+| `avx512`、`avx2`、`avx`、`sse42` | `sve2`、`sve`、`neon` |
 
-## CPU + MPI build
+## CPU + MPI 构建
 
 ```bash
 pixi run -e dev-cpu-mpi configure
 pixi run -e dev-cpu-mpi compile
 ```
 
-Automatically adds `-DMPI=ON` and the MPI compiler configuration.
+此环境会自动添加 `-DMPI=ON` 及 MPI 编译器配置。
 
-## Platform differences
+## 平台差异
 
-| Platform | Compiler | Math library | Notes |
-|----------|----------|-------------|-------|
-| Linux x86_64 | GCC 11 (conda) | MKL | CUDA + MPI requires NCCL |
-| Linux aarch64 | GCC 11 (conda) | OpenBLAS + FFTW | supports SVE/NEON |
-| Windows x64 CPU | Intel oneAPI 2026.1.1 `icx-cl` | MKL | Requires VS 2022 C++ Build Tools 14.44+ and Windows SDK |
-| Windows x64 CUDA | NVCC + MSVC (vs2022) | CUDA libraries | may need `pixi run install-msvc` first |
-| macOS ARM | Clang 22.1 | OpenBLAS + FFTW | CPU backend only |
+| 平台 | 编译器 | 数学库 | 说明 |
+|------|--------|--------|------|
+| Linux x86_64 | GCC 11（conda） | MKL | CUDA + MPI 需要 NCCL |
+| Linux aarch64 | GCC 11（conda） | OpenBLAS + FFTW | 支持 SVE/NEON |
+| Windows x64 CPU | Intel oneAPI 2026.1.1 `icx-cl` | MKL | 需要 VS 2022 C++ Build Tools 14.44+ 和 Windows SDK |
+| Windows x64 CUDA | NVCC + MSVC（vs2022） | CUDA 库 | 可能需要先运行 `pixi run install-msvc` |
+| macOS ARM | Clang 22.1 | OpenBLAS + FFTW | 仅支持 CPU 后端 |
 
-Windows CPU builds use Intel oneAPI `icx-cl` for both C and C++.
-`pixi run -e dev-cpu configure` automatically installs the locked compiler
-environment in `tools/oneapi`; Intel packages are kept separate from the
-project's LLVM JIT dependencies. Local builds and CI use the same entry point.
-VS C++ Build Tools and the Windows SDK must be installed separately with
-administrator privileges; the `vs2022_win-64` package only activates them.
-Use VS 2022 C++ toolset 14.44 or newer for the headers and import libraries:
-the prebuilt LLVM 22 libraries require newer STL symbols than toolset 14.39
-provides. Updating only the redistributable runtime does not update these
-build-time libraries.
-The CUDA environments continue to use MSVC as the NVCC host compiler.
-The Windows CPU tasks use a separate `build-<environment>-oneapi` directory,
-so existing MSVC/Clang build caches are not reused. For unit tests, run
-`pixi run -e dev-cpu configure-tests`, `pixi run -e dev-cpu compile`, then
-`pixi run -e dev-cpu test`. Run the normal benchmark tasks after installation.
-To include the opt-in HDF5 runtime tests in PowerShell, set
-`$env:SPONGE_H5_ENABLE_RUNTIME_SMOKE = "1"` before running `test`.
-Windows CPU CI enables these tests with two OpenMP/MKL threads.
-The runtime package includes `intel-cmplr-lib-rt` for Intel math functions;
-OpenMP uses conda-forge's `llvm-openmp` compatibility DLL, shared with MKL.
-End users installing the binary package do not need the compiler environment.
+Windows CPU 构建使用 Intel oneAPI `icx-cl` 编译 C 和 C++。`pixi run -e dev-cpu configure` 会在 `tools/oneapi` 中自动安装锁定版本的编译器环境；Intel 软件包与项目的 LLVM JIT 依赖分开管理。本地构建和 CI 使用相同入口。
 
-## Global compile settings
+VS C++ Build Tools 和 Windows SDK 需要以管理员权限单独安装；`vs2022_win-64` 包仅负责激活已有安装。头文件和导入库需要 VS 2022 C++ 工具集 14.44 或更新版本：预编译 LLVM 22 库依赖较新的 STL 符号，14.39 无法提供。仅更新可再发行运行库不会更新这些构建时库。
 
-The following are hardcoded in `cmake/utils/common.cmake`:
+CUDA 环境仍使用 MSVC 作为 NVCC 的主机编译器。Windows CPU 任务使用独立的 `build-<environment>-oneapi` 目录，不复用已有的 MSVC/Clang 构建缓存。
 
-- C++ standard: C++17
-- Build type: Release
-- Fast math: `-ffast-math` / `/fp:fast` / `--use_fast_math`
-- OpenMP: always enabled
+单元测试依次运行 `pixi run -e dev-cpu configure-tests`、`pixi run -e dev-cpu compile` 和 `pixi run -e dev-cpu test`；安装后可运行常规基准测试任务。若要在 PowerShell 中启用可选的 HDF5 运行时测试，请在运行 `test` 前设置 `$env:SPONGE_H5_ENABLE_RUNTIME_SMOKE = "1"`。Windows CPU CI 使用两个 OpenMP/MKL 线程运行这些测试。
 
-## Formatting
+运行时软件包包含提供 Intel 数学函数的 `intel-cmplr-lib-rt`；OpenMP 使用 conda-forge 的 `llvm-openmp` 兼容 DLL，并与 MKL 共用。安装预编译软件包的最终用户不需要编译器环境。
+
+## 全局编译设置
+
+以下设置固定在 `cmake/utils/common.cmake` 中：
+
+- C++ 标准：C++17。
+- 构建类型：Release。
+- 快速数学选项：`-ffast-math` / `/fp:fast` / `--use_fast_math`。
+- OpenMP：始终启用。
+
+## 格式化
 
 ```bash
 pixi run -e dev-cuda13 format        # auto-fix
 pixi run -e dev-cuda13 format-check  # check only
 ```
 
-See [Contributing](/docs/2p0/contributing) for details.
+详见[开发与贡献指南](/docs/2p0/contributing)。
 
-## Packaging
+## 打包
 
 ```bash
 pixi run -e dev-cuda13 package-conda
 ```
 
-Produces a `.conda` package in `packaging/outputs/`.
+生成的 `.conda` 软件包位于 `packaging/outputs/`。
 
-## Troubleshooting
+## 常见问题
 
-### configure cannot find CUDA
+### configure 找不到 CUDA
 
-Make sure you are using a CUDA environment (`dev-cuda12` or `dev-cuda13`). Do not specify `-DPARALLEL=cuda` in a CPU environment.
+确认使用的是 CUDA 环境（`dev-cuda12` 或 `dev-cuda13`）。不要在 CPU 环境中指定 `-DPARALLEL=cuda`。
 
-### nvcc warning "incompatible redefinition for option compiler-bindir"
+### nvcc 提示 “incompatible redefinition for option compiler-bindir”
 
-Known warning under the conda environment. Does not affect the build. Safe to ignore.
+这是 conda 环境下的已知警告，不影响构建，可以忽略。
 
-### Wrong system compiler or libraries picked up
+### 错误地选用了系统编译器或库
 
-When pixi provides all required dependencies, use `pixi install -e <env> --clean-envs` to rebuild a clean environment. However, this does not apply when the build depends on external toolchains (MSVC on Windows, HIP/ROCm); in those cases, set up the environment variables yourself before invoking pixi.
+当所有依赖均由 Pixi 提供时，可运行 `pixi install -e <env> --clean-envs` 重建干净环境。但如果依赖外部工具链（Windows 上的 MSVC、HIP/ROCm），需要先自行配置环境变量，再运行 Pixi。
 
-### format reports missing BOM
+### format 提示缺少 BOM
 
-C++ files require UTF-8 with BOM. Run `pixi run format` to fix automatically.
+C++ 文件要求 UTF-8 with BOM 编码。运行 `pixi run format` 可自动修复。
 
-### Cleaning build directories
+### 清理构建目录
 
 ```bash
 rm -rf build-dev-cuda13   # clean a specific environment
