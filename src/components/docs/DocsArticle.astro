@@ -22,6 +22,7 @@ const versionSlug = entry.id.startsWith("2p0/") ? "2p0" : "1p4";
 const versionLabel = versionSlug === "2p0" ? "SPONGE 2.0" : "SPONGE 1.4";
 const slugParts = entry.id.replace(/^(1p4|2p0)\//, "").split("/");
 const isXpongeNestedPage = slugParts[0] === "xponge" && slugParts.length > 1;
+const isInputReferencePage = versionSlug === "2p0" && slugParts[0] === "input-reference" && slugParts.length > 1;
 
 const labels = lang === "en"
   ? {
@@ -56,7 +57,16 @@ const tocGroups = toc.reduce<Array<TocHeading & { children: TocHeading[] }>>((gr
 }, []);
 
 const breadcrumbBase = `${labels.basePath}/${versionSlug}`;
-const breadcrumbPath = isXpongeNestedPage
+const breadcrumbPath = isInputReferencePage
+  ? [
+      {
+        label: lang === "en" ? "Input File Reference" : "输入参数参考",
+        href: `${breadcrumbBase}/input-reference`,
+        current: false
+      },
+      { label: entry.data.title, href: labels.currentPath, current: true }
+    ]
+  : isXpongeNestedPage
   ? slugParts.map((part, index) => ({
       label: part,
       href: `${breadcrumbBase}/${slugParts.slice(0, index + 1).join("/")}`,
@@ -79,6 +89,11 @@ const displayDescription = lang === "en" && slugParts[0] === "xponge"
     <div class="container docs-reader-shell">
       <aside class="docs-reader-sidebar" aria-label={labels.sidebarLabel}>
         <a class="docs-reader-back" href={labels.versionHref}>{versionLabel}</a>
+        {isInputReferencePage && (
+          <a class="docs-reader-back" href={`${breadcrumbBase}/input-reference`}>
+            {lang === "en" ? "Input File Reference" : "输入参数参考"}
+          </a>
+        )}
         {tocGroups.length > 0 && (
           <nav aria-label={labels.tocLabel}>
             {tocGroups.map((group) => (

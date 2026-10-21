@@ -98,7 +98,9 @@ export const docs2p0Zh: DocsLandingData = {
   ctaAvailable: "查看文档",
   pendingLabel: "待补充",
   sections: [
-    { title: "安装指南", state: "pending" },
-    { title: "教程", state: "pending" }
+    { title: "安装与快速开始", href: "/docs/2p0/getting-started", state: "available" },
+    { title: "源码编译指南", href: "/docs/2p0/build-guide", state: "available" },
+    { title: "输入参数参考", href: "/docs/2p0/input-reference", state: "available" },
+    { title: "开发与贡献指南", href: "/docs/2p0/contributing", state: "available" }
   ]
 };

@@ -61,7 +61,9 @@ export const docs2p0En: DocsLandingData = {
   ctaAvailable: "View Docs",
   pendingLabel: "Coming Soon",
   sections: [
-    { title: "Installation Guide", state: "pending" },
-    { title: "Tutorials", state: "pending" }
+    { title: "Getting Started", href: "/en/docs/2p0/getting-started", state: "available" },
+    { title: "Build Guide", href: "/en/docs/2p0/build-guide", state: "available" },
+    { title: "Input File Reference", href: "/en/docs/2p0/input-reference", state: "available" },
+    { title: "Contributing", href: "/en/docs/2p0/contributing", state: "available" }
   ]
 };
