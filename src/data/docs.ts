@@ -98,7 +98,21 @@ export const docs2p0Zh: DocsLandingData = {
   ctaAvailable: "查看文档",
   pendingLabel: "待补充",
   sections: [
-    { title: "安装指南", state: "pending" },
-    { title: "教程", state: "pending" }
+    { title: "安装与快速开始", href: "/docs/2p0/getting-started", state: "available" },
+    { title: "源码编译指南", href: "/docs/2p0/build-guide", state: "available" },
+    { title: "开发与贡献指南", href: "/docs/2p0/contributing", state: "available" },
+    { title: "输入参数索引", href: "/docs/2p0/input-reference", state: "available" },
+    { title: "核心模拟参数", href: "/docs/2p0/input-reference/core", state: "available" },
+    { title: "输入、输出与重启", href: "/docs/2p0/input-reference/io", state: "available" },
+    { title: "恒温器", href: "/docs/2p0/input-reference/thermostat", state: "available" },
+    { title: "恒压器", href: "/docs/2p0/input-reference/barostat", state: "available" },
+    { title: "原子坐标限制", href: "/docs/2p0/input-reference/restrain", state: "available" },
+    { title: "约束算法", href: "/docs/2p0/input-reference/constraint", state: "available" },
+    { title: "邻居表", href: "/docs/2p0/input-reference/neighbor-list", state: "available" },
+    { title: "PME 静电", href: "/docs/2p0/input-reference/pme", state: "available" },
+    { title: "集体变量（CV）", href: "/docs/2p0/input-reference/collective-variables", state: "available" },
+    { title: "增强采样", href: "/docs/2p0/input-reference/enhanced-sampling", state: "available" },
+    { title: "SinkMeta", href: "/docs/2p0/input-reference/sinkmeta", state: "available" },
+    { title: "高级参数", href: "/docs/2p0/input-reference/advanced", state: "available" }
   ]
 };

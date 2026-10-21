@@ -1,0 +1,98 @@
+---
+title: "核心模拟参数"
+description: "SPONGE 2.0 核心模拟参数，迁自主仓库的英文文档。"
+version: "SPONGE 2.0"
+section: "SPONGE 2.0 文档"
+order: 5
+---
+
+> 本页由 GPT-6-Astra 整理，正文暂保留英文原文，尚未翻译。SPONGE 2.0 正处于敏捷开发中，功能、参数和文档可能随版本变动；最新版本信息请参照 GitHub 仓库中的 [docs](https://github.com/SPONGEMM/SPONGE/tree/master/docs) 和 [skills](https://github.com/SPONGEMM/SPONGE/tree/master/skills) 文档。
+>
+> [本页对应的源文档快照](https://github.com/SPONGEMM/SPONGE/blob/317ae56b76da8d12816e9570ff7bd77a270ac48e/docs/input-reference/core.md)。
+
+# Core Simulation Parameters
+
+## Simulation Identity
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `md_name` | string | `"Default SPONGE MD Task Name"` | Simulation task name |
+
+## Simulation Mode
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `mode` | string | **required** | Simulation mode |
+
+`mode` options:
+
+| Value | Description |
+|-------|-------------|
+| `"nve"` | Microcanonical ensemble (constant energy) |
+| `"nvt"` | Canonical ensemble (constant temperature), requires thermostat |
+| `"npt"` | Isothermal-isobaric ensemble, requires thermostat + barostat |
+| `"minimization"` / `"min"` | Energy minimization |
+| `"rerun"` | Trajectory reanalysis |
+
+## Periodic Boundary Conditions
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `pbc` | bool | `true` | Enable periodic boundary conditions |
+
+If `pbc = false`, SPONGE switches to the no-PBC path. This cannot be used with
+`npt`, is not supported in multi-process mode, and expects a very large box.
+
+## Time and Steps
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `step_limit` | int | `1000` | Total simulation steps |
+| `dt` | float | `0.001` | Time step (ps) |
+| `frame_limit` | int | - | Frame limit for rerun mode |
+
+## Force Cutoff
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `cutoff` | float | `8.0` | Non-bonded interaction cutoff distance (A) |
+| `skin` | float | `2.0` | Neighbor list skin distance (A) |
+
+## Temperature and Pressure Targets
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `target_temperature` | float | `300.0` | Top-level target temperature (K), used in NVT/NPT |
+| `target_pressure` | float | `1.0` | Top-level target pressure (bar), used in NPT |
+
+These two keys stay at the top level even when thermostat and barostat options are
+written in `[thermostat]` and `[barostat]`.
+
+Temperature and pressure also support schedules through the top-level keys
+`target_temperature_schedule_*` and `target_pressure_schedule_*`. See
+[Thermostat](/docs/2p0/input-reference/thermostat) and [Barostat](/docs/2p0/input-reference/barostat).
+
+## Initial Velocities
+
+SPONGE preserves the velocities supplied by the selected input loader unless
+initialization is requested explicitly:
+
+```toml
+[initial_velocity]
+mode = "maxwell"
+seed = 202607220001
+```
+
+`mode = "maxwell"` samples velocities at the step-zero target temperature,
+removes center-of-mass motion, projects constrained systems onto the
+SHAKE/SETTLE velocity manifold without moving their coordinates, and rescales
+using the final system degrees of freedom. `seed` is required and must be an
+integer in `0..INT64_MAX`; it is independent of thermostat seeds. This mode is
+available for dynamical simulations, not minimization or rerun.
+
+## Working Directory
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `workspace` | string | directory of mdin file | Working directory path, can be absolute or relative |
+
